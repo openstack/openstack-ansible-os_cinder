@@ -27,8 +27,8 @@
 - name: Add in cinder devices types
   shell: |
     . {{ ansible_env.HOME }}/openrc
-    {{ cinder_bin }}/cinder type-create "{{ item.key }}"
-    {{ cinder_bin }}/cinder type-key "{{ item.key }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
+    {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-create "{{ item.key }}"
+    {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-key "{{ item.key }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
   with_dict: cinder_backends|default({})
   tags:
     - cinder-backends
