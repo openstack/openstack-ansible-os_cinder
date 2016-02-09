@@ -89,17 +89,6 @@
     - cinder-dirs
     - cinder-logs
 
-- name: Drop sudoers file
-  template:
-    src: "sudoers.j2"
-    dest: "/etc/sudoers.d/{{ cinder_system_user_name }}_sudoers"
-    mode: "0440"
-    owner: "root"
-    group: "root"
-  tags:
-    - sudoers
-    - cinder-sudoers
-
 - include: cinder_messaging_setup.yml
   when: >
     inventory_hostname == groups['cinder_all'][0]
