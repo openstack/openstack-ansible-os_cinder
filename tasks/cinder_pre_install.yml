@@ -88,7 +88,3 @@
   tags:
     - cinder-dirs
     - cinder-logs
-
-- include: cinder_messaging_setup.yml
-  when: >
-    inventory_hostname == groups['cinder_all'][0]
