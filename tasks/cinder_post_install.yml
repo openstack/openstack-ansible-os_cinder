@@ -17,8 +17,8 @@
   config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ cinder_system_user_name }}"
-    group: "{{ cinder_system_group_name }}"
+    owner: "{{ item.owner|default(cinder_system_user_name) }}"
+    group: "{{ item.group|default(cinder_system_group_name) }}"
     mode: "0644"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
@@ -33,6 +33,8 @@
       config_type: "ini"
     - src: "rootwrap.conf.j2"
       dest: "/etc/cinder/rootwrap.conf"
+      owner: "root"
+      group: "root"
       config_overrides: "{{ cinder_rootwrap_conf_overrides }}"
       config_type: "ini"
     - src: "policy.json.j2"
@@ -46,12 +48,10 @@
 
 - name: Drop cinder configs
   copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ cinder_system_user_name }}"
-    group: "{{ cinder_system_group_name }}"
-  with_items:
-    - { src: "rootwrap.d/volume.filters", dest: "/etc/cinder/rootwrap.d/volume.filters" }
+    src: "rootwrap.d/volume.filters"
+    dest: "/etc/cinder/rootwrap.d/volume.filters"
+    owner: "root"
+    group: "root"
   notify:
     - Restart cinder services
   tags:
