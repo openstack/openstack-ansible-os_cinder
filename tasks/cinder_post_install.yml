@@ -89,3 +89,14 @@
     - not cinder_venv_enabled | bool
   tags:
     - cinder-command-bin
+
+- name: Drop sudoers file
+  template:
+    src: "sudoers.j2"
+    dest: "/etc/sudoers.d/{{ cinder_system_user_name }}_sudoers"
+    mode: "0440"
+    owner: "root"
+    group: "root"
+  tags:
+    - sudoers
+    - cinder-sudoers
