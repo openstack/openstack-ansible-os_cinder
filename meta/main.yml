@@ -33,4 +33,6 @@ dependencies:
   - apt_package_pinning
   - galera_client
   - openstack_openrc
-  - pip_lock_down
+  - role: pip_lock_down
+    when:
+      - not cinder_developer_mode | bool

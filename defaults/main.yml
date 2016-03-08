@@ -19,6 +19,12 @@ is_metal: true
 ## APT Cache options
 cache_timeout: 600
 
+cinder_git_repo: https://git.openstack.org/openstack/cinder
+cinder_git_install_branch: master
+cinder_developer_mode: false
+cinder_developer_constraints:
+  - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
+
 # Name of the virtual env to deploy into
 cinder_venv_tag: untagged
 cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"

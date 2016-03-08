@@ -43,6 +43,28 @@
     - cinder-install
     - cinder-apt-packages
 
+- name: Create developer mode constraint file
+  copy:
+    dest: "/opt/developer-pip-constraints.txt"
+    content: |
+      {% for item in cinder_developer_constraints %}
+      {{ item }}
+      {% endfor %}
+  when:
+    - cinder_developer_mode | bool
+  tags:
+    - cinder-install
+    - cinder-pip-packages
+
+- name: Set constraint file fact for developer mode
+  set_fact:
+    pip_install_options: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt"
+  when:
+    - cinder_developer_mode | bool
+  tags:
+    - cinder-install
+    - cinder-pip-packages
+
 - name: Install requires pip packages
   pip:
     name: "{{ item }}"
@@ -61,7 +83,9 @@
   stat:
     path: "/var/cache/{{ cinder_venv_download_url | basename }}"
     get_md5: False
-  when: cinder_venv_enabled | bool
+  when:
+    - not cinder_developer_mode | bool
+    - cinder_venv_enabled | bool
   register: local_venv_stat
   tags:
     - cinder-install
@@ -71,7 +95,9 @@
   uri:
     url: "{{ cinder_venv_download_url | replace('tgz', 'checksum') }}"
     return_content: True
-  when: cinder_venv_enabled | bool
+  when:
+    - not cinder_developer_mode | bool
+    - cinder_venv_enabled | bool
   register: remote_venv_checksum
   tags:
     - cinder-install
@@ -90,6 +116,7 @@
   ignore_errors: true
   register: get_venv
   when:
+    - not cinder_developer_mode | bool
     - cinder_venv_enabled | bool
     - (local_venv_stat.stat.exists == False or
         {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
@@ -121,6 +148,7 @@
     path: "{{ cinder_venv_bin | dirname }}"
     state: directory
   when:
+    - not cinder_developer_mode | bool
     - cinder_venv_enabled | bool
     - cinder_get_venv | changed
   tags:
@@ -133,6 +161,7 @@
     dest: "{{ cinder_venv_bin | dirname }}"
     copy: "no"
   when:
+    - not cinder_developer_mode | bool
     - cinder_venv_enabled | bool
     - cinder_get_venv | changed
   notify: Restart cinder services
@@ -144,6 +173,7 @@
   command: >
     virtualenv-tools --update-path=auto {{ cinder_venv_bin | dirname }}
   when:
+    - not cinder_developer_mode | bool
     - cinder_venv_enabled | bool
     - cinder_get_venv | success
   tags:
@@ -164,7 +194,7 @@
   with_items: cinder_pip_packages
   when:
     - cinder_venv_enabled | bool
-    - cinder_get_venv | failed
+    - cinder_get_venv | failed or cinder_developer_mode | bool
   notify: Restart cinder services
   tags:
     - cinder-install
@@ -180,7 +210,9 @@
   retries: 5
   delay: 2
   with_items: cinder_pip_packages
-  when: not cinder_venv_enabled | bool
+  when:
+    - not cinder_developer_mode | bool
+    - not cinder_venv_enabled | bool
   notify: Restart cinder services
   tags:
     - cinder-install
