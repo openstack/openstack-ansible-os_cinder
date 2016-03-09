@@ -56,6 +56,7 @@
     cinder_rabbitmq_password: "secrete"
     cinder_rabbitmq_userid: cinder
     cinder_rabbitmq_vhost: /cinder
+    cinder_glance_api_servers: "http://glance_server:9292"
     galera_root_password: "secrete"
     galera_client_drop_config_file: false
     rabbitmq_servers: 10.100.100.2
