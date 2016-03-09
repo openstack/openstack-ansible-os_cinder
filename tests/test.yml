@@ -13,8 +13,244 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Playbook for role testing
+- name: Playbook for establish ssh keys
+  hosts: 127.0.0.1
+  connection: local
+  become: false
+  pre_tasks:
+    - name: Create ssh key pair for root
+      user:
+        name: "{{ ansible_ssh_user }}"
+        generate_ssh_key: "yes"
+        ssh_key_bits: 2048
+        ssh_key_file: ".ssh/id_rsa"
+    - name: Get the calling user's key
+      command: cat ~/.ssh/id_rsa.pub
+      register: key_get
+    - set_fact:
+        lxc_container_ssh_key: "{{ key_get.stdout }}"
+
+- name: Playbook for configuring the LXC host
   hosts: localhost
   connection: local
+  become: yes
+  pre_tasks:
+    # Make sure OS does not have a stale package cache.
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+    - name: Ensure root's new public ssh key is in authorized_keys
+      authorized_key:
+        user: root
+        key: "{{ hostvars['127.0.0.1']['lxc_container_ssh_key'] }}"
+        manage_dir: no
+    - set_fact:
+        lxc_container_ssh_key: "{{ hostvars['127.0.0.1']['lxc_container_ssh_key'] }}"
+  roles:
+    - role: "lxc_hosts"
+      lxc_net_address: 10.100.100.1
+      lxc_net_dhcp_range: 10.100.100.2,10.100.100.253
+      lxc_net_bridge: lxcbr0
+      lxc_kernel_options:
+        - { key: 'fs.inotify.max_user_instances', value: 1024 }
+      lxc_container_caches:
+        - url: "https://rpc-repo.rackspace.com/container_images/rpc-trusty-container.tgz"
+          name: "trusty.tgz"
+          sha256sum: "56c6a6e132ea7d10be2f3e8104f47136ccf408b30e362133f0dc4a0a9adb4d0c"
+          chroot_path: trusty/rootfs-amd64
+      # The $HOME directory is mocked to work with tox
+      #  by defining the 'ansible_env' hash. This should
+      #  NEVER be done outside of testing.
+      ansible_env:  ## NEVER DO THIS OUTSIDE OF TESTING
+        HOME: "/tmp"
+    - role: "py_from_git"
+      git_repo: "https://github.com/lxc/python2-lxc"
+      git_dest: "/opt/lxc_python2"
+      git_install_branch: "master"
+  post_tasks:
+    # THIS TASK IS ONLY BEING DONE BECAUSE THE TOX SHARED LXC LIB IS NOT USABLE ON A
+    #  HOST MACHINE THAT MAY NOT HAVE ACCESS TO THE VENV.
+    - name: Ensure the lxc lib is on the host
+      command: /usr/local/bin/pip install /opt/lxc_python2
+    # Inventory is being pre-loaded using a post tasks instead of through a dynamic
+    #  inventory system. While this is not a usual method for deployment it's being
+    #  done for functional testing.
+    - name: Create container hosts
+      add_host:
+        groups: "{{ item.groups }}"
+        hostname: "{{ item.name }}"
+        inventory_hostname: "{{ item.name }}"
+        ansible_ssh_host: "{{ item.address }}"
+        ansible_become: true
+        properties:
+          service_name: "{{ item.service }}"
+        container_networks:
+          management_address:
+            address: "{{ item.address }}"
+            bridge: "lxcbr0"
+            interface: "eth1"
+            netmask: "255.255.252.0"
+            type: "veth"
+        physical_host: localhost
+        container_name: "{{ item.name }}"
+      with_items:
+        - { name: "infra1", service: "infra1", address: "10.100.100.101", groups: "all,all_containers,rabbitmq_all,galera_all,service_all" }
+        - { name: "openstack1", service: "openstack1", address: "10.100.100.102", groups: "all,all_containers,keystone_all,cinder_api,cinder_scheduler,cinder_volume,cinder_backup,cinder_all" }
+
+- name: Playbook for creating containers
+  hosts: all_containers
+  connection: local
+  gather_facts: false
+  roles:
+    - role: "lxc_container_create"
+      lxc_container_release: trusty
+      lxc_container_backing_store: dir
+      global_environment_variables:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  post_tasks:
+    - name: Wait for ssh to be available
+      local_action:
+        module: wait_for
+        port: "{{ ansible_ssh_port | default('22') }}"
+        host: "{{ ansible_ssh_host | default(inventory_hostname) }}"
+        search_regex: OpenSSH
+        delay: 1
+
+- name: Playbook for deploying infra services
+  hosts: service_all
+  user: root
+  gather_facts: true
+  roles:
+    - role: "rabbitmq_server"
+      rabbitmq_cookie_token: secrete
+    - role: "galera_server"
+      galera_root_password: secrete
+      galera_root_user: root
+      galera_innodb_buffer_pool_size: 512M
+      galera_innodb_log_buffer_size: 32M
+      galera_server_id: "{{ inventory_hostname | string_2_int }}"
+      galera_wsrep_node_name: "{{ inventory_hostname }}"
+      galera_wsrep_provider_options:
+        - { option: "gcache.size", value: "32M" }
+      galera_server_id: "{{ inventory_hostname | string_2_int }}"
+
+- name: Playbook for deploying keystone
+  hosts: keystone_all
+  user: root
+  gather_facts: true
+  pre_tasks:
+    - name: Ensure rabbitmq vhost
+      rabbitmq_vhost:
+        name: "{{ keystone_rabbitmq_vhost }}"
+        state: "present"
+      delegate_to: "10.100.100.101"
+      when: inventory_hostname == groups['keystone_all'][0]
+      tags:
+        - aodh-rabbitmq
+        - aodh-rabbitmq-vhost
+    - name: Ensure rabbitmq user
+      rabbitmq_user:
+        user: "{{ keystone_rabbitmq_userid }}"
+        password: "{{ keystone_rabbitmq_password }}"
+        vhost: "{{ keystone_rabbitmq_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+      delegate_to: "10.100.100.101"
+      when: inventory_hostname == groups['keystone_all'][0]
+      tags:
+        - aodh-rabbitmq
+        - aodh-rabbitmq-user
+    - name: Create DB for service
+      mysql_db:
+        login_user: "root"
+        login_password: "secrete"
+        login_host: "localhost"
+        name: "{{ keystone_galera_database }}"
+        state: "present"
+      delegate_to: "10.100.100.101"
+      when: inventory_hostname == groups['keystone_all'][0]
+      tags:
+        - mysql-db-setup
+    - name: Grant access to the DB for the service
+      mysql_user:
+        login_user: "root"
+        login_password: "secrete"
+        login_host: "localhost"
+        name: "{{ keystone_galera_database }}"
+        password: "{{ keystone_container_mysql_password }}"
+        host: "{{ item }}"
+        state: "present"
+        priv: "{{ keystone_galera_database }}.*:ALL"
+      with_items:
+        - "localhost"
+        - "%"
+      delegate_to: "10.100.100.101"
+      when: inventory_hostname == groups['keystone_all'][0]
+      tags:
+        - mysql-db-setup
+  roles:
+    - role: os_keystone
+  vars:
+    external_lb_vip_address: 10.100.100.102
+    internal_lb_vip_address: 10.100.100.102
+    keystone_galera_address: 10.100.100.101
+    keystone_galera_database: keystone
+    keystone_venv_tag: "testing"
+    keystone_developer_mode: true
+    keystone_git_install_branch: a55128044f763f5cfe2fdc57c738eaca97636448
+    keystone_auth_admin_token: "SuperSecreteTestToken"
+    keystone_auth_admin_password: "SuperSecretePassword"
+    keystone_service_password: "secrete"
+    keystone_rabbitmq_password: "secrete"
+    keystone_container_mysql_password: "SuperSecrete"
+    keystone_rabbitmq_port: 5671
+    keystone_rabbitmq_userid: keystone
+    keystone_rabbitmq_vhost: /keystone
+    keystone_rabbitmq_servers: 10.100.100.101
+    keystone_rabbitmq_use_ssl: false
+    galera_client_drop_config_file: false
+
+- name: Playbook for deploying cinder
+  hosts: cinder_all
+  user: root
+  gather_facts: true
+  pre_tasks:
   roles:
     - role: "{{ rolename | basename }}"
+  vars:
+    external_lb_vip_address: 10.100.100.102
+    internal_lb_vip_address: 10.100.100.102
+    cinder_galera_address: 10.100.100.101
+    cinder_galera_database: cinder
+    galera_root_password: "secrete"
+    galera_client_drop_config_file: false
+    cinder_rabbitmq_password: "secrete"
+    cinder_rabbitmq_userid: cinder
+    cinder_rabbitmq_vhost: /cinder
+    rabbitmq_servers: 10.100.100.101
+    rabbitmq_use_ssl: true
+    rabbitmq_port: 5671
+    keystone_auth_admin_token: "SuperSecreteTestToken"
+    keystone_auth_admin_password: "SuperSecretePassword"
+    keystone_service_adminuri_insecure: false
+    keystone_service_internaluri_insecure: false
+    keystone_service_internaluri: "http://{{ internal_lb_vip_address }}:5000"
+    keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
+    keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
+    keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
+    cinder_venv_tag: "testing"
+    cinder_developer_mode: true
+    cinder_git_install_branch: 94ae8598b96e2f86844fdf0f35a8b83a94c7b4c4
+    cinder_service_password: "secrete"
+    cinder_container_mysql_password: "SuperSecrete"
+    cinder_profiler_hmac_key: "secrete"
+    cinder_backend_lvm_inuse: false
+    openrc_os_password: "{{ keystone_auth_admin_password }}"
+    openrc_os_domain_name: "Default"
+    memcached_servers: 127.0.0.1
+    memcached_encryption_key: "secrete"
+    debug: true
+    verbose: true
