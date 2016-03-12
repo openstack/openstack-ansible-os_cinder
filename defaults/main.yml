@@ -13,9 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Defines that the role will be deployed on a host machine
-is_metal: true
-
 ## APT Cache options
 cache_timeout: 600
 
@@ -158,7 +155,7 @@ cinder_iscsi_port: 3260
 ## Cinder RPC
 cinder_rpc_backend: rabbit
 
-# (StrOpt) Method used to wipe old voumes (valid options are: none, zero,
+# (StrOpt) Method used to wipe old volumes (valid options are: none, zero,
 # shred)
 cinder_volume_clear: shred
 # (StrOpt) The flag to pass to ionice to alter the i/o priority of the process
@@ -187,8 +184,6 @@ cinder_quota_backups: 10
 cinder_quota_backup_gigabytes: 1000
 
 ## General configuration
-## Set this in rpc_user_config.yml UNLESS you want all hosts to use the same
-## Cinder backends.  See the rpc_user_config example for more on how this is done.
 # cinder_backends:
 #   lvm:
 #     volume_group: cinder-volumes
@@ -212,10 +207,8 @@ cinder_quota_backup_gigabytes: 1000
 #  "volume:create": ""
 #  "volume:delete": ""
 
-# Potential locations of glance
-# the variable cinder_glance_api_servers is a list of servers that can service glance
-# by default this variable is undefined
-#cinder_glance_api_servers:
+# Comma separated list of Glance API servers
+# cinder_glance_api_servers:
 
 cinder_glance_host: 127.0.0.1
 cinder_glance_service_port: 9292
@@ -242,7 +235,7 @@ cinder_apt_packages:
 cinder_requires_pip_packages:
   - virtualenv
   - virtualenv-tools
-  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
+  - python-keystoneclient # Keystoneclient needed by the keystone Ansible module
   - httplib2
 
 # Common pip packages
