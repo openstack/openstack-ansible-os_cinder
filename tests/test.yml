@@ -256,3 +256,18 @@
     memcached_encryption_key: "secrete"
     debug: true
     verbose: true
+
+- name: Playbook for functional testing of cinder
+  hosts: cinder_all
+  user: root
+  gather_facts: false
+  pre_tasks:
+    - name: Install httplib2 so we can use the uri module
+      pip:
+        name: httplib2
+  tasks:
+    - name: Check the cinder-api
+      uri:
+        url: "http://localhost:8776"
+        status_code: 200
+
