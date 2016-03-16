@@ -146,9 +146,6 @@
         state: "present"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['keystone_all'][0]
-      tags:
-        - aodh-rabbitmq
-        - aodh-rabbitmq-vhost
     - name: Ensure rabbitmq user
       rabbitmq_user:
         user: "{{ keystone_rabbitmq_userid }}"
@@ -160,9 +157,6 @@
         state: "present"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['keystone_all'][0]
-      tags:
-        - aodh-rabbitmq
-        - aodh-rabbitmq-user
     - name: Create DB for service
       mysql_db:
         login_user: "root"
@@ -172,8 +166,6 @@
         state: "present"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['keystone_all'][0]
-      tags:
-        - mysql-db-setup
     - name: Grant access to the DB for the service
       mysql_user:
         login_user: "root"
@@ -189,8 +181,6 @@
         - "%"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['keystone_all'][0]
-      tags:
-        - mysql-db-setup
   roles:
     - role: os_keystone
   vars:
@@ -219,18 +209,40 @@
   user: root
   gather_facts: true
   pre_tasks:
+    - name: Ensure Rabbitmq vhost
+      rabbitmq_vhost:
+        name: "{{ cinder_rabbitmq_vhost }}"
+        state: "present"
+      delegate_to: "{{ groups['rabbitmq_all'][0] }}"
+    - name: Ensure rabbitmq user
+      rabbitmq_user:
+        user: "{{ cinder_rabbitmq_userid }}"
+        password: "{{ cinder_rabbitmq_password }}"
+        vhost: "{{ cinder_rabbitmq_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+      delegate_to: "{{ groups['rabbitmq_all'][0] }}"
   roles:
     - role: "{{ rolename | basename }}"
   vars:
     external_lb_vip_address: 10.100.100.3
     internal_lb_vip_address: 10.100.100.3
     cinder_galera_address: 10.100.100.2
-    cinder_galera_database: cinder
-    galera_root_password: "secrete"
-    galera_client_drop_config_file: false
+    cinder_venv_tag: "testing"
+    cinder_developer_mode: true
+    cinder_git_install_branch: 94ae8598b96e2f86844fdf0f35a8b83a94c7b4c4
+    cinder_requirements_git_install_branch: 332278d456e06870150835564342570ec9d5f5a0
+    cinder_service_password: "secrete"
+    cinder_container_mysql_password: "SuperSecrete"
+    cinder_profiler_hmac_key: "secrete"
+    cinder_backend_lvm_inuse: false
     cinder_rabbitmq_password: "secrete"
     cinder_rabbitmq_userid: cinder
     cinder_rabbitmq_vhost: /cinder
+    galera_root_password: "secrete"
+    galera_client_drop_config_file: false
     rabbitmq_servers: 10.100.100.2
     rabbitmq_use_ssl: true
     rabbitmq_port: 5671
@@ -242,14 +254,6 @@
     keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
     keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
     keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
-    cinder_venv_tag: "testing"
-    cinder_developer_mode: true
-    cinder_git_install_branch: 94ae8598b96e2f86844fdf0f35a8b83a94c7b4c4
-    cinder_requirements_git_install_branch: 332278d456e06870150835564342570ec9d5f5a0
-    cinder_service_password: "secrete"
-    cinder_container_mysql_password: "SuperSecrete"
-    cinder_profiler_hmac_key: "secrete"
-    cinder_backend_lvm_inuse: false
     openrc_os_password: "{{ keystone_auth_admin_password }}"
     openrc_os_domain_name: "Default"
     memcached_servers: 127.0.0.1
