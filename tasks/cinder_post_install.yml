@@ -63,6 +63,9 @@
     line: "include /var/lib/cinder/volumes/*"
     state: present
   notify: Ensure tgt service restarted
+  when:
+    - inventory_hostname in groups['cinder_volume']
+    - cinder_backend_lvm_inuse | bool
   tags:
     - cinder-tgt
 
@@ -70,7 +73,9 @@
   template:
     src: nfs_shares.j2
     dest: "{{ cinder_nfs_client.nfs_shares_config }}"
-  when: cinder_nfs_client is defined
+  when:
+    - cinder_nfs_client is defined
+    - inventory_hostname in groups['cinder_volume']
   tags:
     - cinder-nfs
 

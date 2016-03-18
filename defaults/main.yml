@@ -192,6 +192,9 @@ cinder_quota_backup_gigabytes: 1000
 #     volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
 #     volume_backend_name: LVM_iSCSI
 
+# cinder_backend_lvm_inuse: True if current host has an lvm backend
+cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") != -1 }}'
+
 ## Define nfs information for cinder. When the cinder_nfs_client dictionary is defined,
 ## it will enable nfs shares.  The value ``nfs_shares_config`` is the path on the disk
 ## where the NFS export will live. The ``shares`` value is a list of dictionaries that
@@ -217,21 +220,6 @@ cinder_glance_service_port: 9292
 cinder_glance_api_version: 1
 
 cinder_service_in_ldap: false
-
-# Common apt packages
-cinder_apt_packages:
-  - dmeventd
-  - libpq-dev
-  - libkmod-dev
-  - libkmod2
-  - libxslt1-dev
-  - nfs-common
-  - parted
-  - qemu-utils
-  - rpcbind
-  - tgt
-  - zlib1g
-  - zlibc
 
 # Cinder packages that must be installed before anything else
 cinder_requires_pip_packages:
