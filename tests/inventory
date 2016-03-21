@@ -1,2 +1,8 @@
 [all]
-localhost ansible_connection=local ansible_become=True
+localhost ansible_connection=local ansible_become=True ansible_python_interpreter=ENVPYTHON
+
+[cinder_volume]
+localhost ansible_connection=local ansible_become=True ansible_python_interpreter=ENVPYTHON
+
+[cinder_all]
+localhost ansible_connection=local ansible_become=True ansible_python_interpreter=ENVPYTHON

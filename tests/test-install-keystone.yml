@@ -1,0 +1,83 @@
+---
+# Copyright 2015, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Deploy keystone
+  hosts: keystone_all
+  user: root
+  gather_facts: true
+  pre_tasks:
+    - name: Ensure rabbitmq vhost
+      rabbitmq_vhost:
+        name: "{{ keystone_rabbitmq_vhost }}"
+        state: "present"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['keystone_all'][0]
+    - name: Ensure rabbitmq user
+      rabbitmq_user:
+        user: "{{ keystone_rabbitmq_userid }}"
+        password: "{{ keystone_rabbitmq_password }}"
+        vhost: "{{ keystone_rabbitmq_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['keystone_all'][0]
+    - name: Create DB for service
+      mysql_db:
+        login_user: "root"
+        login_password: "secrete"
+        login_host: "localhost"
+        name: "{{ keystone_galera_database }}"
+        state: "present"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['keystone_all'][0]
+    - name: Grant access to the DB for the service
+      mysql_user:
+        login_user: "root"
+        login_password: "secrete"
+        login_host: "localhost"
+        name: "{{ keystone_galera_database }}"
+        password: "{{ keystone_container_mysql_password }}"
+        host: "{{ item }}"
+        state: "present"
+        priv: "{{ keystone_galera_database }}.*:ALL"
+      with_items:
+        - "localhost"
+        - "%"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['keystone_all'][0]
+  roles:
+    - role: os_keystone
+  vars:
+    external_lb_vip_address: 10.100.100.3
+    internal_lb_vip_address: 10.100.100.3
+    keystone_galera_address: 10.100.100.2
+    keystone_galera_database: keystone
+    keystone_venv_tag: "testing"
+    keystone_developer_mode: true
+    keystone_git_install_branch: stable/mitaka
+    keystone_requirements_git_install_branch: f8cf7eba898a1424549c730d6692ec4e9573c0ed # HEAD of "master" as of 23.03.2016
+    keystone_auth_admin_token: "SuperSecreteTestToken"
+    keystone_auth_admin_password: "SuperSecretePassword"
+    keystone_service_password: "secrete"
+    keystone_rabbitmq_password: "secrete"
+    keystone_container_mysql_password: "SuperSecrete"
+    keystone_rabbitmq_port: 5671
+    keystone_rabbitmq_userid: keystone
+    keystone_rabbitmq_vhost: /keystone
+    keystone_rabbitmq_servers: 10.100.100.2
+    keystone_rabbitmq_use_ssl: false
+    galera_client_drop_config_file: false

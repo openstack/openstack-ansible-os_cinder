@@ -13,26 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Prepare the user ssh keys
-- include: test-prepare-keys.yml
-
-# Prepare the host
-- include: test-prepare-host.yml
-
-# Prepare the cinder-volumes VG
-- include: test-prepare-vg.yml
-
-# Prepare the containers
-- include: test-prepare-containers.yml
-
-# Install RabbitMQ/MariaDB
-- include: test-install-infra.yml
-
-# Install Keystone
-- include: test-install-keystone.yml
-
-# Install Cinder
-- include: test-install-cinder.yml
-
-# Test Cinder
-- include: test-cinder-functional.yml
+- name: Create ssh key pairs for use with containers
+  hosts: 127.0.0.1
+  connection: local
+  become: false
+  pre_tasks:
+    - name: Create ssh key pair for root
+      user:
+        name: "{{ ansible_ssh_user }}"
+        generate_ssh_key: "yes"
+        ssh_key_bits: 2048
+        ssh_key_file: ".ssh/id_rsa"
+    - name: Get the calling user's key
+      command: cat ~/.ssh/id_rsa.pub
+      register: key_get
+    - set_fact:
+        lxc_container_ssh_key: "{{ key_get.stdout }}"
