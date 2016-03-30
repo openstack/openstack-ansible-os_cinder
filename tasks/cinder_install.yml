@@ -17,7 +17,8 @@
   when:
     - ansible_pkg_mgr == 'apt'
   tags:
-    - install-apt
+    - cinder-install
+    - cinder-apt-packages
 
 - name: Create developer mode constraint file
   copy:
