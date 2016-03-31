@@ -30,9 +30,12 @@ galaxy_info:
     - development
     - openstack
 dependencies:
-  - apt_package_pinning
-  - galera_client
-  - openstack_openrc
   - role: pip_lock_down
     when:
       - not cinder_developer_mode | bool
+  - role: pip_install
+    when:
+      - cinder_developer_mode | bool
+  - apt_package_pinning
+  - galera_client
+  - openstack_openrc
