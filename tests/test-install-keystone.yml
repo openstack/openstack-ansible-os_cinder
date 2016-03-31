@@ -61,23 +61,5 @@
       when: inventory_hostname == groups['keystone_all'][0]
   roles:
     - role: os_keystone
-  vars:
-    external_lb_vip_address: 10.100.100.3
-    internal_lb_vip_address: 10.100.100.3
-    keystone_galera_address: 10.100.100.2
-    keystone_galera_database: keystone
-    keystone_venv_tag: "testing"
-    keystone_developer_mode: true
-    keystone_git_install_branch: stable/mitaka
-    keystone_requirements_git_install_branch: f8cf7eba898a1424549c730d6692ec4e9573c0ed # HEAD of "master" as of 23.03.2016
-    keystone_auth_admin_token: "SuperSecreteTestToken"
-    keystone_auth_admin_password: "SuperSecretePassword"
-    keystone_service_password: "secrete"
-    keystone_rabbitmq_password: "secrete"
-    keystone_container_mysql_password: "SuperSecrete"
-    keystone_rabbitmq_port: 5671
-    keystone_rabbitmq_userid: keystone
-    keystone_rabbitmq_vhost: /keystone
-    keystone_rabbitmq_servers: 10.100.100.2
-    keystone_rabbitmq_use_ssl: false
-    galera_client_drop_config_file: false
+  vars_files:
+    - test-vars.yml

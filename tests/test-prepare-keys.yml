@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: we use become_user because setting become: no or become: false
+#       doesn't seem to override the ansible_become=true in the
+#       inventory
 - name: Create ssh key pairs for use with containers
-  hosts: 127.0.0.1
-  connection: local
-  become: false
+  hosts: localhost
+  become_user: "{{ ansible_ssh_user }}"
   pre_tasks:
     - name: Create ssh key pair for root
       user:

@@ -1,0 +1,55 @@
+cinder_backends:
+  lvm:
+    volume_group: cinder-volumes
+    volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
+    volume_backend_name: LVM_iSCSI
+cinder_container_mysql_password: "SuperSecrete"
+cinder_developer_mode: true
+cinder_galera_address: 10.100.100.2
+cinder_git_install_branch: stable/mitaka
+cinder_glance_api_servers: "http://glance_server:9292"
+cinder_profiler_hmac_key: "secrete"
+cinder_rabbitmq_password: "secrete"
+cinder_rabbitmq_userid: cinder
+cinder_rabbitmq_vhost: /cinder
+cinder_requirements_git_install_branch: stable/mitaka
+cinder_service_password: "secrete"
+cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
+cinder_venv_tag: "testing"
+debug: true
+external_lb_vip_address: 10.100.100.3
+galera_client_drop_config_file: false
+galera_root_password: "secrete"
+internal_lb_vip_address: 10.100.100.3
+keystone_admin_tenant_name: admin
+keystone_admin_user_name: admin
+keystone_auth_admin_password: "SuperSecretePassword"
+keystone_container_mysql_password: "SuperSecrete"
+keystone_developer_mode: true
+keystone_galera_address: 10.100.100.2
+keystone_galera_database: keystone
+keystone_git_install_branch: stable/mitaka
+keystone_rabbitmq_password: "secrete"
+keystone_rabbitmq_port: 5671
+keystone_rabbitmq_servers: 10.100.100.2
+keystone_rabbitmq_use_ssl: false
+keystone_rabbitmq_userid: keystone
+keystone_rabbitmq_vhost: /keystone
+keystone_requirements_git_install_branch: stable/mitaka
+keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
+keystone_service_adminuri_insecure: false
+keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
+keystone_service_internaluri: "http://{{ internal_lb_vip_address }}:5000"
+keystone_service_internaluri_insecure: false
+keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
+keystone_service_password: "secrete"
+keystone_venv_tag: "testing"
+memcached_encryption_key: "secrete"
+memcached_servers: 127.0.0.1
+openrc_os_auth_url: "{{ keystone_service_internalurl }}"
+openrc_os_domain_name: "Default"
+openrc_os_password: "{{ keystone_auth_admin_password }}"
+rabbitmq_port: 5671
+rabbitmq_servers: 10.100.100.2
+rabbitmq_use_ssl: true
+verbose: true

@@ -37,6 +37,5 @@
       until: volume_status|success
       retries: 5
       delay: 5
-  vars:
-    cinder_venv_tag: testing
-    cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
+  vars_files:
+    - test-vars.yml
