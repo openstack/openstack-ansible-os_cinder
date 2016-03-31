@@ -37,44 +37,5 @@
       when: inventory_hostname == groups['cinder_all'][0]
   roles:
     - role: "{{ rolename | basename }}"
-  vars:
-    external_lb_vip_address: 10.100.100.3
-    internal_lb_vip_address: 10.100.100.3
-    cinder_galera_address: 10.100.100.2
-    cinder_venv_tag: "testing"
-    cinder_developer_mode: true
-    cinder_git_install_branch: stable/mitaka
-    cinder_requirements_git_install_branch: f8cf7eba898a1424549c730d6692ec4e9573c0ed # HEAD of "master" as of 23.03.2016
-    cinder_service_password: "secrete"
-    cinder_container_mysql_password: "SuperSecrete"
-    cinder_profiler_hmac_key: "secrete"
-    cinder_backends:
-      lvm:
-        volume_group: cinder-volumes
-        volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
-        volume_backend_name: LVM_iSCSI
-    cinder_rabbitmq_password: "secrete"
-    cinder_rabbitmq_userid: cinder
-    cinder_rabbitmq_vhost: /cinder
-    cinder_glance_api_servers: "http://glance_server:9292"
-    galera_root_password: "secrete"
-    galera_client_drop_config_file: false
-    rabbitmq_servers: 10.100.100.2
-    rabbitmq_use_ssl: true
-    rabbitmq_port: 5671
-    keystone_admin_user_name: admin
-    keystone_admin_tenant_name: admin
-    keystone_auth_admin_password: "SuperSecretePassword"
-    keystone_service_adminuri_insecure: false
-    keystone_service_internaluri_insecure: false
-    keystone_service_internaluri: "http://{{ internal_lb_vip_address }}:5000"
-    keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
-    keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
-    keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
-    openrc_os_auth_url: "{{ keystone_service_internalurl }}"
-    openrc_os_password: "{{ keystone_auth_admin_password }}"
-    openrc_os_domain_name: "Default"
-    memcached_servers: 127.0.0.1
-    memcached_encryption_key: "secrete"
-    debug: true
-    verbose: true
+  vars_files:
+    - test-vars.yml

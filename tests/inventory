@@ -1,8 +1,39 @@
 [all]
 localhost ansible_connection=local ansible_become=True
+infra1 ansible_host=10.100.100.2 ansible_become=True ansible_user=root
+openstack1 ansible_host=10.100.100.3 ansible_become=True ansible_user=root
+
+[all_containers]
+infra1
+openstack1
+
+[rabbitmq_all]
+infra1
+
+[galera_all]
+infra1
+
+[service_all:children]
+rabbitmq_all
+galera_all
+
+[keystone_all]
+openstack1
+
+[cinder_api]
+openstack1
+
+[cinder_scheduler]
+openstack1
+
+[cinder_backup]
+openstack1
 
 [cinder_volume]
-localhost ansible_connection=local ansible_become=True
+localhost
 
-[cinder_all]
-localhost ansible_connection=local ansible_become=True
+[cinder_all:children]
+cinder_api
+cinder_scheduler
+cinder_backup
+cinder_volume
