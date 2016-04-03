@@ -6,13 +6,13 @@ cinder_backends:
 cinder_container_mysql_password: "SuperSecrete"
 cinder_developer_mode: true
 cinder_galera_address: 10.100.100.2
-cinder_git_install_branch: stable/mitaka
+cinder_git_install_branch: master
 cinder_glance_api_servers: "http://glance_server:9292"
 cinder_profiler_hmac_key: "secrete"
 cinder_rabbitmq_password: "secrete"
 cinder_rabbitmq_userid: cinder
 cinder_rabbitmq_vhost: /cinder
-cinder_requirements_git_install_branch: stable/mitaka
+cinder_requirements_git_install_branch: master
 cinder_service_password: "secrete"
 cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
 cinder_venv_tag: "testing"
@@ -28,14 +28,14 @@ keystone_container_mysql_password: "SuperSecrete"
 keystone_developer_mode: true
 keystone_galera_address: 10.100.100.2
 keystone_galera_database: keystone
-keystone_git_install_branch: stable/mitaka
+keystone_git_install_branch: master
 keystone_rabbitmq_password: "secrete"
 keystone_rabbitmq_port: 5671
 keystone_rabbitmq_servers: 10.100.100.2
 keystone_rabbitmq_use_ssl: false
 keystone_rabbitmq_userid: keystone
 keystone_rabbitmq_vhost: /keystone
-keystone_requirements_git_install_branch: stable/mitaka
+keystone_requirements_git_install_branch: master
 keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
 keystone_service_adminuri_insecure: false
 keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
