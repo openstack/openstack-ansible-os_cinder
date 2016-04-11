@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-## APT Cache options
-cache_timeout: 600
 
 cinder_git_repo: https://git.openstack.org/openstack/cinder
 cinder_git_install_branch: master
