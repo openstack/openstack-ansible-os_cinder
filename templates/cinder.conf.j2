@@ -26,6 +26,7 @@ backup_driver = {{ cinder_service_backup_driver }}
 backup_metadata_version = {{ cinder_service_backup_metadata_version }}
 backup_compression_algorithm = {{ cinder_service_backup_compression_algorithm }}
 {% if cinder_service_backup_driver == 'cinder.backup.drivers.swift' %}
+swift_catalog_info = {{ cinder_swift_catalog_info }}
 backup_swift_auth = {{ cinder_service_backup_swift_auth }}
 {% if cinder_service_backup_swift_auth == 'single_user' %}
 backup_swift_url = {{ cinder_service_backup_swift_url }}

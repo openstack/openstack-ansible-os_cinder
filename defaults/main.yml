@@ -140,6 +140,8 @@ cinder_service_backup_ceph_pool: backups
 cinder_service_backup_compression_algorithm: zlib
 cinder_service_backup_metadata_version: 2
 
+cinder_swift_catalog_info: "object-store:swift:internalURL"
+
 cinder_service_volume_program_name: cinder-volume
 
 cinder_service_scheduler_program_name: cinder-scheduler
