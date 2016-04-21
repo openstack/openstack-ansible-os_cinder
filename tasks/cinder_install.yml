@@ -73,7 +73,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: cinder_requires_pip_packages
+  with_items: "{{ cinder_requires_pip_packages }}"
   tags:
     - cinder-install
     - cinder-pip-packages
@@ -190,7 +190,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: cinder_pip_packages
+  with_items: "{{ cinder_pip_packages }}"
   when:
     - cinder_venv_enabled | bool
     - cinder_get_venv | failed or cinder_developer_mode | bool
@@ -208,7 +208,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: cinder_pip_packages
+  with_items: "{{ cinder_pip_packages }}"
   when:
     - not cinder_developer_mode | bool
     - not cinder_venv_enabled | bool
