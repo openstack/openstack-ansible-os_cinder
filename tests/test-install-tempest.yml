@@ -13,20 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Playbook for functional testing of cinder
-  hosts: cinder_api
+- name: Playbook for deploying tempest
+  hosts: openstack1
   user: root
-  gather_facts: false
-  tasks:
-    - name: Check the cinder-api
-      uri:
-        url: "http://localhost:8776"
-        status_code: 200,300
-    - name: Run tempest
-      shell: |
-        . /opt/tempest_{{ tempest_git_install_branch }}/bin/activate
-        /opt/tempest_{{ tempest_git_install_branch }}/run_tempest.sh --no-virtual-env ${RUN_TEMPEST_OPTS} tempest.api.volume.test_volumes_get
-      environment:
-        RUN_TEMPEST_OPTS: "--serial"
+  gather_facts: true
+  roles:
+    - role: "os_tempest"
   vars_files:
     - test-vars.yml

@@ -34,5 +34,8 @@
 # Install Cinder
 - include: test-install-cinder.yml
 
+# Install Tempest
+- include: test-install-tempest.yml
+
 # Test Cinder
 - include: test-cinder-functional.yml
