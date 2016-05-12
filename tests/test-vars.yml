@@ -53,9 +53,11 @@ rabbitmq_port: 5671
 rabbitmq_servers: 10.100.100.2
 rabbitmq_use_ssl: true
 tempest_developer_mode: True
-tempest_git_repo: https://git.openstack.org/openstack/tempest
-tempest_git_install_branch: 534a8dc60dfef116156b8f9ee60071a9bf4e4f90
-tempest_git_dest: "/opt/tempest_{{ tempest_git_install_branch | replace('/', '_') }}"
+tempest_git_install_branch: master
+tempest_venv_tag: "{{ tempest_git_install_branch }}"
+# tempest_venv_bin is the same as the default in os_tempest role, but we set
+# it again here so we can refer to it in test-cinder-functional.yml
+tempest_venv_bin: "/opt/tempest_{{ tempest_venv_tag }}/bin"
 tempest_log_dir: "/var/log/"
 tempest_main_group: cinder_all
 tempest_service_available_aodh: False

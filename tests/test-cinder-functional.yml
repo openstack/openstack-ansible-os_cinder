@@ -24,8 +24,8 @@
         status_code: 200,300
     - name: Run tempest
       shell: |
-        . /opt/tempest_{{ tempest_git_install_branch }}/bin/activate
-        /opt/tempest_{{ tempest_git_install_branch }}/run_tempest.sh --no-virtual-env ${RUN_TEMPEST_OPTS} tempest.api.volume.test_volumes_get
+        . {{ tempest_venv_bin }}/activate
+        {{ tempest_venv_bin | dirname }}/run_tempest.sh --no-virtual-env ${RUN_TEMPEST_OPTS} tempest.api.volume.test_volumes_get
       environment:
         RUN_TEMPEST_OPTS: "--serial"
   vars_files:
