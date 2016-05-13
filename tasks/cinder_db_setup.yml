@@ -13,32 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Create DB for service
-  mysql_db:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ cinder_galera_address }}"
-    name: "{{ cinder_galera_database }}"
-    state: "present"
-  tags:
-    - cinder-db-setup
-
-- name: Grant access to the DB for the service
-  mysql_user:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ cinder_galera_address }}"
-    name: "{{ cinder_galera_user }}"
-    password: "{{ cinder_container_mysql_password }}"
-    host: "{{ item }}"
-    state: "present"
-    priv: "{{ cinder_galera_database }}.*:ALL"
-  with_items:
-    - "localhost"
-    - "%"
-  tags:
-    - cinder-db-setup
-
 - name: Perform a cinder DB sync
   command: "{{ cinder_bin }}/cinder-manage db sync"
   become: yes
