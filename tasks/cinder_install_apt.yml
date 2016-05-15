@@ -36,7 +36,19 @@
   delay: 2
   with_items: "{{ cinder_apt_packages }}"
 
-- name: Install apt packages
+- name: Install apt packages common between different backends
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ cinder_volume_apt_packages }}"
+  when:
+    - inventory_hostname in groups['cinder_volume']
+
+- name: Install apt packages for LVM backend
   apt:
     pkg: "{{ item }}"
     state: latest
