@@ -19,6 +19,9 @@
     "volume:create_snapshot": "rule:admin_or_owner",
     "volume:delete_snapshot": "rule:admin_or_owner",
     "volume:update_snapshot": "rule:admin_or_owner",
+    "volume:get_snapshot_metadata": "rule:admin_or_owner",
+    "volume:delete_snapshot_metadata": "rule:admin_or_owner",
+    "volume:update_snapshot_metadata": "rule:admin_or_owner",
     "volume:extend": "rule:admin_or_owner",
     "volume:update_readonly_flag": "rule:admin_or_owner",
     "volume:retype": "rule:admin_or_owner",
@@ -53,6 +56,7 @@
     "volume_extension:volume_admin_actions:migrate_volume_completion": "rule:admin_api",
 
     "volume_extension:volume_actions:upload_public": "rule:admin_api",
+    "volume_extension:volume_actions:upload_image": "rule:admin_or_owner",
 
     "volume_extension:volume_host_attribute": "rule:admin_api",
     "volume_extension:volume_tenant_attribute": "rule:admin_or_owner",
@@ -69,15 +73,15 @@
     "volume:create_transfer": "rule:admin_or_owner",
     "volume:accept_transfer": "",
     "volume:delete_transfer": "rule:admin_or_owner",
+    "volume:get_transfer": "rule:admin_or_owner",
     "volume:get_all_transfers": "rule:admin_or_owner",
 
     "volume_extension:replication:promote": "rule:admin_api",
     "volume_extension:replication:reenable": "rule:admin_api",
 
-    "volume:enable_replication": "rule:admin_api",
-    "volume:disable_replication": "rule:admin_api",
-    "volume:failover_replication": "rule:admin_api",
-    "volume:list_replication_targets": "rule:admin_api",
+    "volume:failover_host": "rule:admin_api",
+    "volume:freeze_host": "rule:admin_api",
+    "volume:thaw_host": "rule:admin_api",
 
     "backup:create" : "",
     "backup:delete": "rule:admin_or_owner",
@@ -102,5 +106,8 @@
     "consistencygroup:get_cgsnapshot": "group:nobody",
     "consistencygroup:get_all_cgsnapshots": "group:nobody",
 
-    "scheduler_extension:scheduler_stats:get_pools" : "rule:admin_api"
+    "scheduler_extension:scheduler_stats:get_pools" : "rule:admin_api",
+    "message:delete": "rule:admin_or_owner",
+    "message:get": "rule:admin_or_owner",
+    "message:get_all": "rule:admin_or_owner"
 }
