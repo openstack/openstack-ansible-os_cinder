@@ -35,6 +35,32 @@
         state: "present"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['cinder_all'][0]
+    - name: Create DB for service
+      mysql_db:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ cinder_galera_address }}"
+        name: "{{ cinder_galera_database }}"
+        state: "present"
+      when: inventory_hostname == groups['cinder_all'][0]
+      tags:
+        - mysql-db-setup
+    - name: Grant access to the DB for the service
+      mysql_user:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ cinder_galera_address }}"
+        name: "{{ cinder_galera_user }}"
+        password: "{{ cinder_container_mysql_password }}"
+        host: "{{ item }}"
+        state: "present"
+        priv: "{{ cinder_galera_database }}.*:ALL"
+      when: inventory_hostname == groups['cinder_all'][0]
+      with_items:
+        - "localhost"
+        - "%"
+      tags:
+        - mysql-db-setup
   roles:
     - role: "{{ rolename | basename }}"
   vars_files:

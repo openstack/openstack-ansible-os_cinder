@@ -12,6 +12,8 @@ cinder_profiler_hmac_key: "secrete"
 cinder_rabbitmq_password: "secrete"
 cinder_rabbitmq_userid: cinder
 cinder_rabbitmq_vhost: /cinder
+cinder_galera_user: cinder
+cinder_galera_database: cinder
 cinder_requirements_git_install_branch: master
 cinder_service_password: "secrete"
 cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
@@ -19,6 +21,7 @@ cinder_venv_tag: "testing"
 debug: true
 external_lb_vip_address: 10.100.100.3
 galera_client_drop_config_file: false
+galera_root_user: "root"
 galera_root_password: "secrete"
 internal_lb_vip_address: 10.100.100.3
 keystone_admin_tenant_name: admin
