@@ -237,7 +237,6 @@ cinder_pip_packages:
   - pycrypto
   - python-cinderclient
   - python-keystoneclient
-  - python-cephlibs
 
 # Service Names
 cinder_service_names:
