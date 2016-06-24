@@ -24,9 +24,30 @@
   tags:
     - always
 
+- name: Check init system
+  command: cat /proc/1/comm
+  register: _pid1_name
+  tags:
+    - always
+
+- name: Set the name of pid1
+  set_fact:
+    pid1_name: "{{ _pid1_name.stdout }}"
+  tags:
+    - always
+
 - include: cinder_pre_install.yml
+  tags:
+    - cinder-install
+
 - include: cinder_install.yml
+  tags:
+    - cinder-install
+    - cinder-config
+
 - include: cinder_post_install.yml
+  tags:
+    - cinder-install
 
 - include: cinder_db_setup.yml
   when: >
@@ -36,7 +57,9 @@
   when: >
     inventory_hostname == groups['cinder_all'][0]
 
-- include: cinder_upstart_init.yml
+- include: cinder_init.yml
+  tags:
+    - cinder-install
 
 - name: Flush handlers
   meta: flush_handlers
@@ -49,3 +72,5 @@
   when: >
     inventory_hostname in groups['cinder_volume']
     and cinder_backend_lvm_inuse
+  tags:
+    - cinder-install

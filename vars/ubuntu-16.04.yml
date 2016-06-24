@@ -1,5 +1,6 @@
 ---
-# Copyright 2014, Rackspace US, Inc.
+# Copyright 2016, Intel Corporation.
+# Copyright 2016, IBM Corporation.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,27 +14,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-galaxy_info:
-  author: rcbops
-  description: Installation and setup of cinder
-  company: Rackspace
-  license: Apache2
-  min_ansible_version: 1.9
-  platforms:
-    - name: Ubuntu
-      versions:
-        - trusty
-        - xenial
-  categories:
-    - cloud
-    - python
-    - cinder
-    - development
-    - openstack
-dependencies:
-  - pip_install
-  - role: apt_package_pinning
-    when:
-      - ansible_pkg_mgr == 'apt'
-  - galera_client
-  - openstack_openrc
+## APT Cache options
+cache_timeout: 600
+
+# Common apt packages
+cinder_apt_packages:
+ - rpcbind
+ - rsync
+ - git
+ - nfs-common
+ - libpq-dev
+ - libkmod-dev
+ - libkmod2
+ - libxslt1-dev
+ - zlib1g
+ - zlibc
+ - libffi-dev
+ - libssl-dev
+
+cinder_volume_apt_packages:
+ - qemu-utils
+
+cinder_lvm_volume_apt_packages:
+ - dmeventd
+ - parted
+ - tgt
+
+
