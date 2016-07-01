@@ -103,6 +103,9 @@ truncate: CommandFilter, truncate, root
 chmod: CommandFilter, chmod, root
 rm: CommandFilter, rm, root
 
+# cinder/volume/drivers/remotefs.py
+mkdir: CommandFilter, mkdir, root
+
 # cinder/volume/drivers/netapp/nfs.py:
 netapp_nfs_find: RegExpFilter, find, root, find, ^[/]*([^/\0]+(/+)?)*$, -maxdepth, \d+, -name, img-cache.*, -amin, \+\d+
 
@@ -202,6 +205,7 @@ vgc-cluster: CommandFilter, vgc-cluster, root
 # cinder/volume/drivers/vzstorage.py
 pstorage-mount: CommandFilter, pstorage-mount, root
 pstorage: CommandFilter, pstorage, root
+ploop: CommandFilter, ploop, root
 
 # initiator/connector.py:
 drv_cfg: CommandFilter, /opt/emc/scaleio/sdc/bin/drv_cfg, root, /opt/emc/scaleio/sdc/bin/drv_cfg, --query_guid
