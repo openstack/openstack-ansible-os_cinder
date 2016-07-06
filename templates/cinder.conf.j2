@@ -61,13 +61,7 @@ nova_catalog_info = {{ cinder_nova_catalog_info }}
 nova_catalog_admin_info = {{ cinder_nova_catalog_admin_info }}
 
 ## Glance
-# TODO(odyssey4me): Remove this conditional once https://review.openstack.org/299928 has merged
-{% if cinder_glance_api_servers is defined %}
 glance_api_servers = {{ cinder_glance_api_servers }}
-{% else %}
-glance_host = {{ cinder_glance_host }}
-glance_port = 9292
-{% endif %}
 glance_num_retries = 0
 glance_api_version = {{ cinder_glance_api_version }}
 
