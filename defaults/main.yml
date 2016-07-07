@@ -24,15 +24,7 @@ cinder_developer_constraints:
 
 # Name of the virtual env to deploy into
 cinder_venv_tag: untagged
-cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
-
-# Set this to enable or disable installing in a venv
-cinder_venv_enabled: true
-
-# The bin path defaults to the venv path however if installation in a
-#  venv is disabled the bin path will be dynamically set based on the
-#  system path used when the installing.
-cinder_bin: "{{ cinder_venv_bin }}"
+cinder_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
 
 cinder_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/cinder.tgz
 

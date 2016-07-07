@@ -49,17 +49,6 @@
   tags:
     - cinder-dirs
 
-- name: Create cinder venv dir
-  file:
-    path: "{{ item.path }}"
-    state: directory
-  with_items:
-    - { path: "/openstack/venvs" }
-    - { path: "{{ cinder_venv_bin }}" }
-  when: cinder_venv_enabled | bool
-  tags:
-    - cinder-dirs
-
 - name: Test for log directory or link
   shell: |
     if [ -h "/var/log/cinder"  ]; then

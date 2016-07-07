@@ -84,7 +84,6 @@
     get_md5: False
   when:
     - not cinder_developer_mode | bool
-    - cinder_venv_enabled | bool
   register: local_venv_stat
   tags:
     - cinder-install
@@ -96,7 +95,6 @@
     return_content: True
   when:
     - not cinder_developer_mode | bool
-    - cinder_venv_enabled | bool
   register: remote_venv_checksum
   tags:
     - cinder-install
@@ -116,7 +114,6 @@
   register: get_venv
   when:
     - not cinder_developer_mode | bool
-    - cinder_venv_enabled | bool
     - (local_venv_stat.stat.exists == False or
         {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
   tags:
@@ -126,17 +123,15 @@
 - name: Set cinder get_venv fact
   set_fact:
     cinder_get_venv: "{{ get_venv }}"
-  when: cinder_venv_enabled | bool
   tags:
     - cinder-install
     - cinder-pip-packages
 
 - name: Remove existing venv
   file:
-    path: "{{ cinder_venv_bin | dirname }}"
+    path: "{{ cinder_bin | dirname }}"
     state: absent
   when:
-    - cinder_venv_enabled | bool
     - cinder_get_venv | changed
   tags:
     - cinder-install
@@ -144,11 +139,11 @@
 
 - name: Create cinder venv dir
   file:
-    path: "{{ cinder_venv_bin | dirname }}"
+    path: "{{ cinder_bin | dirname }}"
     state: directory
+  register: cinder_venv_dir
   when:
     - not cinder_developer_mode | bool
-    - cinder_venv_enabled | bool
     - cinder_get_venv | changed
   tags:
     - cinder-install
@@ -157,33 +152,21 @@
 - name: Unarchive pre-built venv
   unarchive:
     src: "/var/cache/{{ cinder_venv_download_url | basename }}"
-    dest: "{{ cinder_venv_bin | dirname }}"
+    dest: "{{ cinder_bin | dirname }}"
     copy: "no"
   when:
     - not cinder_developer_mode | bool
-    - cinder_venv_enabled | bool
-    - cinder_get_venv | changed
+    - cinder_get_venv | changed or cinder_venv_dir | changed
   notify: Restart cinder services
   tags:
     - cinder-install
     - cinder-pip-packages
 
-- name: Update virtualenv path
-  command: >
-    virtualenv-tools --update-path=auto {{ cinder_venv_bin | dirname }}
-  when:
-    - not cinder_developer_mode | bool
-    - cinder_venv_enabled | bool
-    - cinder_get_venv | success
-  tags:
-    - cinder-install
-    - cinder-pip-packages
-
-- name: Install pip packages (venv)
+- name: Install pip packages
   pip:
     name: "{{ item }}"
     state: latest
-    virtualenv: "{{ cinder_venv_bin | dirname }}"
+    virtualenv: "{{ cinder_bin | dirname }}"
     virtualenv_site_packages: "no"
     extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
@@ -192,27 +175,17 @@
   delay: 2
   with_items: "{{ cinder_pip_packages }}"
   when:
-    - cinder_venv_enabled | bool
     - cinder_get_venv | failed or cinder_developer_mode | bool
   notify: Restart cinder services
   tags:
     - cinder-install
     - cinder-pip-packages
 
-- name: Install pip packages (no venv)
-  pip:
-    name: "{{ item }}"
-    state: latest
-    extra_args: "{{ pip_install_options_fact }}"
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ cinder_pip_packages }}"
+- name: Update virtualenv path
+  command: >
+    virtualenv-tools --update-path=auto {{ cinder_bin | dirname }}
   when:
     - not cinder_developer_mode | bool
-    - not cinder_venv_enabled | bool
-  notify: Restart cinder services
   tags:
     - cinder-install
     - cinder-pip-packages

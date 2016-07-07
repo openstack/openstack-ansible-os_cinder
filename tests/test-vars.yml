@@ -16,7 +16,6 @@ cinder_galera_user: cinder
 cinder_galera_database: cinder
 cinder_requirements_git_install_branch: master
 cinder_service_password: "secrete"
-cinder_venv_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
 cinder_venv_tag: "testing"
 debug: true
 external_lb_vip_address: 10.100.100.3
