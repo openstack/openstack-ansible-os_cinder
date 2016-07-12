@@ -21,8 +21,6 @@
     service_publicurl: "{{ cinder_service_publicurl }}"
     service_internalurl: "{{ cinder_service_internalurl }}"
     service_adminurl: "{{ cinder_service_adminurl }}"
-  tags:
-    - cinder-server
 
 - include: cinder_service_add.yml
   vars:
@@ -32,5 +30,3 @@
     service_publicurl: "{{ cinder_service_v2_publicurl }}"
     service_internalurl: "{{ cinder_service_v2_internalurl }}"
     service_adminurl: "{{ cinder_service_v2_adminurl }}"
-  tags:
-    - cinder-server

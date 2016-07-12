@@ -16,9 +16,6 @@
 - include: cinder_install_apt.yml
   when:
     - ansible_pkg_mgr == 'apt'
-  tags:
-    - cinder-install
-    - cinder-apt-packages
 
 - name: Create developer mode constraint file
   copy:
@@ -29,9 +26,6 @@
       {% endfor %}
   when:
     - cinder_developer_mode | bool
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Clone requirements git repository
   git:
@@ -42,27 +36,18 @@
     version: "{{ cinder_requirements_git_install_branch }}"
   when:
     - cinder_developer_mode | bool
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Add constraints to pip_install_options fact for developer mode
   set_fact:
     pip_install_options_fact: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt --constraint /opt/requirements/upper-constraints.txt"
   when:
     - cinder_developer_mode | bool
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Set pip_install_options_fact when not in developer mode
   set_fact:
     pip_install_options_fact: "{{ pip_install_options|default('') }}"
   when:
     - not cinder_developer_mode | bool
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Install requires pip packages
   pip:
@@ -74,9 +59,6 @@
   retries: 5
   delay: 2
   with_items: "{{ cinder_requires_pip_packages }}"
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Get local venv checksum
   stat:
@@ -85,9 +67,6 @@
   when:
     - not cinder_developer_mode | bool
   register: local_venv_stat
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Get remote venv checksum
   uri:
@@ -96,9 +75,6 @@
   when:
     - not cinder_developer_mode | bool
   register: remote_venv_checksum
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 # TODO: When project moves to ansible 2 we can pass this a sha256sum which will:
 #       a) allow us to remove force: yes
@@ -116,16 +92,10 @@
     - not cinder_developer_mode | bool
     - (local_venv_stat.stat.exists == False or
         {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Set cinder get_venv fact
   set_fact:
     cinder_get_venv: "{{ get_venv }}"
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Remove existing venv
   file:
@@ -133,9 +103,6 @@
     state: absent
   when:
     - cinder_get_venv | changed
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Create cinder venv dir
   file:
@@ -145,9 +112,6 @@
   when:
     - not cinder_developer_mode | bool
     - cinder_get_venv | changed
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Unarchive pre-built venv
   unarchive:
@@ -158,9 +122,6 @@
     - not cinder_developer_mode | bool
     - cinder_get_venv | changed or cinder_venv_dir | changed
   notify: Restart cinder services
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Install pip packages
   pip:
@@ -177,9 +138,6 @@
   when:
     - cinder_get_venv | failed or cinder_developer_mode | bool
   notify: Restart cinder services
-  tags:
-    - cinder-install
-    - cinder-pip-packages
 
 - name: Update virtualenv path
   command: >
@@ -187,6 +145,3 @@
   when:
     - not cinder_developer_mode | bool
     - cinder_get_venv | success
-  tags:
-    - cinder-install
-    - cinder-pip-packages

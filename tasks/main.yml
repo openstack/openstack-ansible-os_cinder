@@ -43,19 +43,23 @@
 - include: cinder_install.yml
   tags:
     - cinder-install
-    - cinder-config
 
 - include: cinder_post_install.yml
   tags:
     - cinder-install
+    - cinder-config
 
 - include: cinder_db_setup.yml
   when: >
     inventory_hostname == groups['cinder_all'][0]
+  tags:
+    - cinder-install
 
 - include: cinder_service_setup.yml
   when: >
     inventory_hostname == groups['cinder_all'][0]
+  tags:
+    - cinder-install
 
 - include: cinder_init.yml
   tags:
@@ -67,6 +71,8 @@
 - include: cinder_backends.yml
   when: >
     inventory_hostname in groups['cinder_volume'][0]
+  tags:
+    - cinder-install
 
 - include: cinder_lvm_config.yml
   when: >
