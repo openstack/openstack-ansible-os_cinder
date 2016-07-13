@@ -16,13 +16,9 @@
 
 - include: cinder_init_upstart.yml
   when: pid1_name == "init"
-  tags:
-    - cinder-init
 
 - include: cinder_init_systemd.yml
   when: pid1_name == "systemd"
-  tags:
-    - cinder-init
 
 - name: Load service
   service:

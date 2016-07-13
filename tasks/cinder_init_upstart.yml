@@ -21,24 +21,16 @@
     owner: "root"
     group: "root"
   register: upstart_init
-
   notify:
     - Restart cinder services
-  tags:
-    - upstart-init
-    - cinder-init
 
 - name: Reload init scripts
   shell: |
     initctl reload-configuration
   when: upstart_init | changed
   register: upstart_init
-
   notify:
     - Restart cinder services
-  tags:
-    - upstart-init
-    - cinder-init
 
 - name: Load service
   service:
@@ -46,6 +38,3 @@
    enabled: "yes"
   notify:
     - Restart cinder services
-  tags:
-    - upstart-init
-    - cinder-init

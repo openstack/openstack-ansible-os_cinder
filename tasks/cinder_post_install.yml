@@ -43,8 +43,6 @@
       config_type: "json"
   notify:
     - Restart cinder services
-  tags:
-    - cinder-config
 
 - name: Drop cinder configs
   copy:
@@ -54,8 +52,6 @@
     group: "root"
   notify:
     - Restart cinder services
-  tags:
-    - cinder-config
 
 - name: Ensure cinder tgt include
   lineinfile:
@@ -66,8 +62,6 @@
   when:
     - inventory_hostname in groups['cinder_volume']
     - cinder_backend_lvm_inuse | bool
-  tags:
-    - cinder-tgt
 
 - name: Create nfs shares export file
   template:
@@ -76,8 +70,6 @@
   when:
     - cinder_nfs_client is defined
     - inventory_hostname in groups['cinder_volume']
-  tags:
-    - cinder-nfs
 
 - name: Drop sudoers file
   template:
@@ -86,6 +78,3 @@
     mode: "0440"
     owner: "root"
     group: "root"
-  tags:
-    - sudoers
-    - cinder-sudoers

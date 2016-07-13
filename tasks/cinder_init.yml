@@ -22,8 +22,6 @@
     service_home: "{{ cinder_system_home_folder }}"
   when: >
     inventory_hostname in groups['cinder_api']
-  tags:
-    - upstart-init
 
 - include: cinder_init_common.yml
   vars:
@@ -34,8 +32,6 @@
     service_home: "{{ cinder_system_home_folder }}"
   when: >
     inventory_hostname in groups['cinder_scheduler']
-  tags:
-    - upstart-init
 
 - include: cinder_init_common.yml
   vars:
@@ -46,8 +42,6 @@
     service_home: "{{ cinder_system_home_folder }}"
   when: >
     inventory_hostname in groups['cinder_volume']
-  tags:
-    - upstart-init
 
 - include: cinder_init_common.yml
   vars:
@@ -59,5 +53,3 @@
   when: >
     inventory_hostname in groups['cinder_backup'] and
     cinder_service_backup_program_enabled == true
-  tags:
-    - upstart-init

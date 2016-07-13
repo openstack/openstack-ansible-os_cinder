@@ -29,10 +29,6 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - cinder-api-setup
-    - cinder-service-add
-    - cinder-setup
 
 # Create an admin user
 - name: Ensure cinder user
@@ -51,10 +47,6 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - cinder-api-setup
-    - cinder-service-add
-    - cinder-setup
 
 # Add a role to the user
 - name: Ensure cinder user to admin role
@@ -73,10 +65,6 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - cinder-api-setup
-    - cinder-service-add
-    - cinder-setup
 
 # Create an endpoint
 - name: Ensure cinder endpoint
@@ -101,7 +89,3 @@
   until: add_service|success
   retries: 5
   delay: 10
-  tags:
-    - cinder-api-setup
-    - cinder-service-add
-    - cinder-setup

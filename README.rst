@@ -51,3 +51,13 @@ Example Playbook
       vars:
         cinder_glance_api_servers: "http://glance_server:9292"
         cinder_galera_address: "{{ internal_lb_vip_address }}"
+
+Tags
+====
+
+This role supports two tags: ``cinder-install`` and ``cinder-config``
+
+The ``cinder-install`` tag can be used to install and upgrade.
+
+The ``cinder-config`` tag can be used to maintain configuration of the
+service.
