@@ -50,14 +50,16 @@
     - cinder-config
 
 - include: cinder_db_setup.yml
-  when: >
-    inventory_hostname == groups['cinder_all'][0]
+  when:
+    - groups['cinder_all'] | length > 0
+    - inventory_hostname == groups['cinder_all'][0]
   tags:
     - cinder-install
 
 - include: cinder_service_setup.yml
-  when: >
-    inventory_hostname == groups['cinder_all'][0]
+  when:
+    - groups['cinder_all'] | length > 0
+    - inventory_hostname == groups['cinder_all'][0]
   tags:
     - cinder-install
 
@@ -69,8 +71,9 @@
   meta: flush_handlers
 
 - include: cinder_backends.yml
-  when: >
-    inventory_hostname in groups['cinder_volume'][0]
+  when:
+    - groups['cinder_volume'] | length > 0
+    - inventory_hostname in groups['cinder_volume'][0]
   tags:
     - cinder-install
 
