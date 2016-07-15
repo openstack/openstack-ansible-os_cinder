@@ -49,6 +49,9 @@ cinder_galera_database: cinder
 ## RabbitMQ info
 cinder_rabbitmq_userid: cinder
 cinder_rabbitmq_vhost: /cinder
+cinder_rabbitmq_port: 5672
+cinder_rabbitmq_servers: 127.0.0.1
+cinder_rabbitmq_use_ssl: False
 
 ## Cinder User / Group
 cinder_system_user_name: cinder
