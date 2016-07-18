@@ -51,14 +51,13 @@
 
 - name: Install requires pip packages
   pip:
-    name: "{{ item }}"
+    name: "{{ cinder_requires_pip_packages | join(' ') }}"
     state: latest
     extra_args: "{{ pip_install_options_fact }}"
   register: install_packages
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ cinder_requires_pip_packages }}"
 
 - name: Get local venv checksum
   stat:
@@ -125,7 +124,7 @@
 
 - name: Install pip packages
   pip:
-    name: "{{ item }}"
+    name: "{{ cinder_pip_packages | join(' ') }}"
     state: latest
     virtualenv: "{{ cinder_bin | dirname }}"
     virtualenv_site_packages: "no"
@@ -134,7 +133,6 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ cinder_pip_packages }}"
   when:
     - cinder_get_venv | failed or cinder_developer_mode | bool
   notify: Restart cinder services
