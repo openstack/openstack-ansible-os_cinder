@@ -110,12 +110,12 @@ nfs_shares_config={{ cinder_nfs_client.nfs_shares_config }}
 connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8
 
 [oslo_messaging_rabbit]
-rabbit_port = {{ rabbitmq_port }}
+rabbit_port = {{ cinder_rabbitmq_port }}
 rabbit_userid = {{ cinder_rabbitmq_userid }}
 rabbit_password = {{ cinder_rabbitmq_password }}
 rabbit_virtual_host = {{ cinder_rabbitmq_vhost }}
-rabbit_hosts = {{ rabbitmq_servers }}
-rabbit_use_ssl = {{ rabbitmq_use_ssl }}
+rabbit_hosts = {{ cinder_rabbitmq_servers }}
+rabbit_use_ssl = {{ cinder_rabbitmq_use_ssl }}
 
 [oslo_concurrency]
 lock_path = /var/lock/cinder
