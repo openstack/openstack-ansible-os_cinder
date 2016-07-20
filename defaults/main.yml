@@ -47,11 +47,20 @@ cinder_galera_user: cinder
 cinder_galera_database: cinder
 
 ## RabbitMQ info
+
+## Configuration for RPC communications
 cinder_rabbitmq_userid: cinder
 cinder_rabbitmq_vhost: /cinder
 cinder_rabbitmq_port: 5672
 cinder_rabbitmq_servers: 127.0.0.1
 cinder_rabbitmq_use_ssl: False
+
+## Configuration for notifications communication, i.e. [oslo_messaging_notifications]
+cinder_rabbitmq_telemetry_userid: "{{ cinder_rabbitmq_userid }}"
+cinder_rabbitmq_telemetry_vhost: "{{ cinder_rabbitmq_vhost }}"
+cinder_rabbitmq_telemetry_port: "{{ cinder_rabbitmq_port }}"
+cinder_rabbitmq_telemetry_servers: "{{ cinder_rabbitmq_servers }}"
+cinder_rabbitmq_telemetry_use_ssl: "{{ cinder_rabbitmq_use_ssl }}"
 
 ## Cinder User / Group
 cinder_system_user_name: cinder

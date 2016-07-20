@@ -9,9 +9,9 @@ cinder_galera_address: 10.100.100.2
 cinder_git_install_branch: master
 cinder_glance_api_servers: "http://glance_server:9292"
 cinder_profiler_hmac_key: "secrete"
-cinder_rabbitmq_port: 5671
+cinder_rabbitmq_port: 5672
 cinder_rabbitmq_servers: 10.100.100.2
-cinder_rabbitmq_use_ssl: true
+cinder_rabbitmq_use_ssl: False
 cinder_rabbitmq_password: "secrete"
 cinder_rabbitmq_userid: cinder
 cinder_rabbitmq_vhost: /cinder
@@ -35,9 +35,9 @@ keystone_galera_address: 10.100.100.2
 keystone_galera_database: keystone
 keystone_git_install_branch: master
 keystone_rabbitmq_password: "secrete"
-keystone_rabbitmq_port: 5671
+keystone_rabbitmq_port: 5672
 keystone_rabbitmq_servers: 10.100.100.2
-keystone_rabbitmq_use_ssl: false
+keystone_rabbitmq_use_ssl: False
 keystone_rabbitmq_userid: keystone
 keystone_rabbitmq_vhost: /keystone
 keystone_requirements_git_install_branch: master
