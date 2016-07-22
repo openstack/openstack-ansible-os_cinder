@@ -57,6 +57,7 @@ cinder_rabbitmq_use_ssl: False
 
 ## Configuration for notifications communication, i.e. [oslo_messaging_notifications]
 cinder_rabbitmq_telemetry_userid: "{{ cinder_rabbitmq_userid }}"
+cinder_rabbitmq_telemetry_password: "{{ cinder_rabbitmq_password }}"
 cinder_rabbitmq_telemetry_vhost: "{{ cinder_rabbitmq_vhost }}"
 cinder_rabbitmq_telemetry_port: "{{ cinder_rabbitmq_port }}"
 cinder_rabbitmq_telemetry_servers: "{{ cinder_rabbitmq_servers }}"
