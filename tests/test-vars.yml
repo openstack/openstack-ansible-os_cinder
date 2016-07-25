@@ -48,6 +48,7 @@ keystone_service_internaluri: "http://{{ internal_lb_vip_address }}:5000"
 keystone_service_internaluri_insecure: false
 keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
 keystone_service_password: "secrete"
+keystone_service_region: RegionOne
 keystone_venv_tag: "testing"
 memcached_encryption_key: "secrete"
 memcached_servers: 127.0.0.1

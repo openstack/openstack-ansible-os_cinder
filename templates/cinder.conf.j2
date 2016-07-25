@@ -61,6 +61,8 @@ quota_backup_gigabytes = {{ cinder_quota_backup_gigabytes }}
 nova_catalog_info = {{ cinder_nova_catalog_info }}
 nova_catalog_admin_info = {{ cinder_nova_catalog_admin_info }}
 
+os_region_name = {{ cinder_service_region }}
+
 ## Glance
 glance_api_servers = {{ cinder_glance_api_servers }}
 glance_num_retries = 0
@@ -140,6 +142,7 @@ user_domain_id = {{ cinder_service_user_domain_id }}
 project_name = {{ cinder_service_project_name }}
 username = {{ cinder_service_user_name }}
 password = {{ cinder_service_password }}
+region_name = {{ keystone_service_region }}
 
 memcached_servers = {{ memcached_servers }}
 
