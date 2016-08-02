@@ -14,27 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Create cinder TEMP run dir
+- name: Create TEMP run dir
   file:
     path: "/var/run/{{ program_name }}"
     state: directory
     owner: "{{ system_user }}"
     group: "{{ system_group }}"
-    mode: 02755
-  tags:
-    - systemd-init
-    - cinder-init
+    mode: "02755"
 
-- name: Create cinder TEMP lock dir
+- name: Create TEMP lock dir
   file:
     path: "/var/lock/{{ program_name }}"
     state: directory
     owner: "{{ system_user }}"
     group: "{{ system_group }}"
-    mode: 02755
-  tags:
-    - systemd-init
-    - cinder-init
+    mode: "02755"
 
 - name: Create tempfile.d entry
   template:
