@@ -29,7 +29,7 @@
 - name: Install apt packages
   apt:
     pkg: "{{ item }}"
-    state: latest
+    state: "{{ cinder_package_state }}"
   register: install_packages
   until: install_packages|success
   retries: 5
@@ -39,7 +39,7 @@
 - name: Install apt packages common between different backends
   apt:
     pkg: "{{ item }}"
-    state: latest
+    state: "{{ cinder_package_state }}"
   register: install_packages
   until: install_packages|success
   retries: 5
@@ -51,7 +51,7 @@
 - name: Install apt packages for LVM backend
   apt:
     pkg: "{{ item }}"
-    state: latest
+    state: "{{ cinder_package_state }}"
   register: install_packages
   until: install_packages|success
   retries: 5

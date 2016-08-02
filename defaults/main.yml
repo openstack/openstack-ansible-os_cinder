@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Set the package install state for distribution packages
+# Options are 'present' and 'latest'
+cinder_package_state: "latest"
 
 cinder_git_repo: https://git.openstack.org/openstack/cinder
 cinder_git_install_branch: master
