@@ -253,6 +253,12 @@ cinder_service_names:
   - cinder-volume
   - cinder-backup
 
+# This variable is used by the repo_build process to determine
+# which host group to check for members of before building the
+# pip packages required by this role. The value is picked up
+# by the py_pkgs lookup.
+cinder_role_project_group: cinder_all
+
 ## Tunable overrides
 cinder_policy_overrides: {}
 cinder_rootwrap_conf_overrides: {}
