@@ -2,6 +2,15 @@
 Cinder role for OpenStack-Ansible
 =================================
 
+This Ansible role installs and configures OpenStack cinder.
+
+The following cinder services are managed by the role:
+    * cinder-api
+    * cinder-volume
+    * cinder-scheduler
+
+By default, cinder API v1 and v2 are both enabled.
+
 .. toctree::
    :maxdepth: 2
 

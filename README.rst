@@ -2,17 +2,11 @@
 OpenStack-Ansible cinder
 ========================
 
-This Ansible role installs and configures OpenStack Cinder.
+This Ansible role installs and configures OpenStack cinder.
 
-The following Cinder services are managed by the role:
-    * cinder-api
-    * cinder-volume
-    * cinder-scheduler
+Documentation for the project can be found at:
+  http://docs.openstack.org/developer/openstack-ansible-os_cinder/
 
-By default, Cinder API v1 and v2 are both enabled.
+The project home is at:
+  http://launchpad.net/openstack-ansible
 
-Support for various Cinder backends is supported by the role. See role
-internals for further details.
-
-Support for volume backups to Swift or Ceph is supported by the role. See role
-internals for further details.
