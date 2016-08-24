@@ -14,8 +14,13 @@
 # Ansible Discovered LVM Devices {{ lv_devices }}
 
 {% if used_lvm_devices|length <= 0 %}
+    {# If there are no LVM devices present, allow all devices to be scanned #}
     {% if used_lvm_devices.append('"a/.*/"') %}{% endif %}
+}
 {% else %}
+    {# Append 'loop.*' to the list to help with AIO deployments. #}
+    {% if used_lvm_devices.append('"a/loop.*/"') %}{% endif %}
+    {# Disable scanning any other devices than the ones listed. #}
     {% if used_lvm_devices.append('"r/.*/"') %}{% endif %}
 {% endif %}
 
