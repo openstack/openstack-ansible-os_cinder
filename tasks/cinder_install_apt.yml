@@ -34,7 +34,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ cinder_apt_packages }}"
+  with_items: "{{ cinder_distro_packages }}"
 
 - name: Install apt packages common between different backends
   apt:
@@ -44,7 +44,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ cinder_volume_apt_packages }}"
+  with_items: "{{ cinder_volume_distro_packages }}"
   when:
     - inventory_hostname in groups['cinder_volume']
 
@@ -56,7 +56,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ cinder_lvm_volume_apt_packages }}"
+  with_items: "{{ cinder_lvm_volume_distro_packages }}"
   when:
     - inventory_hostname in groups['cinder_volume']
     - cinder_backend_lvm_inuse | bool

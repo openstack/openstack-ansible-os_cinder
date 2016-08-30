@@ -18,7 +18,7 @@
 cache_timeout: 600
 
 # Common apt packages
-cinder_apt_packages:
+cinder_distro_packages:
  - rpcbind
  - rsync
  - git
@@ -32,10 +32,10 @@ cinder_apt_packages:
  - libffi-dev
  - libssl-dev
 
-cinder_volume_apt_packages:
+cinder_volume_distro_packages:
  - qemu-utils
 
-cinder_lvm_volume_apt_packages:
+cinder_lvm_volume_distro_packages:
  - dmeventd
  - parted
  - tgt

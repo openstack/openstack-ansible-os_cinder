@@ -17,7 +17,7 @@
 cache_timeout: 600
 
 # Common apt packages
-cinder_apt_packages:
+cinder_distro_packages:
   - libpq-dev
   - libkmod-dev
   - libkmod2
@@ -27,10 +27,10 @@ cinder_apt_packages:
   - zlib1g
   - zlibc
 
-cinder_volume_apt_packages:
+cinder_volume_distro_packages:
   - qemu-utils
 
-cinder_lvm_volume_apt_packages:
+cinder_lvm_volume_distro_packages:
   - dmeventd
   - parted
   - tgt
