@@ -8,8 +8,20 @@ using the LVM backend.
 .. note::
 
    While this is the default for cinder, using the LVM backend results in a
-   Single Point of Failure. As a result of the volume service being deployed
-   directly to the host, ``is_metal`` is ``true`` when using LVM.
+   Single Point of Failure.
+
+The LVM back end needs to run on the host, however most of the other back ends
+can be deployed inside a container. If the storage back ends deployed within
+your environment are able to run inside containers, then it is recommended to
+set ``is_metal: False`` in the ``env.d/cinder.yml`` file.
+
+.. note::
+
+   Due to a
+   `limitation of the container system <https://bugs.launchpad.net/ubuntu/+source/lxc/+bug/1226855>`_,
+   you must deploy the volume service directly onto the host when using
+   back ends depending on iSCSI. That is the case, for example, for
+   storage appliances configured to use the iSCSI protocol.
 
 NFS backend
 ~~~~~~~~~~~~
