@@ -13,14 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ansible_ssh_host: "{{ ansible_host }}"
 container_name: "{{ inventory_hostname }}"
 container_networks:
   management_address:
     address: "{{ ansible_host }}"
-    bridge: "lxcbr0"
+    bridge: "br-mgmt"
     interface: "eth1"
-    netmask: "255.255.252.0"
+    netmask: "255.255.255.0"
     type: "veth"
 physical_host: localhost
 properties:

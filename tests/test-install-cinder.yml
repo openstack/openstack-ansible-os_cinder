@@ -22,7 +22,7 @@
       rabbitmq_vhost:
         name: "{{ cinder_rabbitmq_vhost }}"
         state: "present"
-      delegate_to: "10.100.100.2"
+      delegate_to: "{{ hostvars[groups['rabbitmq_all'][0]]['ansible_host'] }}"
       when: inventory_hostname == groups['cinder_all'][0]
     - name: Ensure rabbitmq user
       rabbitmq_user:
@@ -33,7 +33,7 @@
         read_priv: ".*"
         write_priv: ".*"
         state: "present"
-      delegate_to: "10.100.100.2"
+      delegate_to: "{{ hostvars[groups['rabbitmq_all'][0]]['ansible_host'] }}"
       when: inventory_hostname == groups['cinder_all'][0]
     - name: Create DB for service
       mysql_db:
@@ -44,6 +44,7 @@
         state: "present"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['cinder_all'][0]
+      delegate_to: "{{ hostvars[groups['galera_all'][0]]['ansible_host'] }}"
       tags:
         - mysql-db-setup
     - name: Grant access to the DB for the service
@@ -58,12 +59,14 @@
         priv: "{{ cinder_galera_database }}.*:ALL"
       delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['cinder_all'][0]
+      delegate_to: "{{ hostvars[groups['galera_all'][0]]['ansible_host'] }}"
       with_items:
         - "localhost"
         - "%"
       tags:
         - mysql-db-setup
   roles:
-    - role: "{{ rolename | basename }}"
+    - role: "os_cinder"
   vars_files:
+    - common/test-vars.yml
     - test-vars.yml

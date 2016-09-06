@@ -13,29 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Prepare the user ssh keys
-- include: test-prepare-keys.yml
-
-# Prepare the host
-- include: test-prepare-host.yml
+# Setup the host
+- include: common/test-setup-host.yml
 
 # Prepare the cinder-volumes VG
 - include: test-prepare-vg.yml
 
-# Prepare the containers
-- include: test-prepare-containers.yml
-
 # Install RabbitMQ/MariaDB
-- include: test-install-infra.yml
+- include: common/test-install-infra.yml
 
 # Install Keystone
-- include: test-install-keystone.yml
+- include: common/test-install-keystone.yml
 
 # Install Cinder
 - include: test-install-cinder.yml
 
 # Install Tempest
-- include: test-install-tempest.yml
+- include: common/test-install-tempest.yml
 
 # Test Cinder
 - include: test-cinder-functional.yml

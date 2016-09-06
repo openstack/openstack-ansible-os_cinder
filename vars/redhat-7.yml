@@ -25,6 +25,7 @@ cinder_distro_packages:
   - kmod-devel
   - kmod-libs
   - zlib-devel
+  - git
 
 cinder_volume_distro_packages:
   - qemu-img
