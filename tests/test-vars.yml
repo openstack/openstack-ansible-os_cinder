@@ -3,73 +3,40 @@ cinder_backends:
     volume_group: cinder-volumes
     volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
     volume_backend_name: LVM_iSCSI
+cinder_default_volume_type: lvm
+
 cinder_container_mysql_password: "SuperSecrete"
 cinder_developer_mode: true
-cinder_galera_address: 10.100.100.2
+cinder_galera_address: "{{ hostvars[groups['galera_all'][0]]['ansible_host'] }}"
 cinder_git_install_branch: master
 cinder_glance_api_servers: "http://glance_server:9292"
 cinder_profiler_hmac_key: "secrete"
-cinder_rabbitmq_port: 5672
-cinder_rabbitmq_servers: 10.100.100.2
-cinder_rabbitmq_use_ssl: False
-cinder_rabbitmq_password: "secrete"
+cinder_rabbitmq_port: "{{ rabbitmq_port }}"
+cinder_rabbitmq_servers: "{{ hostvars[groups['rabbitmq_all'][0]]['ansible_host'] }}"
+cinder_rabbitmq_use_ssl: "{{ rabbitmq_use_ssl }}"
+cinder_rabbitmq_password: "{{ rabbitmq_password }}"
 cinder_rabbitmq_userid: cinder
 cinder_rabbitmq_vhost: /cinder
 cinder_galera_user: cinder
 cinder_galera_database: cinder
 cinder_requirements_git_install_branch: master
 cinder_service_password: "secrete"
-cinder_default_volume_type: lvm
 cinder_venv_tag: "testing"
-debug: true
-external_lb_vip_address: 10.100.100.3
-galera_client_drop_config_file: false
-galera_root_user: "root"
-galera_root_password: "secrete"
-internal_lb_vip_address: 10.100.100.3
-keystone_admin_tenant_name: admin
-keystone_admin_user_name: admin
-keystone_auth_admin_password: "SuperSecretePassword"
-keystone_container_mysql_password: "SuperSecrete"
-keystone_developer_mode: true
-keystone_galera_address: 10.100.100.2
-keystone_galera_database: keystone
-keystone_git_install_branch: master
-keystone_rabbitmq_password: "secrete"
-keystone_rabbitmq_port: 5672
-keystone_rabbitmq_servers: 10.100.100.2
-keystone_rabbitmq_use_ssl: False
-keystone_rabbitmq_userid: keystone
-keystone_rabbitmq_vhost: /keystone
-keystone_requirements_git_install_branch: master
-keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
-keystone_service_adminuri_insecure: false
-keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
-keystone_service_internaluri: "http://{{ internal_lb_vip_address }}:5000"
-keystone_service_internaluri_insecure: false
-keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
-keystone_service_password: "secrete"
-keystone_service_region: RegionOne
-keystone_venv_tag: "testing"
-memcached_encryption_key: "secrete"
-memcached_servers: 127.0.0.1
-openrc_os_auth_url: "{{ keystone_service_internalurl }}"
-openrc_os_domain_name: "Default"
-openrc_os_password: "{{ keystone_auth_admin_password }}"
-tempest_developer_mode: True
-tempest_git_install_branch: master
-tempest_venv_tag: "{{ tempest_git_install_branch }}"
-# tempest_venv_bin is the same as the default in os_tempest role, but we set
-# it again here so we can refer to it in test-cinder-functional.yml
-tempest_venv_bin: "/opt/tempest_{{ tempest_venv_tag }}/bin"
-tempest_log_dir: "/var/log/"
-tempest_main_group: cinder_all
-tempest_service_available_aodh: False
-tempest_service_available_ceilometer: False
-tempest_service_available_cinder: True
-tempest_service_available_glance: False
-tempest_service_available_heat: False
-tempest_service_available_horizon: False
-tempest_service_available_neutron: False
-tempest_service_available_nova: False
-tempest_service_available_swift: False
+
+cinder_service_port: 8776
+cinder_service_proto: http
+cinder_service_publicuri: "{{ cinder_service_proto }}://{{ hostvars[groups['cinder_api'][0]]['ansible_host'] }}:{{ cinder_service_port }}"
+cinder_service_publicurl: "{{ cinder_service_publicuri }}/v1/%(tenant_id)s"
+cinder_service_adminuri: "{{ cinder_service_proto }}://{{ hostvars[groups['cinder_api'][0]]['ansible_host'] }}:{{ cinder_service_port }}"
+cinder_service_adminurl: "{{ cinder_service_adminuri }}/v1/%(tenant_id)s"
+cinder_service_internaluri: "{{ cinder_service_proto }}://{{ hostvars[groups['cinder_api'][0]]['ansible_host'] }}:{{ cinder_service_port }}"
+cinder_service_internalurl: "{{ cinder_service_internaluri }}/v1/%(tenant_id)s"
+
+cinder_service_v2_port: 8776
+cinder_service_v2_proto: http
+cinder_service_v2_publicuri: "{{ cinder_service_v2_proto }}://{{ hostvars[groups['cinder_api'][0]]['ansible_host'] }}:{{ cinder_service_v2_port }}"
+cinder_service_v2_publicurl: "{{ cinder_service_publicuri }}/v2/%(tenant_id)s"
+cinder_service_v2_adminuri: "{{ cinder_service_v2_proto }}://{{ hostvars[groups['cinder_api'][0]]['ansible_host'] }}:{{ cinder_service_v2_port }}"
+cinder_service_v2_adminurl: "{{ cinder_service_adminuri }}/v2/%(tenant_id)s"
+cinder_service_v2_internaluri: "{{ cinder_service_v2_proto }}://{{ hostvars[groups['cinder_api'][0]]['ansible_host'] }}:{{ cinder_service_v2_port }}"
+cinder_service_v2_internalurl: "{{ cinder_service_internaluri }}/v2/%(tenant_id)s"
