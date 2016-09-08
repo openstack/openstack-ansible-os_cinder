@@ -10,6 +10,7 @@
     "volume:get": "rule:admin_or_owner",
     "volume:get_all": "rule:admin_or_owner",
     "volume:get_volume_metadata": "rule:admin_or_owner",
+    "volume:create_volume_metadata": "rule:admin_or_owner",
     "volume:delete_volume_metadata": "rule:admin_or_owner",
     "volume:update_volume_metadata": "rule:admin_or_owner",
     "volume:get_volume_admin_metadata": "rule:admin_api",
@@ -113,6 +114,18 @@
     "group:group_types_specs": "rule:admin_api",
     "group:access_group_types_specs": "rule:admin_api",
     "group:group_type_access": "rule:admin_or_owner",
+
+    "group:create" : "",
+    "group:delete": "rule:admin_or_owner",
+    "group:update": "rule:admin_or_owner",
+    "group:get": "rule:admin_or_owner",
+    "group:get_all": "rule:admin_or_owner",
+
+    "group:create_group_snapshot": "",
+    "group:delete_group_snapshot": "rule:admin_or_owner",
+    "group:update_group_snapshot": "rule:admin_or_owner",
+    "group:get_group_snapshot": "rule:admin_or_owner",
+    "group:get_all_group_snapshots": "rule:admin_or_owner",
 
     "scheduler_extension:scheduler_stats:get_pools" : "rule:admin_api",
     "message:delete": "rule:admin_or_owner",
