@@ -16,9 +16,16 @@
 - name: Prepare cinder-volumes volume group
   hosts: localhost
   tasks:
-    - name: Install lvm2 package
+    - name: Install lvm2 apt package
       apt:
         name: lvm2
+      when:
+        - ansible_pkg_mgr == 'apt'
+    - name: Install lvm2 yum package
+      yum:
+        name: lvm2
+      when:
+        - ansible_pkg_mgr == 'yum'
     - name: Create sparse Cinder file
       shell: "truncate -s 10G /openstack/cinder.img"
       args:

@@ -16,6 +16,9 @@
 ## APT Cache options
 cache_timeout: 600
 
+# service names
+tgt_service_name: tgt
+
 # Common apt packages
 cinder_distro_packages:
   - libpq-dev
