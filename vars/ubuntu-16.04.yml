@@ -19,25 +19,23 @@ cache_timeout: 600
 
 # Common apt packages
 cinder_distro_packages:
- - rpcbind
- - rsync
- - git
- - nfs-common
- - libpq-dev
- - libkmod-dev
- - libkmod2
- - libxslt1-dev
- - zlib1g
- - zlibc
- - libffi-dev
- - libssl-dev
+  - rpcbind
+  - rsync
+  - git
+  - nfs-common
+  - libpq-dev
+  - libkmod-dev
+  - libkmod2
+  - libxslt1-dev
+  - zlib1g
+  - zlibc
+  - libffi-dev
+  - libssl-dev
 
 cinder_volume_distro_packages:
- - qemu-utils
+  - qemu-utils
 
 cinder_lvm_volume_distro_packages:
- - dmeventd
- - parted
- - tgt
-
-
+  - dmeventd
+  - parted
+  - tgt
