@@ -16,7 +16,6 @@
 {% if used_lvm_devices|length <= 0 %}
     {# If there are no LVM devices present, allow all devices to be scanned #}
     {% if used_lvm_devices.append('"a/.*/"') %}{% endif %}
-}
 {% else %}
     {# Append 'loop.*' to the list to help with AIO deployments. #}
     {% if used_lvm_devices.append('"a/loop.*/"') %}{% endif %}
