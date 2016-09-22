@@ -483,3 +483,27 @@ each storage node that will use it.
    The ``cinder-volume.yml`` playbook will automatically install the
    ``nfs-common`` file across the hosts, transitioning from an LVM to a
    NetApp back end.
+
+Configuring cinder qos specs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Deployers may optionally define the variable ``cinder_qos_specs``
+to create qos specs.  This variable is a list of dictionaries that
+contain the options for each qos spec.  cinder volume-types may be
+assigned to a qos spec by defining the key ``cinder_volume_types`` in
+the desired qos spec dictionary.
+
+.. code-block:: console
+
+    - name: high-iops
+      options:
+        consumer: front-end
+        read_iops_sec: 2000
+        write_iops_sec: 2000
+      cinder_volume_types:
+        - volumes-1
+        - volumes-2
+    - name: low-iops
+      options:
+        consumer: front-end
+        write_iops_sec: 100
