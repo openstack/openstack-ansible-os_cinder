@@ -14,8 +14,8 @@
 # limitations under the License.
 
 - include: cinder_install_apt.yml
-  when:
-    - ansible_pkg_mgr == 'apt'
+  static: no
+  when: ansible_pkg_mgr == 'apt'
 
 - name: Create developer mode constraint file
   copy:
