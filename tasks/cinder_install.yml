@@ -17,6 +17,10 @@
   static: no
   when: ansible_pkg_mgr == 'apt'
 
+- include: cinder_install_yum.yml
+  when:
+    - ansible_pkg_mgr == 'yum'
+
 - name: Create developer mode constraint file
   copy:
     dest: "/opt/developer-pip-constraints.txt"

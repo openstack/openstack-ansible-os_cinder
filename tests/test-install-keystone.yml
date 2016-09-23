@@ -39,7 +39,7 @@
       mysql_db:
         login_user: "root"
         login_password: "secrete"
-        login_host: "localhost"
+        login_host: "{{ keystone_galera_address }}"
         name: "{{ keystone_galera_database }}"
         state: "present"
       delegate_to: "10.100.100.2"
@@ -48,7 +48,7 @@
       mysql_user:
         login_user: "root"
         login_password: "secrete"
-        login_host: "localhost"
+        login_host: "{{ keystone_galera_address }}"
         name: "{{ keystone_galera_database }}"
         password: "{{ keystone_container_mysql_password }}"
         host: "{{ item }}"

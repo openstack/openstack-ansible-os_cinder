@@ -23,6 +23,6 @@
 
 - name: Ensure tgt service restarted
   service:
-    name: tgt
+    name: "{{ tgt_service_name }}"
     state: restarted
     pattern: tgtd
