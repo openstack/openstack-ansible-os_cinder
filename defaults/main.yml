@@ -102,7 +102,6 @@ cinder_service_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_v
 cinder_service_adminurl: "{{ cinder_service_adminuri }}/v1/%(tenant_id)s"
 cinder_service_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
 cinder_service_internalurl: "{{ cinder_service_internaluri }}/v1/%(tenant_id)s"
-cinder_service_program_name: cinder-api
 
 cinder_service_v2_name: cinderv2
 cinder_service_v2_port: 8776
@@ -121,7 +120,6 @@ cinder_keystone_auth_plugin: password
 
 ## In order to enable the cinder backup you MUST set ``cinder_service_backup_program_enabled`` to "true"
 cinder_service_backup_program_enabled: false
-cinder_service_backup_program_name: cinder-backup
 # cinder_service_backup_driver: Options include 'cinder.backup.drivers.swift' or
 #                               'cinder.backup.drivers.ceph'
 cinder_service_backup_driver: cinder.backup.drivers.swift
@@ -147,10 +145,6 @@ cinder_service_backup_compression_algorithm: zlib
 cinder_service_backup_metadata_version: 2
 
 cinder_swift_catalog_info: "object-store:swift:internalURL"
-
-cinder_service_volume_program_name: cinder-volume
-
-cinder_service_scheduler_program_name: cinder-scheduler
 
 # If ``cinder_osapi_volume_workers`` is unset the system will use half the number of
 # available VCPUS to compute the number of api workers to use.
@@ -246,12 +240,21 @@ cinder_pip_packages:
   - python-cinderclient
   - python-keystoneclient
 
-# Service Names
-cinder_service_names:
-  - cinder-api
-  - cinder-scheduler
-  - cinder-volume
-  - cinder-backup
+## Service Name-Group Mapping
+cinder_services:
+  cinder-api:
+    group: cinder_api
+    service_name: cinder-api
+  cinder-scheduler:
+    group: cinder_scheduler
+    service_name: cinder-scheduler
+  cinder-volume:
+    group: cinder_volume
+    service_name: cinder-volume
+  cinder-backup:
+    group: cinder_backup
+    service_name: cinder-backup
+    condition: "{{ cinder_service_backup_program_enabled | bool }}"
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
