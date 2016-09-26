@@ -51,7 +51,6 @@
     - cinder-config
 
 - include: cinder_db_setup.yml
-  static: no
   when:
     - groups['cinder_all'] | length > 0
     - inventory_hostname == groups['cinder_all'][0]
@@ -59,7 +58,6 @@
     - cinder-install
 
 - include: cinder_service_setup.yml
-  static: no
   when:
     - groups['cinder_all'] | length > 0
     - inventory_hostname == groups['cinder_all'][0]
@@ -74,7 +72,6 @@
   meta: flush_handlers
 
 - include: cinder_backends.yml
-  static: no
   when:
     - groups['cinder_volume'] | length > 0
     - inventory_hostname in groups['cinder_volume'][0]
@@ -82,7 +79,6 @@
     - cinder-install
 
 - include: cinder_lvm_config.yml
-  static: no
   when:
     - inventory_hostname in groups['cinder_volume']
     - cinder_backend_lvm_inuse
