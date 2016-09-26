@@ -248,10 +248,15 @@ cinder_pip_packages:
 
 # Service Names
 cinder_service_names:
-  - cinder-api
-  - cinder-scheduler
-  - cinder-volume
-  - cinder-backup
+  cinder-api:
+    group: cinder_api
+  cinder-scheduler:
+    group: cinder_scheduler
+  cinder-volume:
+    group: cinder_volume
+  cinder-backup:
+    group: cinder_backup
+    condition: "{{ cinder_service_backup_program_enabled | bool }}"
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the

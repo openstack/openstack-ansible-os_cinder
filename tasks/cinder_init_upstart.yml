@@ -16,11 +16,15 @@
 - name: Place the init script
   template:
     src: "cinder-upstart-init.j2"
-    dest: "/etc/init/{{ program_name }}.conf"
+    dest: "/etc/init/{{ item.key }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
   register: upstart_init
+  with_dict: "{{ cinder_service_names }}"
+  when:
+    - inventory_hostname in groups[item.value.group]
+    - "{{ item.value.condition | default(true) }}"
   notify:
     - Restart cinder services
 
@@ -29,12 +33,5 @@
     initctl reload-configuration
   when: upstart_init | changed
   register: upstart_init
-  notify:
-    - Restart cinder services
-
-- name: Load service
-  service:
-   name: "{{ program_name }}"
-   enabled: "yes"
   notify:
     - Restart cinder services
