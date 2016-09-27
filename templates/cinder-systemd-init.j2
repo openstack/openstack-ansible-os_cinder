@@ -7,13 +7,13 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ system_user }}
-Group={{ system_group }}
+User={{ cinder_system_user_name }}
+Group={{ cinder_system_group_name }}
 
 {% if program_override is defined %}
-ExecStart={{ program_override }} {{ program_config_options|default('') }} --log-file=/var/log/cinder/{{ program_name }}.log
+ExecStart={{ program_override }} {{ program_config_options|default('') }} --log-file=/var/log/cinder/{{ item.key }}.log
 {% else %}
-ExecStart={{ cinder_bin }}/{{ program_name }} {{ program_config_options|default('') }} --log-file=/var/log/cinder/{{ program_name }}.log
+ExecStart={{ cinder_bin }}/{{ item.key }} {{ program_config_options|default('') }} --log-file=/var/log/cinder/{{ item.key }}.log
 {% endif %}
 
 # Give a reasonable amount of time for the server to start up/shut down

@@ -24,7 +24,11 @@
 
 - name: Load service
   service:
-   name: "{{ program_name }}"
+   name: "{{ item.key }}"
    enabled: "yes"
+  with_dict: "{{ cinder_service_names }}"
+  when:
+    - inventory_hostname in groups[item.value.group]
+    - "{{ item.value.condition | default(true) }}"
   notify:
     - Restart cinder services

@@ -15,10 +15,10 @@
 
 - name: Restart cinder services
   service:
-    name: "{{ item }}"
+    name: "{{ item.key }}"
     state: restarted
-    pattern: "{{ item }}"
-  with_items: "{{ cinder_service_names }}"
+    pattern: "{{ item.key }}"
+  with_dict: "{{ cinder_service_names }}"
   failed_when: false
 
 - name: Ensure tgt service restarted
