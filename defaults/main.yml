@@ -195,6 +195,9 @@ cinder_quota_backup_gigabytes: 1000
 #     volume_group: cinder-volumes
 #     volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
 #     volume_backend_name: LVM_iSCSI
+#     extra_volume_types:
+#       - lvm_high_iops
+#       - lvm_low_iops
 
 # cinder_backend_lvm_inuse: True if current host has an lvm backend
 cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") != -1 }}'
