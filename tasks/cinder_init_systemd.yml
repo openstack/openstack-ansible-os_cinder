@@ -16,24 +16,24 @@
 
 - name: Create TEMP run dir
   file:
-    path: "/var/run/{{ item.key }}"
+    path: "/var/run/{{ item.value.service_name }}"
     state: directory
     owner: "{{ cinder_system_user_name }}"
     group: "{{ cinder_system_group_name }}"
     mode: "02755"
-  with_dict: "{{ cinder_service_names }}"
+  with_dict: "{{ cinder_services }}"
   when:
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
 
 - name: Create TEMP lock dir
   file:
-    path: "/var/lock/{{ item.key }}"
+    path: "/var/lock/{{ item.value.service_name }}"
     state: directory
     owner: "{{ cinder_system_user_name }}"
     group: "{{ cinder_system_group_name }}"
     mode: "02755"
-  with_dict: "{{ cinder_service_names }}"
+  with_dict: "{{ cinder_services }}"
   when:
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
@@ -45,7 +45,7 @@
     mode: "0644"
     owner: "root"
     group: "root"
-  with_dict: "{{ cinder_service_names }}"
+  with_dict: "{{ cinder_services }}"
   when:
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
@@ -53,18 +53,13 @@
 - name: Place the systemd init script
   template:
     src: "cinder-systemd-init.j2"
-    dest: "/etc/systemd/system/{{ item.key }}.service"
+    dest: "/etc/systemd/system/{{ item.value.service_name }}.service"
     mode: "0644"
     owner: "root"
     group: "root"
-  register: systemd_init
-  with_dict: "{{ cinder_service_names }}"
+  with_dict: "{{ cinder_services }}"
   when:
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
-
-- name: Reload the systemd daemon
-  command: "systemctl daemon-reload"
-  when: systemd_init | changed
   notify:
-    - Restart cinder services
+    - Reload systemd daemon

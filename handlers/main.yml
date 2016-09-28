@@ -13,13 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Reload systemd daemon
+  command: "systemctl daemon-reload"
+  notify:
+    - Restart cinder services
+
+- name: Reload upstart init scripts
+  shell: |
+    initctl reload-configuration
+  notify:
+    - Restart cinder services
+
 - name: Restart cinder services
   service:
-    name: "{{ item.key }}"
+    name: "{{ item.value.service_name }}"
     state: restarted
-    pattern: "{{ item.key }}"
-  with_dict: "{{ cinder_service_names }}"
-  failed_when: false
+    pattern: "{{ item.value.service_name }}"
+  with_dict: "{{ cinder_services }}"
+  when:
+    - inventory_hostname in groups[item.value.group]
+    - "{{ item.value.condition | default(true) }}"
 
 - name: Ensure tgt service restarted
   service:

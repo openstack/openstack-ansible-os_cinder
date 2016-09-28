@@ -1,4 +1,4 @@
 # {{ ansible_managed }}
 
-D /var/lock/{{ item.key }} 2755 {{ cinder_system_user_name }} {{ cinder_system_group_name }}
-D /var/run/{{ item.key }} 2755 {{ cinder_system_user_name }} {{ cinder_system_group_name }}
+D /var/lock/{{ item.value.service_name }} 2755 {{ cinder_system_user_name }} {{ cinder_system_group_name }}
+D /var/run/{{ item.value.service_name }} 2755 {{ cinder_system_user_name }} {{ cinder_system_group_name }}
