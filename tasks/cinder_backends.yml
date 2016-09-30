@@ -30,3 +30,15 @@
       {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-key "{{ item.key }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
     fi
   with_dict: "{{ cinder_backends|default({}) }}"
+
+- name: Add extra cinder volume types
+  shell: |
+    . {{ ansible_env.HOME }}/openrc
+    {% for evtype in item.value.extra_volume_types %}
+      if ! {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-list | grep "{{ evtype }}"; then
+        {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-create "{{ evtype }}"
+        {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-key "{{ evtype }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
+      fi
+    {% endfor %}
+  with_dict: "{{ cinder_backends|default({}) }}"
+  when: item.value.extra_volume_types is defined
