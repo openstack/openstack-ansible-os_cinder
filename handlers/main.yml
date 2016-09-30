@@ -15,12 +15,20 @@
 
 - name: Reload systemd daemon
   command: "systemctl daemon-reload"
+  register: reload_systemd
+  until: reload_systemd | success
+  retries: 5
+  delay: 2
   notify:
     - Restart cinder services
 
 - name: Reload upstart init scripts
   shell: |
     initctl reload-configuration
+  register: reload_upstart
+  until: reload_upstart | success
+  retries: 5
+  delay: 2
   notify:
     - Restart cinder services
 
