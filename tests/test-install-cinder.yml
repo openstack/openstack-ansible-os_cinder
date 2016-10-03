@@ -42,7 +42,6 @@
         login_host: "{{ cinder_galera_address }}"
         name: "{{ cinder_galera_database }}"
         state: "present"
-      delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['cinder_all'][0]
       delegate_to: "{{ hostvars[groups['galera_all'][0]]['ansible_host'] }}"
       tags:
@@ -57,7 +56,6 @@
         host: "{{ item }}"
         state: "present"
         priv: "{{ cinder_galera_database }}.*:ALL"
-      delegate_to: "10.100.100.2"
       when: inventory_hostname == groups['cinder_all'][0]
       delegate_to: "{{ hostvars[groups['galera_all'][0]]['ansible_host'] }}"
       with_items:
