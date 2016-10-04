@@ -14,6 +14,7 @@
 # limitations under the License.
 
 bridges:
-  - "br-mgmt"
-
+  - name: "br-mgmt"
+    ip_addr: "10.1.1.1"
+ansible_become: True
 ansible_python_interpreter: "/usr/bin/python2"
