@@ -34,4 +34,3 @@
         {{ tempest_venv_bin | dirname }}/run_tempest.sh --no-virtual-env --serial tempest.api.volume.test_volumes_get
   vars_files:
     - common/test-vars.yml
-    - test-vars.yml

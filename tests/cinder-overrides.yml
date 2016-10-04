@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,23 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Setup the host
-- include: common/test-setup-host.yml
-
-# Prepare the cinder-volumes VG
-- include: common/test-setup-cinder-localhost.yml
-
-# Install RabbitMQ/MariaDB
-- include: common/test-install-infra.yml
-
-# Install Keystone
-- include: common/test-install-keystone.yml
-
-# Install Cinder
-- include: common/test-install-cinder.yml
-
-# Install Tempest
-- include: common/test-install-tempest.yml
-
-# Test Cinder
-- include: test-cinder-functional.yml
+# There are currently no overrides required for the cinder role.
+# If you need cinder specific variable overries set them below and add
+# "-e @{toxinidir}/tests/cinder-overrides.yml \" to the ansible test run.
