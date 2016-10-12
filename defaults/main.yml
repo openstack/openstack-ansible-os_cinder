@@ -158,6 +158,8 @@ cinder_iscsi_port: 3260
 
 ## Cinder RPC
 cinder_rpc_backend: rabbit
+cinder_rpc_executor_thread_pool_size: 64
+cinder_rpc_response_timeout: 60
 
 # (StrOpt) Method used to wipe old volumes (valid options are: none, zero,
 # shred)
