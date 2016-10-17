@@ -64,7 +64,7 @@
   tags:
     - cinder-install
 
-- include: cinder_init.yml
+- include: cinder_init_common.yml
   tags:
     - cinder-install
 
