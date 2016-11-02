@@ -19,7 +19,8 @@
     {{ cinder_bin }}/cinder qos-list | grep {{ item.name }} || \
     {{ cinder_bin }}/cinder qos-create {{ item.name }}\
     {% for k,v in item.options.iteritems() %} {{ k }}={{ v }}{% endfor %}
-  with_items: cinder_qos_specs
+  with_items: "{{ cinder_qos_specs }}"
+  changed_when: false
   tags:
     - cinder-qos
 
@@ -31,7 +32,7 @@
       $({{ cinder_bin }}/cinder qos-list | grep {{ item.name }} | grep -oE "{{ _UUID_regex }}") \
       $({{ cinder_bin }}/cinder type-list | grep {{ vtype }} | grep -oE "{{ _UUID_regex }}")
     {% endfor %}
-  with_items: cinder_qos_specs
+  with_items: "{{ cinder_qos_specs }}"
   when:
     - item.cinder_volume_types is defined
   tags:

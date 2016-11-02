@@ -17,3 +17,4 @@
   command: "{{ cinder_bin }}/cinder-manage db sync"
   become: yes
   become_user: "{{ cinder_system_user_name }}"
+  changed_when: false

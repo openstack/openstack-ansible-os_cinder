@@ -19,8 +19,8 @@
     - Restart cinder services
 
 - name: Reload upstart init scripts
-  shell: |
-    initctl reload-configuration
+  command: initctl reload-configuration
+  changed_when: false
   notify:
     - Restart cinder services
 
