@@ -127,6 +127,7 @@ lock_path = /var/lock/cinder
 [profiler]
 profiler_enabled = {{ cinder_profiler_enabled }}
 trace_sqlalchemy = {{ cinder_profiler_trace_sqlalchemy }}
+hmac_keys = {{ cinder_profiler_hmac_key }}
 
 [keymgr]
 encryption_auth_url = {{ keystone_service_internaluri }}/v3
