@@ -40,49 +40,19 @@
   retries: 5
   delay: 2
 
-- name: Get local venv checksum
-  stat:
-    path: "/var/cache/{{ cinder_venv_download_url | basename }}"
-    get_md5: False
-  when:
-    - not cinder_developer_mode | bool
-  register: local_venv_stat
-
-- name: Get remote venv checksum
-  uri:
-    url: "{{ cinder_venv_download_url | replace('tgz', 'checksum') }}"
-    return_content: True
-  when:
-    - not cinder_developer_mode | bool
-  register: remote_venv_checksum
-
-# TODO: When project moves to ansible 2 we can pass this a sha256sum which will:
-#       a) allow us to remove force: yes
-#       b) allow the module to calculate the checksum of dest file which would
-#          result in file being downloaded only if provided and dest sha256sum
-#          checksums differ
 - name: Attempt venv download
   get_url:
     url: "{{ cinder_venv_download_url }}"
     dest: "/var/cache/{{ cinder_venv_download_url | basename }}"
-    force: yes
-  failed_when: false
-  register: get_venv
-  when:
-    - not cinder_developer_mode | bool
-    - (local_venv_stat.stat.exists == False or
-        {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
-
-- name: Set cinder get_venv fact
-  set_fact:
-    cinder_get_venv: "{{ get_venv }}"
+    checksum: "sha1:{{ lookup('url', cinder_venv_download_url | replace('tgz', 'checksum')) }}"
+  register: cinder_get_venv
+  when: not cinder_developer_mode | bool
 
 - name: Remove existing venv
   file:
     path: "{{ cinder_bin | dirname }}"
     state: absent
-  when:
-    - cinder_get_venv | changed
+  when: cinder_get_venv | changed
 
 - name: Create cinder venv dir
   file:
@@ -117,8 +87,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  when:
-    - cinder_get_venv | failed or cinder_developer_mode | bool
+  when: cinder_developer_mode | bool
   notify: Restart cinder services
 
 - name: Update virtualenv path
@@ -126,4 +95,4 @@
     virtualenv-tools --update-path=auto {{ cinder_bin | dirname }}
   when:
     - not cinder_developer_mode | bool
-    - cinder_get_venv | success
+    - cinder_get_venv | changed or cinder_venv_dir | changed
