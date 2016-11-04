@@ -122,7 +122,7 @@ transport_url = rabbit://{% for host in cinder_rabbitmq_telemetry_servers.split(
 {% endif %}
 
 [oslo_concurrency]
-lock_path = /var/lock/cinder
+lock_path = {{ cinder_lock_path }}
 
 [profiler]
 profiler_enabled = {{ cinder_profiler_enabled }}

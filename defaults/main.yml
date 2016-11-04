@@ -71,6 +71,8 @@ cinder_system_comment: cinder system user
 cinder_system_shell: /bin/false
 cinder_system_home_folder: "/var/lib/{{ cinder_system_user_name }}"
 
+cinder_lock_path: /var/lock/cinder
+
 ## Cinder Auth
 cinder_service_admin_tenant_name: "service"
 cinder_service_admin_username: "cinder"
