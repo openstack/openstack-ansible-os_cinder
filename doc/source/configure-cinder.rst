@@ -218,10 +218,20 @@ Configuring cinder to use LVM
                  iscsi_ip_address: "{{ cinder_storage_address }}"
                limit_container_types: cinder_volume
 
-To use another backend in a
-container instead of bare metal, edit
-the ``/etc/openstack_deploy/env.d/cinder.yml`` and remove the
-``is_metal: true`` stanza under the ``cinder_volumes_container`` properties.
+To use another backend in a container instead of bare metal,
+copy the ``env.d/cinder.yml`` to
+``/etc/openstack_deploy/env.d/cinder.yml`` file and change the
+``is_metal: true`` stanza under the ``cinder_volumes_container`` properties
+to ``is_metal: false``.
+
+Alternatively, you can also selectively override, like this:
+
+.. code-block:: yaml
+
+   container_skel:
+     cinder_volumes_container:
+       properties:
+         is_metal: false
 
 Configuring cinder to use Ceph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +241,19 @@ the API and backend. When using any forms of network storage
 (iSCSI, NFS, Ceph) for cinder, the API containers can be considered
 as backend servers. A separate storage host is not required.
 
-In ``env.d/cinder.yml`` remove ``is_metal: true``
+Copy the ``env.d/cinder.yml`` to
+``/etc/openstack_deploy/env.d/cinder.yml`` file and change the
+``is_metal: true`` stanza under the ``cinder_volumes_container`` properties
+to ``is_metal: false``.
+
+Alternatively, you can also selectively override, like this:
+
+.. code-block:: yaml
+
+   container_skel:
+     cinder_volumes_container:
+       properties:
+         is_metal: false
 
 #. List of target hosts on which to deploy the cinder API. We recommend
    that a minimum of three target hosts are used for this service.
