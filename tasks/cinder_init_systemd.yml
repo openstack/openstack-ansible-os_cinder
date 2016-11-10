@@ -38,10 +38,10 @@
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
 
-- name: Create tempfile.d entry
+- name: Create tmpfiles.d entry
   template:
-    src: "cinder-systemd-tempfiles.j2"
-    dest: "/etc/tmpfiles.d/cinder.conf"
+    src: "cinder-systemd-tmpfiles.j2"
+    dest: "/etc/tmpfiles.d/{{ item.value.service_name }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
