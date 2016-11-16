@@ -92,7 +92,7 @@
 
 - name: Update virtualenv path
   command: >
-    virtualenv-tools --update-path=auto {{ cinder_bin | dirname }}
+    virtualenv-tools --update-path=auto --reinitialize {{ cinder_bin | dirname }}
   when:
     - not cinder_developer_mode | bool
     - cinder_get_venv | changed or cinder_venv_dir | changed
