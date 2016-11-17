@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,20 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Setup the host
-- include: common/test-setup-host.yml
+tempest_run: yes
 
-# Prepare the cinder-volumes VG
-- include: common/test-setup-cinder-localhost.yml
+tempest_plugins:
+  - name: cinder
+    repo: https://git.openstack.org/openstack/cinder
+    branch: master
 
-# Install RabbitMQ/MariaDB
-- include: common/test-install-infra.yml
-
-# Install Keystone
-- include: common/test-install-keystone.yml
-
-# Install Cinder
-- include: common/test-install-cinder.yml
-
-# Install and execute Tempest
-- include: common/test-install-tempest.yml
+tempest_test_whitelist:
+  - cinder.tests.tempest.api.volume.*
