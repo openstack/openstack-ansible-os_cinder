@@ -13,11 +13,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: cinder_install_apt.yml
-  when: ansible_pkg_mgr == 'apt'
+- name: Ensure apt cache is up to date
+  apt:
+    update_cache: yes
+    cache_valid_time: "{{ cache_timeout }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
 
-- include: cinder_install_yum.yml
-  when: ansible_pkg_mgr == 'yum'
+- name: Install distro packages
+  package:
+    name: "{{ item }}"
+    state: "{{ cinder_package_state }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ cinder_distro_packages }}"
+
+- name: Install distro packages common between different backends
+  package:
+    name: "{{ item }}"
+    state: "{{ cinder_package_state }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ cinder_volume_distro_packages }}"
+  when:
+    - inventory_hostname in groups['cinder_volume']
+
+- name: Install distro packages for LVM backend
+  package:
+    name: "{{ item }}"
+    state: "{{ cinder_package_state }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ cinder_lvm_volume_distro_packages }}"
+  when:
+    - inventory_hostname in groups['cinder_volume']
+    - cinder_backend_lvm_inuse | bool
 
 - name: Create developer mode constraint file
   copy:
