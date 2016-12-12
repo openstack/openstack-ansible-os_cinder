@@ -162,9 +162,8 @@ cinder_rpc_backend: rabbit
 cinder_rpc_executor_thread_pool_size: 64
 cinder_rpc_response_timeout: 60
 
-# (StrOpt) Method used to wipe old volumes (valid options are: none, zero,
-# shred)
-cinder_volume_clear: shred
+# (StrOpt) Method used to wipe old volumes (valid options are: none, zero)
+cinder_volume_clear: zero
 # (StrOpt) The flag to pass to ionice to alter the i/o priority of the process
 # used to zero a volume after deletion, for example "-c3" for idle only
 # priority.
