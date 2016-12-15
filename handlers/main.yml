@@ -18,17 +18,10 @@
   notify:
     - Restart cinder services
 
-- name: Reload upstart init scripts
-  command: initctl reload-configuration
-  changed_when: false
-  notify:
-    - Restart cinder services
-
 - name: Restart cinder services
   service:
     name: "{{ item.value.service_name }}"
     state: restarted
-    pattern: "{{ item.value.service_name }}"
   with_dict: "{{ cinder_services }}"
   when:
     - inventory_hostname in groups[item.value.group]
@@ -38,4 +31,3 @@
   service:
     name: "{{ tgt_service_name }}"
     state: restarted
-    pattern: tgtd

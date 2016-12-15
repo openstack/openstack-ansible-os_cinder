@@ -14,10 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: cinder_init_upstart.yml
-  when:
-    - ansible_service_mgr == 'upstart'
-
 - include: cinder_init_systemd.yml
   when:
     - ansible_service_mgr == 'systemd'
