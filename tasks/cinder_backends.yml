@@ -22,6 +22,11 @@
   retries: 10
   delay: 10
 
+- name: Create singular cinder_backends variable for all hosts
+  set_fact:
+    _cinder_backends: "{{ (_cinder_backends | default(cinder_backends | default({}))) | combine(hostvars[item]['cinder_backends'] | default({})) }}"
+  with_items: "{{ groups['cinder_volume'] }}"
+
 - name: Add in cinder devices types
   shell: |
     . {{ ansible_env.HOME }}/openrc
@@ -29,4 +34,4 @@
       {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-create "{{ item.key }}"
       {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-key "{{ item.key }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
     fi
-  with_dict: "{{ cinder_backends|default({}) }}"
+  with_dict: "{{ _cinder_backends|default({}) }}"

@@ -62,7 +62,7 @@
 - include: cinder_backends.yml
   when:
     - groups['cinder_volume'] | length > 0
-    - inventory_hostname in groups['cinder_volume'][0]
+    - inventory_hostname == groups['cinder_volume'][0]
   tags:
     - cinder-install
 
