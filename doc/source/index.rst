@@ -16,6 +16,9 @@ By default, cinder API v1 and v2 are both enabled.
 
    configure-cinder.rst
 
+To clone or view the source code for this repository, visit the role repository
+for `os_cinder <https://github.com/openstack/openstack-ansible-os_cinder>`_.
+
 Default variables
 ~~~~~~~~~~~~~~~~~
 
