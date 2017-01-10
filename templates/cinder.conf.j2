@@ -97,11 +97,6 @@ default_volume_type = {{ cinder_default_volume_type }}
 {% if cinder_backends is defined %}
 enabled_backends={% for backend in cinder_backends|dictsort %}{{ backend.0 }}{% if not loop.last %},{% endif %}{% endfor %}
 
-{% if cinder_ceilometer_enabled %}
-[oslo_messaging_notifications]
-driver = messagingv2
-{% endif %}
-
 # All given backend(s)
 {% for backend_section in cinder_backends|dictsort %}
 [{{ backend_section.0 }}]
@@ -113,6 +108,11 @@ nfs_shares_config={{ cinder_nfs_client.nfs_shares_config }}
 {% endif %}
 
 {% endfor %}
+{% endif %}
+
+{% if cinder_ceilometer_enabled %}
+[oslo_messaging_notifications]
+driver = messagingv2
 {% endif %}
 
 [database]
