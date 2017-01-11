@@ -26,6 +26,7 @@ cinder_distro_packages:
   - kmod-libs
   - zlib-devel
   - git
+  - which
 
 cinder_developer_mode_distro_packages:
   - git
