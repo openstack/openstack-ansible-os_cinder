@@ -28,6 +28,9 @@ cinder_developer_constraints:
 cinder_venv_tag: untagged
 cinder_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
 
+# venv_download, even when true, will use the fallback method of building the
+# venv from scratch if the venv download fails.
+cinder_venv_download: "{{ not cinder_developer_mode | bool }}"
 cinder_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/cinder.tgz
 
 # Enable/Disable Ceilometer
