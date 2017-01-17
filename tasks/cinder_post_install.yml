@@ -68,10 +68,13 @@
 - name: Create nfs shares export file
   template:
     src: nfs_shares.j2
-    dest: "{{ cinder_nfs_client.nfs_shares_config }}"
+    dest: "{{ item.value.nfs_shares_config }}"
+  with_dict: "{{ cinder_backends }}"
   when:
-    - cinder_nfs_client is defined
+    - item.value.nfs_shares_config is defined
     - inventory_hostname in groups['cinder_volume']
+  tags:
+    - cinder-nfs
 
 - name: Drop sudoers file
   template:
