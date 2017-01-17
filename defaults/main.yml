@@ -205,16 +205,6 @@ cinder_quota_backup_gigabytes: 1000
 # cinder_backend_lvm_inuse: True if current host has an lvm backend
 cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") != -1 }}'
 
-## Define nfs information for cinder. When the cinder_nfs_client dictionary is defined,
-## it will enable nfs shares.  The value ``nfs_shares_config`` is the path on the disk
-## where the NFS export will live. The ``shares`` value is a list of dictionaries that
-## must have the IP address of the NFS server and the location where the export will be.
-# cinder_nfs_client:
-#   nfs_shares_config: /etc/cinder/nfs_shares
-#   shares:
-#     - ip: "127.0.0.1"
-#       share: "/vol/cinder"
-
 ## Policy vars
 # Provide a list of access controls to update the default policy.json with. These changes will be merged
 # with the access controls in the default policy.json. E.g.

@@ -30,15 +30,29 @@ Edit ``/etc/openstack_deploy/openstack_user_config.yml`` and configure
 the NFS client on each storage node if the NetApp backend is configured to use
 an NFS storage protocol.
 
-#. Add the ``cinder_backends`` stanza (which includes
-   ``cinder_nfs_client``) under the ``container_vars`` stanza for
-   each storage node:
+#. For each storage node, add one ``cinder_backends`` block underneath
+   the a new ``container_vars`` section. ``container_vars`` are used to
+   allow container/host individualized configuration. Each cinder back end
+   is defined with a unique key. For example, ``nfs-volume1``.
+   This later represents a unique cinder backend and volume type.
 
    .. code-block:: yaml
 
        container_vars:
          cinder_backends:
-           cinder_nfs_client:
+           nfs-volume1:
+
+#. Configure the appropriate cinder volume backend name:
+
+   .. code::
+
+      volume_backend_name: NFS_VOLUME1
+
+#. Configure the appropriate cinder NFS driver:
+
+   .. code::
+
+      volume_driver: cinder.volume.drivers.nfs.NfsDriver
 
 #. Configure the location of the file that lists shares available to the
    block storage service. This configuration file must include
@@ -46,21 +60,43 @@ an NFS storage protocol.
 
    .. code-block:: yaml
 
-       nfs_shares_config: SHARE_CONFIG
+       nfs_shares_config: FILENAME_NFS_SHARES
 
-   Replace ``SHARE_CONFIG`` with the location of the share
-   configuration file. For example, ``/etc/cinder/nfs_shares``.
+   Replace ``FILENAME_NFS_SHARES`` with the location of the share
+   configuration file. For example, ``/etc/cinder/nfs_shares_volume1``.
+
+#. Define mount options for the NFS mount. For example:
+
+   .. code::
+
+      nfs_mount_options: "rsize=65535,wsize=65535,timeo=1200,actimeo=120"
 
 #. Configure one or more NFS shares:
 
    .. code-block:: yaml
 
        shares:
-          - { ip: "NFS_HOST", share: "NFS_SHARE" }
+          - { ip: "HOSTNAME", share: "PATH_TO_NFS_VOLUME" }
 
-   Replace ``NFS_HOST`` with the IP address or hostname of the NFS
-   server, and the ``NFS_SHARE`` with the absolute path to an existing
-   and accessible NFS share.
+   Replace ``HOSTNAME`` with the IP address or hostname of the NFS
+   server, and the ``PATH_TO_NFS_VOLUME`` with the absolute path to an
+   existing and accessible NFS share (excluding the IP address or hostname).
+
+The following is a full configuration example of a cinder NFS backend
+named NFS1. The cinder playbooks will automatically add a custom
+``volume-type`` and ``nfs-volume1`` as in this example:
+
+   .. code::
+
+     container_vars:
+       cinder_backends:
+         nfs-volume1:
+           volume_backend_name: NFS_VOLUME1
+           volume_driver: cinder.volume.drivers.nfs.NfsDriver
+           nfs_shares_config: /etc/cinder/nfs_shares_volume1
+           nfs_mount_options: "rsize=65535,wsize=65535,timeo=1200,actimeo=120"
+           shares:
+           - { ip: "1.2.3.4", share: "/vol1" }
 
 Backup
 ~~~~~~
@@ -407,9 +443,9 @@ each storage node that will use it.
 
    .. code-block:: yaml
 
-       nfs_shares_config: SHARE_CONFIG
+       nfs_shares_config: FILENAME_NFS_SHARES
 
-   Replace ``SHARE_CONFIG`` with the location of the share
+   Replace ``FILENAME_NFS_SHARES`` with the location of the share
    configuration file. For example, ``/etc/cinder/nfs_shares``.
 
 #. Configure the server:
