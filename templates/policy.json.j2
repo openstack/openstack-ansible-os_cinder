@@ -6,6 +6,7 @@
 
     "volume:create": "",
     "volume:delete": "rule:admin_or_owner",
+    "volume:force_delete": "rule:admin_api",
     "volume:get": "rule:admin_or_owner",
     "volume:get_all": "rule:admin_or_owner",
     "volume:get_volume_metadata": "rule:admin_or_owner",
@@ -136,5 +137,7 @@
 
     "clusters:get": "rule:admin_api",
     "clusters:get_all": "rule:admin_api",
-    "clusters:update": "rule:admin_api"
+    "clusters:update": "rule:admin_api",
+
+    "workers:cleanup": "rule:admin_api"
 }
