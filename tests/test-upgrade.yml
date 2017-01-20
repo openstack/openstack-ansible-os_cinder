@@ -25,6 +25,9 @@
 # Install Keystone
 - include: common/test-install-keystone.yml
 
+# Install previous Cinder
+- include: test-install-previous-cinder.yml
+
 # Install Cinder
 - include: common/test-install-cinder.yml
 
