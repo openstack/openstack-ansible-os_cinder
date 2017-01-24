@@ -13,15 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Reload systemd daemon
-  command: "systemctl daemon-reload"
-  notify:
-    - Restart cinder services
-
 - name: Restart cinder services
-  service:
+  systemd:
     name: "{{ item.value.service_name }}"
     state: restarted
+    daemon_reload: yes
   with_dict: "{{ cinder_services }}"
   when:
     - inventory_hostname in groups[item.value.group]
