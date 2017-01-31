@@ -33,6 +33,9 @@ cinder_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
 cinder_venv_download: "{{ not cinder_developer_mode | bool }}"
 cinder_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/cinder.tgz
 
+# Enable/Disable Barbican
+cinder_barbican_enabled: False
+
 # Enable/Disable Ceilometer
 cinder_ceilometer_enabled: False
 
