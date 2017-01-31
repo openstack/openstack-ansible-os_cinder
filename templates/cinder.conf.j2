@@ -126,8 +126,13 @@ profiler_enabled = {{ cinder_profiler_enabled }}
 trace_sqlalchemy = {{ cinder_profiler_trace_sqlalchemy }}
 hmac_keys = {{ cinder_profiler_hmac_key }}
 
-[keymgr]
-encryption_auth_url = {{ keystone_service_internaluri }}/v3
+{% if cinder_barbican_enabled %}
+[barbican]
+auth_endpoint = {{ keystone_service_internaluri }}/v3
+
+[key_manager]
+api_class = castellan.key_manager.barbican_key_manager.BarbicanKeyManager
+{% endif %}
 
 [keystone_authtoken]
 insecure = {{ keystone_service_internaluri_insecure | bool }}
