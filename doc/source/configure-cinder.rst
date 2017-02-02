@@ -396,6 +396,83 @@ integration with cinder (nova and glance included):
 .. _OpenStack-Ansible and Ceph Working Example: https://www.openstackfaq.com/openstack-ansible-ceph/
 
 
+Configuring cinder to use Dell EqualLogic
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To use the Dell EqualLogic volume driver as a back end, edit the
+``/etc/openstack_deploy/openstack_user_config.yml`` file and
+configure the storage nodes that will use it.
+
+Define the following parameters.
+
+#. Add ``dellqlx`` stanza under the ``cinder_backends`` for each
+   storage node:
+
+   .. code-block:: yaml
+
+        cinder_backends:
+          delleqlx:
+
+#. Use Dell EQLX San ISCSI driver:
+
+   .. code-block:: yaml
+
+        volume_driver: cinder.volume.drivers.eqlx.DellEQLSanISCSIDriver
+
+#. Specify the SAN IP address:
+
+   .. code-block:: yaml
+
+        san_ip: ip_of_dell_storage
+
+#. Specify SAN username (Default: grpadmin):
+
+   .. code-block:: yaml
+
+        san_login: grpadmin
+
+#. Specify the SAN password:
+
+   .. code-block:: yaml
+
+       san_password: password
+
+#. Specify the group name for pools (Default: group-0):
+
+   .. code-block:: yaml
+
+       eqlx_group_name: group-0
+
+#. Specify the pool where Cinder will create volumes and snapshots
+   (Default: default):
+
+   .. code-block:: yaml
+
+       eqlx_pool: default
+
+#. Ensure the ``openstack_user_config.yml`` configuration is
+   accurate:
+
+   .. code-block:: yaml
+
+       storage_hosts:
+         Infra01:
+           ip: infra_host_ip
+           container_vars:
+             cinder_backends:
+               limit_container_types: cinder_volume
+               delleqlx:
+                 volume_driver: cinder.volume.drivers.eqlx.DellEQLSanISCSIDriver
+                 san_ip: ip_of_dell_storage
+                 san_login: grpadmin
+                 san_password: password
+                 eqlx_group_name: group-0
+                 eqlx_pool: default
+
+.. note:: For more details about available configuration options,
+          see http://docs.openstack.org/newton/config-reference/block-storage/drivers/dell-equallogic-driver.html
+
+
 Configuring cinder to use a NetApp appliance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
