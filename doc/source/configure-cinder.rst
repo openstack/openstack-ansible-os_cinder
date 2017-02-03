@@ -413,6 +413,12 @@ Define the following parameters.
         cinder_backends:
           delleqlx:
 
+#. Specify volume back end name:
+
+   .. code-block:: yaml
+
+        volume_backend_name: DellEQLX_iSCSI
+
 #. Use Dell EQLX San ISCSI driver:
 
    .. code-block:: yaml
@@ -462,6 +468,7 @@ Define the following parameters.
              cinder_backends:
                limit_container_types: cinder_volume
                delleqlx:
+                 volume_backend_name: DellEQLX_iSCSI
                  volume_driver: cinder.volume.drivers.eqlx.DellEQLSanISCSIDriver
                  san_ip: ip_of_dell_storage
                  san_login: grpadmin
