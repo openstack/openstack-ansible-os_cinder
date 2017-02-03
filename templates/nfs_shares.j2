@@ -1,4 +1,5 @@
 # {{ ansible_managed }}
-{% for share in item.value.shares %}
+{% set shares_exports = item.value.shares | default([]) | union(cinder_nfs_client.shares | default([]))  %}
+{% for share in shares_exports  %}
 {{ share.ip }}:{{ share.share }}
 {% endfor %}
