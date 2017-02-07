@@ -17,9 +17,9 @@
   config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ item.owner|default(cinder_system_user_name) }}"
+    owner: "root"
     group: "{{ item.group|default(cinder_system_group_name) }}"
-    mode: "0644"
+    mode: "0640"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
   with_items:
@@ -33,8 +33,6 @@
       config_type: "ini"
     - src: "rootwrap.conf.j2"
       dest: "/etc/cinder/rootwrap.conf"
-      owner: "root"
-      group: "root"
       config_overrides: "{{ cinder_rootwrap_conf_overrides }}"
       config_type: "ini"
     - src: "policy.json.j2"
