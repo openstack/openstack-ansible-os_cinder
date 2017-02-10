@@ -5,6 +5,7 @@
     "admin_api": "is_admin:True or (role:admin and is_admin_project:True)",
 
     "volume:create": "",
+    "volume:create_from_image": "",
     "volume:delete": "rule:admin_or_owner",
     "volume:force_delete": "rule:admin_api",
     "volume:get": "rule:admin_or_owner",
@@ -77,9 +78,6 @@
     "volume:delete_transfer": "rule:admin_or_owner",
     "volume:get_transfer": "rule:admin_or_owner",
     "volume:get_all_transfers": "rule:admin_or_owner",
-
-    "volume_extension:replication:promote": "rule:admin_api",
-    "volume_extension:replication:reenable": "rule:admin_api",
 
     "volume:failover_host": "rule:admin_api",
     "volume:freeze_host": "rule:admin_api",
