@@ -27,9 +27,3 @@
 
 # Install previous Cinder
 - include: test-install-previous-cinder.yml
-
-# Install Cinder
-- include: common/test-install-cinder.yml
-
-# Install and execute Tempest
-- include: common/test-install-tempest.yml
