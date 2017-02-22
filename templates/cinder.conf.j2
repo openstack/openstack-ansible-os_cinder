@@ -1,8 +1,5 @@
 # {{ ansible_managed }}
 
-{% set _api_threads = ansible_processor_vcpus|default(2) // 2 %}
-{% set api_threads = _api_threads if _api_threads > 0 else 1 %}
-
 [DEFAULT]
 # Disable stderr logging
 use_stderr = False
@@ -10,7 +7,7 @@ debug = {{ debug }}
 fatal_deprecations = {{ cinder_fatal_deprecations }}
 my_ip = {{ cinder_management_address }}
 
-osapi_volume_workers = {{ cinder_osapi_volume_workers | default(api_threads) }}
+osapi_volume_workers = {{ cinder_osapi_volume_workers }}
 
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_config = /etc/cinder/api-paste.ini
