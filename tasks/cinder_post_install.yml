@@ -75,7 +75,7 @@
   template:
     src: nfs_shares.j2
     dest: "{{ item.value.nfs_shares_config }}"
-  with_dict: "{{ cinder_backends }}"
+  with_dict: "{{ cinder_backends | default({}) }}"
   when:
     - item.value.nfs_shares_config is defined
     - inventory_hostname in groups['cinder_volume']
