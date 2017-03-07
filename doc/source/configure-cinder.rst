@@ -423,7 +423,7 @@ Define the following parameters.
 
    .. code-block:: yaml
 
-        volume_driver: cinder.volume.drivers.eqlx.DellEQLSanISCSIDriver
+        volume_driver: cinder.volume.drivers.dell_emc.ps.PSSeriesISCSIDriver
 
 #. Specify the SAN IP address:
 
@@ -469,7 +469,7 @@ Define the following parameters.
                limit_container_types: cinder_volume
                delleqlx:
                  volume_backend_name: DellEQLX_iSCSI
-                 volume_driver: cinder.volume.drivers.eqlx.DellEQLSanISCSIDriver
+                 volume_driver: cinder.volume.drivers.dell_emc.ps.PSSeriesISCSIDriver
                  san_ip: ip_of_dell_storage
                  san_login: grpadmin
                  san_password: password
@@ -477,7 +477,7 @@ Define the following parameters.
                  eqlx_pool: default
 
 .. note:: For more details about available configuration options,
-          see http://docs.openstack.org/newton/config-reference/block-storage/drivers/dell-equallogic-driver.html
+          see http://docs.openstack.org/ocata/config-reference/block-storage/drivers/dell-equallogic-driver.html
 
 
 Configuring cinder to use a NetApp appliance
