@@ -30,7 +30,7 @@
 - name: Add in cinder devices types
   shell: |
     . {{ ansible_env.HOME }}/openrc
-    if ! {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-list | grep "{{ item.key }}"; then
+    if ! {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-list | grep " {{ item.key }} "; then
       {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-create "{{ item.key }}"
       {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-key "{{ item.key }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
     fi
@@ -41,7 +41,7 @@
   shell: |
     . {{ ansible_env.HOME }}/openrc
     {% for evtype in item.value.extra_volume_types %}
-      if ! {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-list | grep "{{ evtype }}"; then
+      if ! {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-list | grep " {{ evtype }} "; then
         {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-create "{{ evtype }}"
         {{ cinder_bin }}/cinder {{ keystone_service_adminuri_insecure | bool | ternary('--insecure','') }} type-key "{{ evtype }}" set volume_backend_name="{{ item.value.volume_backend_name }}"
       fi
