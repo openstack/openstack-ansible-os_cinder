@@ -30,3 +30,12 @@
     service_publicurl: "{{ cinder_service_v2_publicurl }}"
     service_internalurl: "{{ cinder_service_v2_internalurl }}"
     service_adminurl: "{{ cinder_service_v2_adminurl }}"
+
+- include: cinder_service_add.yml
+  vars:
+    service_name: "{{ cinder_service_v3_name }}"
+    service_type: "{{ cinder_service_v3_type }}"
+    service_description: "{{ cinder_service_v3_description }}"
+    service_publicurl: "{{ cinder_service_v3_publicurl }}"
+    service_internalurl: "{{ cinder_service_v3_internalurl }}"
+    service_adminurl: "{{ cinder_service_v3_adminurl }}"
