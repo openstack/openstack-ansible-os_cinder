@@ -17,9 +17,9 @@ ExecStart={{ cinder_bin }}/{{ item.value.service_name }} {{ program_config_optio
 {% endif %}
 
 # Give a reasonable amount of time for the server to start up/shut down
-TimeoutSec=300
+TimeoutSec={{ cinder_sigkill_timeout }}
 Restart=on-failure
-RestartSec=150
+RestartSec={{ cinder_restart_wait }}
 
 [Install]
 WantedBy=multi-user.target
