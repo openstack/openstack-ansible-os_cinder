@@ -21,6 +21,7 @@ tgt_service_name: tgt
 
 # Common apt packages
 cinder_distro_packages:
+  - git
   - libpq-dev
   - libkmod-dev
   - libkmod2
