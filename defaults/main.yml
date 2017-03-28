@@ -248,21 +248,30 @@ cinder_pip_packages:
   - python-cinderclient
   - python-keystoneclient
 
+cinder_api_init_overrides: {}
+cinder_scheduler_init_overrides: {}
+cinder_volume_init_overrides: {}
+cinder_backup_init_overrides: {}
+
 ## Service Name-Group Mapping
 cinder_services:
   cinder-api:
     group: cinder_api
     service_name: cinder-api
+    init_config_overrides: "{{ cinder_api_init_overrides }}"
   cinder-scheduler:
     group: cinder_scheduler
     service_name: cinder-scheduler
+    init_config_overrides: "{{ cinder_scheduler_init_overrides }}"
   cinder-volume:
     group: cinder_volume
     service_name: cinder-volume
+    init_config_overrides: "{{ cinder_volume_init_overrides }}"
   cinder-backup:
     group: cinder_backup
     service_name: cinder-backup
     condition: "{{ cinder_service_backup_program_enabled | bool }}"
+    init_config_overrides: "{{ cinder_backup_init_overrides }}"
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
