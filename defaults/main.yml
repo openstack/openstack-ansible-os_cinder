@@ -80,6 +80,7 @@ cinder_service_admin_username: "cinder"
 ## Cinder API's enabled
 cinder_enable_v1_api: true
 cinder_enable_v2_api: true
+cinder_enable_v3_api: true
 
 ## Cinder api service type and data
 cinder_service_name: cinder
@@ -114,6 +115,18 @@ cinder_service_v2_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_l
 cinder_service_v2_adminurl: "{{ cinder_service_adminuri }}/v2/%(tenant_id)s"
 cinder_service_v2_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
 cinder_service_v2_internalurl: "{{ cinder_service_internaluri }}/v2/%(tenant_id)s"
+
+cinder_service_v3_name: cinderv3
+cinder_service_v3_port: 8776
+cinder_service_v3_proto: http
+cinder_service_v3_type: volumev3
+cinder_service_v3_description: "Cinder Volume Service V3"
+cinder_service_v3_publicuri: "{{ cinder_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_v3_publicurl: "{{ cinder_service_publicuri }}/v3/%(tenant_id)s"
+cinder_service_v3_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_v3_adminurl: "{{ cinder_service_adminuri }}/v3/%(tenant_id)s"
+cinder_service_v3_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_v3_internalurl: "{{ cinder_service_internaluri }}/v3/%(tenant_id)s"
 
 ## Keystone authentication middleware
 cinder_keystone_auth_plugin: password
