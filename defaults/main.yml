@@ -23,6 +23,8 @@ cinder_git_install_branch: master
 cinder_developer_mode: false
 cinder_developer_constraints:
   - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
+cinder_developer_mode_packages:
+  - git
 
 # Name of the virtual env to deploy into
 cinder_venv_tag: untagged

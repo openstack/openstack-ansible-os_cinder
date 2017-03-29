@@ -24,7 +24,6 @@ tgt_service_name: tgt
 cinder_distro_packages:
   - rpcbind
   - rsync
-  - git
   - nfs-common
   - libpq-dev
   - libkmod-dev
