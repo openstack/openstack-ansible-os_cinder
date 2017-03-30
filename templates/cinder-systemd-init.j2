@@ -21,7 +21,7 @@ TimeoutSec={{ cinder_sigkill_timeout }}
 Restart=on-failure
 RestartSec={{ cinder_restart_wait }}
 
-# This creates a specific slice which all nova services will operate from
+# This creates a specific slice which all services will operate from
 #  The accounting options give us the ability to see resource usage through
 #  the `systemd-cgtop` command.
 Slice=cinder.slice
