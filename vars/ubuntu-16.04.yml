@@ -33,6 +33,7 @@ cinder_distro_packages:
   - zlibc
   - libffi-dev
   - libssl-dev
+  - open-iscsi
 
 cinder_volume_distro_packages:
   - qemu-utils
