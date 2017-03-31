@@ -26,6 +26,7 @@ cinder_distro_packages:
   - kmod-libs
   - zlib-devel
   - which
+  - iscsi-initiator-utils
 
 cinder_volume_distro_packages:
   - qemu-img
