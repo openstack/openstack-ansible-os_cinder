@@ -27,6 +27,7 @@ cinder_distro_packages:
   - zlib-devel
   - git
   - which
+  - iscsi-initiator-utils
 
 cinder_developer_mode_distro_packages:
   - git
