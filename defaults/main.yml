@@ -138,7 +138,8 @@ cinder_service_v3_internaluri: "{{ cinder_service_internaluri_proto }}://{{ inte
 cinder_service_v3_internalurl: "{{ cinder_service_internaluri }}/v3/%(tenant_id)s"
 
 ## Keystone authentication middleware
-cinder_keystone_auth_plugin: password
+cinder_keystone_auth_plugin: "{{ cinder_keystone_auth_type }}"
+cinder_keystone_auth_type: password
 
 ## In order to enable the cinder backup you MUST set ``cinder_service_backup_program_enabled`` to "true"
 cinder_service_backup_program_enabled: false

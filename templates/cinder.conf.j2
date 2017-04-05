@@ -134,7 +134,7 @@ api_class = castellan.key_manager.barbican_key_manager.BarbicanKeyManager
 
 [keystone_authtoken]
 insecure = {{ keystone_service_internaluri_insecure | bool }}
-auth_plugin = {{ cinder_keystone_auth_plugin }}
+auth_type = {{ cinder_keystone_auth_plugin }}
 auth_url = {{ keystone_service_adminurl }}
 auth_uri = {{ keystone_service_internaluri }}
 project_domain_id = {{ cinder_service_project_domain_id }}
