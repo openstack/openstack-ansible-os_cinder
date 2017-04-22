@@ -11,7 +11,7 @@ osapi_volume_workers = {{ cinder_osapi_volume_workers }}
 
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_config = /etc/cinder/api-paste.ini
-auth_strategy = keystone
+auth_strategy = {{ cinder_auth_strategy }}
 
 ## Cinder API's enabled
 enable_v1_api = {{ cinder_enable_v1_api }}
