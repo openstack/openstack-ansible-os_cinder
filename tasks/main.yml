@@ -51,7 +51,7 @@
   tags:
     - cinder-config
 
-- include: cinder_init_common.yml
+- include: "cinder_init_{{ ansible_service_mgr }}.yml"
   tags:
     - cinder-config
 
