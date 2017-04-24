@@ -61,6 +61,8 @@
   when:
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
+  notify:
+    - Restart cinder services
 
 - name: Place the systemd init script
   config_template:
