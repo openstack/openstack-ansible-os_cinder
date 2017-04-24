@@ -36,7 +36,7 @@
       config_overrides: "{{ cinder_rootwrap_conf_overrides }}"
       config_type: "ini"
     - src: "policy.json.j2"
-      dest: "/etc/cinder/policy.json"
+      dest: "/etc/cinder/policy.json-{{ cinder_venv_tag }}"
       config_overrides: "{{ cinder_policy_overrides }}"
       config_type: "json"
   notify:

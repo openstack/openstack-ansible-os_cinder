@@ -49,6 +49,8 @@
   when:
     - inventory_hostname in groups[item.value.group]
     - "{{ item.value.condition | default(true) }}"
+  notify:
+    - Reload systemd daemon
 
 - name: Place the systemd init script
   config_template:
