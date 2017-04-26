@@ -311,9 +311,11 @@ cinder_cinder_conf_overrides: {}
 # Timeout (in seconds) for cinder to wait between SIGTERM and SIGKILL
 # Applies to TimeoutSec in systemd, affecting start and stop times.
 # 'sigkill_timeout' is a global option should one desired.
+# NOTE(odyssey4me): DEPRECATED for removal in Pike
 cinder_sigkill_timeout: 120
 
 # Number of seconds to wait before restarting the service
+# NOTE(odyssey4me): DEPRECATED for removal in Pike
 cinder_restart_wait: 5
 
 _UUID_regex: "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}"
