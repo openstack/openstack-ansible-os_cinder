@@ -88,11 +88,18 @@
   retries: 5
   delay: 2
 
+- name: Retrieve checksum for venv download
+  uri:
+    url: "{{ cinder_venv_download_url | replace('tgz', 'checksum') }}"
+    return_content: yes
+  register: cinder_venv_checksum
+  when: cinder_venv_download | bool
+
 - name: Attempt venv download
   get_url:
     url: "{{ cinder_venv_download_url }}"
     dest: "/var/cache/{{ cinder_venv_download_url | basename }}"
-    checksum: "sha1:{{ lookup('url', cinder_venv_download_url | replace('tgz', 'checksum')) }}"
+    checksum: "sha1:{{ cinder_venv_checksum.content | trim }}"
   register: cinder_get_venv
   when: cinder_venv_download | bool
 
