@@ -21,14 +21,14 @@ cinder_distro_packages:
   - nfs-utils
   - rpcbind
   - libxslt-devel
-  - libpqxx-devel
+  - postgresql-devel
   - kmod-devel
   - kmod-libs
   - zlib-devel
   - which
 
 cinder_volume_distro_packages:
-  - qemu-img
+  - qemu-img-ev
 
 cinder_lvm_volume_distro_packages:
   - device-mapper-event
