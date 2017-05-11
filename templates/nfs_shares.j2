@@ -1,5 +1,10 @@
 # {{ ansible_managed }}
-{% set shares_exports = item.value.shares | default([]) | union(cinder_nfs_client.shares | default([]))  %}
+{% if cinder_nfs_client is defined %}
+{% set shares_exports = item.value.shares | default([]) | union(cinder_nfs_client.shares | default([])) %}
+{% else %}
+{% set shares_exports = item.value.shares | default([]) %}
+{% endif %}
+
 {% for share in shares_exports  %}
 {{ share.ip }}:{{ share.share }}
 {% endfor %}
