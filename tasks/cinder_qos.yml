@@ -16,9 +16,12 @@
 - name: Add in cinder qos types
   shell: |
     . {{ ansible_env.HOME }}/openrc
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {{ cinder_bin }}/cinder qos-list | grep {{ item.name }} || \
     {{ cinder_bin }}/cinder qos-create {{ item.name }}\
     {% for k,v in item.options.iteritems() %} {{ k }}={{ v }}{% endfor %}
+  args:
+    executable: /bin/bash
   with_items: "{{ cinder_qos_specs }}"
   changed_when: false
   tags:
@@ -27,11 +30,14 @@
 - name: Associate qos types to volume types
   shell: |
     . {{ ansible_env.HOME }}/openrc
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for vtype in item.cinder_volume_types %}
     {{ cinder_bin }}/cinder qos-associate \
       $({{ cinder_bin }}/cinder qos-list | grep {{ item.name }} | grep -oE "{{ _UUID_regex }}") \
       $({{ cinder_bin }}/cinder type-list | grep {{ vtype }} | grep -oE "{{ _UUID_regex }}")
     {% endfor %}
+  args:
+    executable: /bin/bash
   with_items: "{{ cinder_qos_specs }}"
   when:
     - item.cinder_volume_types is defined

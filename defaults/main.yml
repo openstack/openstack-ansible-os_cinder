@@ -91,6 +91,9 @@ cinder_enable_v1_api: true
 cinder_enable_v2_api: true
 cinder_enable_v3_api: true
 
+## Cinder API check cert validation
+cinder_service_internaluri_insecure: false
+
 ## Cinder api service type and data
 cinder_service_name: cinder
 cinder_service_project_domain_id: default
