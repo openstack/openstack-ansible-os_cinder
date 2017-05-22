@@ -153,3 +153,10 @@
   command: >
     virtualenv-tools --update-path=auto --reinitialize {{ cinder_bin | dirname }}
   when: cinder_get_venv | changed
+
+- name: Record the venv tag deployed
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: cinder
+    option: venv_tag
+    value: "{{ cinder_venv_tag }}"
