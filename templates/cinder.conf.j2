@@ -108,7 +108,7 @@ enabled_backends={% for backend in cinder_backends|dictsort %}{{ backend.0 }}{% 
 connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8
 
 [oslo_messaging_rabbit]
-rabbit_use_ssl = {{ cinder_rabbitmq_use_ssl }}
+ssl = {{ cinder_rabbitmq_use_ssl }}
 
 {% if cinder_ceilometer_enabled %}
 [oslo_messaging_notifications]
