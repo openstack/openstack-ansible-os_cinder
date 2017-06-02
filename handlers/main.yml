@@ -36,10 +36,7 @@
     name: "{{ item.value.service_name }}"
     enabled: yes
     state: stopped
-  with_dict: "{{ cinder_services }}"
-  when:
-    - inventory_hostname in groups[item.value.group]
-    - "item.value.condition | default(true)"
+  with_dict: "{{ filtered_cinder_services }}"
   register: _stop
   until: _stop | success
   retries: 5
@@ -67,10 +64,7 @@
     name: "{{ item.value.service_name }}"
     enabled: yes
     state: "started"
-  with_dict: "{{ cinder_services }}"
-  when:
-    - inventory_hostname in groups[item.value.group]
-    - "item.value.condition | default(true)"
+  with_dict: "{{ filtered_cinder_services }}"
   register: _start
   until: _start | success
   retries: 5

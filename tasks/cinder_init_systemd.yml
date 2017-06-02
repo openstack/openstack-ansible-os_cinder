@@ -21,10 +21,7 @@
     owner: "{{ cinder_system_user_name }}"
     group: "{{ cinder_system_group_name }}"
     mode: "02755"
-  with_dict: "{{ cinder_services }}"
-  when:
-    - inventory_hostname in groups[item.value.group]
-    - "{{ item.value.condition | default(true) }}"
+  with_dict: "{{ filtered_cinder_services }}"
 
 - name: Create TEMP lock dir
   file:
@@ -33,10 +30,7 @@
     owner: "{{ cinder_system_user_name }}"
     group: "{{ cinder_system_group_name }}"
     mode: "02755"
-  with_dict: "{{ cinder_services }}"
-  when:
-    - inventory_hostname in groups[item.value.group]
-    - "{{ item.value.condition | default(true) }}"
+  with_dict: "{{ filtered_cinder_services }}"
 
 - name: Create tmpfiles.d entry
   template:
@@ -45,10 +39,7 @@
     mode: "0644"
     owner: "root"
     group: "root"
-  with_dict: "{{ cinder_services }}"
-  when:
-    - inventory_hostname in groups[item.value.group]
-    - "{{ item.value.condition | default(true) }}"
+  with_dict: "{{ filtered_cinder_services }}"
   notify:
     - Reload systemd daemon
 
@@ -61,9 +52,6 @@
     group: "root"
     config_overrides: "{{ item.value.init_config_overrides }}"
     config_type: "ini"
-  with_dict: "{{ cinder_services }}"
-  when:
-    - inventory_hostname in groups[item.value.group]
-    - "{{ item.value.condition | default(true) }}"
+  with_dict: "{{ filtered_cinder_services }}"
   notify:
     - Reload systemd daemon
