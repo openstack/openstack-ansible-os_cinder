@@ -28,6 +28,9 @@ cinder_distro_packages:
   - which
   - iscsi-initiator-utils
 
+cinder_developer_mode_distro_packages:
+  - git
+
 cinder_volume_distro_packages:
   - qemu-img-ev
 

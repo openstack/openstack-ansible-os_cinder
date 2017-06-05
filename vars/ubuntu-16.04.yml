@@ -35,6 +35,9 @@ cinder_distro_packages:
   - libssl-dev
   - open-iscsi
 
+cinder_developer_mode_distro_packages:
+  - git-core
+
 cinder_volume_distro_packages:
   - qemu-utils
 

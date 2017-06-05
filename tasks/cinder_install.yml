@@ -15,57 +15,14 @@
 
 - name: Install distro packages
   package:
-    name: "{{ item }}"
+    name: "{{ cinder_package_list }}"
     state: "{{ cinder_package_state }}"
     update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
     cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
   register: install_packages
-  until: install_packages|success
+  until: install_packages | success
   retries: 5
   delay: 2
-  with_items: "{{ cinder_distro_packages }}"
-
-- name: Install distro packages common between different backends
-  package:
-    name: "{{ item }}"
-    state: "{{ cinder_package_state }}"
-    update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
-    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ cinder_volume_distro_packages }}"
-  when:
-    - inventory_hostname in groups['cinder_volume']
-
-- name: Install distro packages for LVM backend
-  package:
-    name: "{{ item }}"
-    state: "{{ cinder_package_state }}"
-    update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
-    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ cinder_lvm_volume_distro_packages }}"
-  when:
-    - inventory_hostname in groups['cinder_volume']
-    - cinder_backend_lvm_inuse | bool
-
-- name: Install distro packages for developer_mode installs
-  package:
-    name: "{{ item }}"
-    state: "{{ cinder_package_state }}"
-    update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
-    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  with_items: "{{ cinder_developer_mode_packages }}"
-  when: cinder_developer_mode | bool
 
 - name: Create developer mode constraint file
   copy:
