@@ -27,6 +27,9 @@ cinder_distro_packages:
   - zlib-devel
   - git
 
+cinder_developer_mode_distro_packages:
+  - git
+
 cinder_volume_distro_packages:
   - qemu-img
 

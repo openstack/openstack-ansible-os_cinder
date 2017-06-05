@@ -31,6 +31,9 @@ cinder_distro_packages:
   - zlib1g
   - zlibc
 
+cinder_developer_mode_distro_packages:
+  - git-core
+
 cinder_volume_distro_packages:
   - qemu-utils
 
