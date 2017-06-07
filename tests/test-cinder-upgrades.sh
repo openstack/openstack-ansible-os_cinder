@@ -86,7 +86,7 @@ export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-cinder-install.log"
 execute_ansible_playbook
 
 # Prepare environment for the upgrade of Cinder
-export TEST_PLAYBOOK="${COMMON_TESTS_PATH}/test-install-cinder.yml"
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/benchmark-upgrade.yml"
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-cinder-upgrade.log"
 
 # Excute the upgrade of Cinder
