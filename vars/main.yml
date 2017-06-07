@@ -13,6 +13,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# Compile a list of the distro packages to install based on
+# whether the host is in the host group and the service is
+# enabled.
+#
+cinder_package_list: |-
+  {% set packages = cinder_distro_packages %}
+  {% if cinder_services['cinder-volume']['group'] in group_names %}
+  {%   set _ = packages.extend(cinder_volume_distro_packages) %}
+  {%   if cinder_backend_lvm_inuse | bool %}
+  {%     set _ = packages.extend(cinder_lvm_volume_distro_packages) %}
+  {%   endif %}
+  {% endif %}
+  {% if cinder_developer_mode | bool %}
+  {%   set _ = packages.extend(cinder_developer_mode_distro_packages) %}
+  {% endif %}
+  {{ packages }}
+
+#
+# Compile a list of the services on a host based on whether
+# the host is in the host group and the service is enabled.
+#
 filtered_cinder_services: >
   {%- set services = cinder_services.copy() %}
   {%- for key,value in cinder_services.items() %}
