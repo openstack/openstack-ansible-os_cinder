@@ -251,14 +251,14 @@ cinder_requires_pip_packages:
 # Common pip packages
 cinder_pip_packages:
   - cinder
+  - cryptography
   - ecdsa
   - httplib2
   - keystonemiddleware
   - PyMySQL
-  - python-memcached
-  - pycrypto
   - python-cinderclient
   - python-keystoneclient
+  - python-memcached
 
 cinder_api_init_overrides: {}
 cinder_scheduler_init_overrides: {}
