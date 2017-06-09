@@ -33,10 +33,10 @@
 
 - name: Stop services
   service:
-    name: "{{ item.value.service_name }}"
+    name: "{{ item.service_name }}"
     enabled: yes
     state: stopped
-  with_dict: "{{ filtered_cinder_services }}"
+  with_items: "{{ filtered_cinder_services }}"
   register: _stop
   until: _stop | success
   retries: 5
@@ -61,10 +61,10 @@
 
 - name: Start services
   service:
-    name: "{{ item.value.service_name }}"
+    name: "{{ item.service_name }}"
     enabled: yes
     state: "started"
-  with_dict: "{{ filtered_cinder_services }}"
+  with_items: "{{ filtered_cinder_services }}"
   register: _start
   until: _start | success
   retries: 5

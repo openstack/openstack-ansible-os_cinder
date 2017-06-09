@@ -16,10 +16,10 @@
 - name: Place the init script
   template:
     src: "cinder-upstart-init.j2"
-    dest: "/etc/init/{{ item.value.service_name }}.conf"
+    dest: "/etc/init/{{ item.service_name }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
-  with_dict: "{{ filtered_cinder_services }}"
+  with_items: "{{ filtered_cinder_services }}"
   notify:
     - Reload upstart init scripts
