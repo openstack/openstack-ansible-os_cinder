@@ -268,19 +268,23 @@ cinder_services:
     group: cinder_api
     service_name: cinder-api
     init_config_overrides: "{{ cinder_api_init_overrides }}"
+    start_order: 1
   cinder-scheduler:
     group: cinder_scheduler
     service_name: cinder-scheduler
     init_config_overrides: "{{ cinder_scheduler_init_overrides }}"
+    start_order: 2
   cinder-volume:
     group: cinder_volume
     service_name: cinder-volume
     init_config_overrides: "{{ cinder_volume_init_overrides }}"
+    start_order: 3
   cinder-backup:
     group: cinder_backup
     service_name: cinder-backup
     condition: "{{ cinder_service_backup_program_enabled | bool }}"
     init_config_overrides: "{{ cinder_backup_init_overrides }}"
+    start_order: 4
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
