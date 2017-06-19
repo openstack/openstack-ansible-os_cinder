@@ -3,13 +3,11 @@ localhost
 infra1
 keystone
 cinder
-cinder_vol
 
 [all_containers]
 infra1
 keystone
 cinder
-cinder_vol
 
 [rabbitmq_all]
 infra1
@@ -42,7 +40,6 @@ cinder
 
 [cinder_volume]
 localhost
-cinder_vol
 
 [cinder_all:children]
 cinder_api
