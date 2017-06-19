@@ -22,18 +22,18 @@ tgt_service_name: tgt
 
 # Common apt packages
 cinder_distro_packages:
-  - rpcbind
-  - rsync
-  - nfs-common
-  - libpq-dev
+  - libffi-dev
   - libkmod-dev
   - libkmod2
+  - libpq-dev
+  - libssl-dev
   - libxslt1-dev
+  - nfs-common
+  - open-iscsi
+  - rpcbind
+  - rsync
   - zlib1g
   - zlibc
-  - libffi-dev
-  - libssl-dev
-  - open-iscsi
 
 cinder_developer_mode_distro_packages:
   - git-core
@@ -45,3 +45,4 @@ cinder_lvm_volume_distro_packages:
   - dmeventd
   - parted
   - tgt
+  - thin-provisioning-tools
