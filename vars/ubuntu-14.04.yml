@@ -39,5 +39,6 @@ cinder_volume_distro_packages:
 
 cinder_lvm_volume_distro_packages:
   - dmeventd
+  - lvm2
   - parted
   - tgt
