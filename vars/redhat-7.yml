@@ -37,5 +37,6 @@ cinder_volume_distro_packages:
 
 cinder_lvm_volume_distro_packages:
   - device-mapper-event
+  - lvm2
   - parted
   - scsi-target-utils
