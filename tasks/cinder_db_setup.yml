@@ -17,28 +17,7 @@
   command: "{{ cinder_bin }}/cinder-manage db sync"
   become: yes
   become_user: "{{ cinder_system_user_name }}"
-  when:
-    - "ansible_local['openstack_ansible']['cinder']['need_db_sync'] | bool"
   changed_when: false
-  register: dbsync
-
-- name: Disable the db sync requirement
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: cinder
-    option: need_db_sync
-    value: False
-  when:
-    - dbsync | succeeded
-
-- name: Record the need for online data migrations
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: cinder
-    option: need_online_data_migrations
-    value: True
-  when:
-    - dbsync | succeeded
 
 - name: Perform online data migrations
   command: "{{ cinder_bin }}/cinder-manage db online-data-migrations"
@@ -58,4 +37,3 @@
     value: False
   when:
     - data_migrations | succeeded
-
