@@ -40,11 +40,18 @@
   tags:
     - cinder-config
 
+- include: cinder_cleanup_old_facts.yml
+  when:
+    - "'need_db_sync' in ansible_local['openstack_ansible']['cinder']"
+  tags:
+    - cinder-config
+
 - include: cinder_post_install.yml
   tags:
     - cinder-config
 
 - include: cinder_db_setup.yml
+  static: no
   when:
     - groups['cinder_api'] | length > 0
     - inventory_hostname == groups['cinder_api'][0]
@@ -52,6 +59,7 @@
     - cinder-config
 
 - include: cinder_service_setup.yml
+  static: no
   when:
     - groups['cinder_api'] | length > 0
     - inventory_hostname == groups['cinder_api'][0]
@@ -66,6 +74,7 @@
   meta: flush_handlers
 
 - include: cinder_backends.yml
+  static: no
   when:
     - groups['cinder_volume'] | length > 0
     - inventory_hostname == groups['cinder_volume'][0]
@@ -74,7 +83,7 @@
 
 - include: cinder_lvm_config.yml
   when:
-    - inventory_hostname in groups['cinder_volume']
-    - cinder_backend_lvm_inuse
+    - "'cinder_volume' in group_names"
+    - "cinder_backend_lvm_inuse | bool"
   tags:
     - cinder-config
