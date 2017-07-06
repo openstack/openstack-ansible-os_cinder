@@ -55,7 +55,7 @@
   when:
     - "groups['cinder_api'] | length > 0"
     - "'cinder_api' in group_names"
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - "inventory_hostname == (groups['cinder_api'] | intersect(ansible_play_hosts))[0]"
   tags:
     - cinder-config
 
@@ -64,7 +64,7 @@
   when:
     - "groups['cinder_api'] | length > 0"
     - "'cinder_api' in group_names"
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - "inventory_hostname == (groups['cinder_api'] | intersect(ansible_play_hosts))[0]"
   tags:
     - cinder-config
 
@@ -80,7 +80,7 @@
   when:
     - "groups['cinder_volume'] | length > 0"
     - "'cinder_volume' in group_names"
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - "inventory_hostname == (groups['cinder_volume'] | intersect(ansible_play_hosts))[0]"
   tags:
     - cinder-config
 
