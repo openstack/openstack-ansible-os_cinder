@@ -100,7 +100,7 @@ enabled_backends={% for backend in cinder_backends|dictsort %}{{ backend.0 }}{% 
 # All given backend(s)
 {% for backend_section in cinder_backends|dictsort %}
 [{{ backend_section.0 }}]
-{% for key, value in backend_section.1.items() if key not in ['shares'] %}
+{% for key, value in (backend_section.1 | dictsort) if key not in ['shares'] %}
 {{ key }}={{ value }}
 {% endfor %}
 {% if cinder_nfs_client is defined %}
