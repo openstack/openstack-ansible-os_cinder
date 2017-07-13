@@ -72,6 +72,18 @@
   tags:
     - cinder-config
 
+- name: Include ceph_client role
+  include_role:
+    name: ceph_client
+  vars:
+    openstack_service_system_user: "{{ cinder_system_user_name }}"
+    openstack_service_venv_bin: "{{ cinder_bin }}"
+  when:
+    - "'cinder_volume' in group_names"
+    - "cinder_backend_rbd_inuse | bool"
+  tags:
+    - ceph
+
 - name: Flush handlers
   meta: flush_handlers
 
