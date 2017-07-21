@@ -44,6 +44,7 @@ cinder_default_availability_zone: "{{ cinder_storage_availability_zone }}"
 
 cinder_storage_address: 127.0.0.1
 cinder_management_address: 127.0.0.1
+cinder_uwsgi_bind_address: 0.0.0.0
 
 cinder_nova_catalog_info: compute:nova:internalURL
 cinder_nova_catalog_admin_info: compute:nova:adminURL
@@ -258,6 +259,7 @@ cinder_pip_packages:
   - python-cinderclient
   - python-keystoneclient
   - python-memcached
+  - uwsgi
 
 cinder_api_init_overrides: {}
 cinder_scheduler_init_overrides: {}
@@ -271,6 +273,13 @@ cinder_services:
     service_name: cinder-api
     init_config_overrides: "{{ cinder_api_init_overrides }}"
     start_order: 1
+    wsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
+    wsgi_app: True
+    log_string: "--logto "
+    wsgi_name: cinder-wsgi
+    uwsgi_port: "{{ cinder_service_port }}"
+    uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
+    program_override: "{{ cinder_bin }}/uwsgi --ini /etc/uwsgi/cinder-api.ini"
   cinder-scheduler:
     group: cinder_scheduler
     service_name: cinder-scheduler
@@ -287,6 +296,12 @@ cinder_services:
     condition: "{{ cinder_service_backup_program_enabled | bool }}"
     init_config_overrides: "{{ cinder_backup_init_overrides }}"
     start_order: 4
+
+# Cinder uWSGI settings
+cinder_wsgi_processes_max: 16
+cinder_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, cinder_wsgi_processes_max] | min }}"
+cinder_wsgi_threads: 1
+cinder_wsgi_buffer_size: 65535
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
@@ -314,5 +329,6 @@ cinder_policy_overrides: {}
 cinder_rootwrap_conf_overrides: {}
 cinder_api_paste_ini_overrides: {}
 cinder_cinder_conf_overrides: {}
+cinder_api_uwsgi_ini_overrides: {}
 
 _UUID_regex: "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}"

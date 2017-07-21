@@ -59,6 +59,10 @@
   tags:
     - cinder-config
 
+- include: cinder_uwsgi.yml
+  tags:
+    - cinder-config
+
 - include: cinder_service_setup.yml
   static: no
   when:

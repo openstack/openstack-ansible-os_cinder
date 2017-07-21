@@ -10,10 +10,10 @@ Type=simple
 User={{ cinder_system_user_name }}
 Group={{ cinder_system_group_name }}
 
-{% if program_override is defined %}
-ExecStart={{ program_override }} {{ program_config_options|default('') }} --log-file=/var/log/cinder/{{ item.service_name }}.log
+{% if item.program_override is defined %}
+ExecStart={{ item.program_override }} {{ item.program_config_options|default('') }} {{ item.log_string | default('--log-file=') }}/var/log/cinder/{{ item.service_name }}.log
 {% else %}
-ExecStart={{ cinder_bin }}/{{ item.service_name }} {{ program_config_options|default('') }} --log-file=/var/log/cinder/{{ item.service_name }}.log
+ExecStart={{ cinder_bin }}/{{ item.service_name }} {{ item.program_config_options|default('') }} --log-file=/var/log/cinder/{{ item.service_name }}.log
 {% endif %}
 {% if item.service_name != "cinder-api" %}
 ExecReload=/bin/kill -HUP $MAINPID
