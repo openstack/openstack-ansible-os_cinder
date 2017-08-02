@@ -19,7 +19,7 @@
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {{ cinder_bin }}/cinder qos-list | grep {{ item.name }} || \
     {{ cinder_bin }}/cinder qos-create {{ item.name }}\
-    {% for k,v in item.options.iteritems() %} {{ k }}={{ v }}{% endfor %}
+    {% for k,v in item.options.items() %} {{ k }}={{ v }}{% endfor %}
   args:
     executable: /bin/bash
   with_items: "{{ cinder_qos_specs }}"
