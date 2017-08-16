@@ -4,16 +4,17 @@ gid = {{ cinder_system_group_name }}
 
 virtualenv = /openstack/venvs/cinder-{{ cinder_venv_tag }}
 wsgi-file = {{ cinder_bin }}/{{ item.wsgi_name }}
-http-socket = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
+http = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
 
 master = true
 enable-threads = true
 processes = {{ cinder_wsgi_processes }}
 threads = {{ cinder_wsgi_threads }}
-exit-on-reload = true
+exit-on-reload = false
 die-on-term = true
 lazy-apps = true
 add-header = Connection: close
 buffer-size = {{ cinder_wsgi_buffer_size }}
 thunder-lock = true
 logfile-chmod = 644
+pidfile = /var/run/{{ item.service_name }}/{{ item.service_name }}.pid
