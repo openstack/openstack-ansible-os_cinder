@@ -53,4 +53,4 @@
 - name: os_previous_cinder
   src: https://git.openstack.org/openstack/openstack-ansible-os_cinder
   scm: git
-  version: stable/ocata
+  version: stable/pike
