@@ -19,7 +19,7 @@ cinder_package_state: "latest"
 cinder_pip_package_state: "latest"
 
 cinder_git_repo: https://git.openstack.org/openstack/cinder
-cinder_git_install_branch: master
+cinder_git_install_branch: stable/pike
 cinder_developer_mode: false
 cinder_developer_constraints:
   - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
