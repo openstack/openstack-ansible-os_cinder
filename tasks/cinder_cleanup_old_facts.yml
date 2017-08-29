@@ -16,12 +16,15 @@
 # TODO(odyssey4me):
 # This file and the task calling it may be removed in Queens.
 
-- name: Remove the old db_sync fact
+- name: Remove the old db_sync facts
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: cinder
-    option: "need_db_sync"
+    option: "{{ item }}"
     state: absent
+  with_items:
+    - "need_db_sync"
+    - "need_online_data_migrations"
 
 - name: refresh local facts
   setup:

@@ -42,7 +42,8 @@
 
 - include: cinder_cleanup_old_facts.yml
   when:
-    - "'need_db_sync' in ansible_local['openstack_ansible']['cinder']"
+    - ('need_db_sync' in ansible_local['openstack_ansible']['cinder']) or
+      ('need_online_data_migrations' in ansible_local['openstack_ansible']['cinder'])
   tags:
     - cinder-config
 

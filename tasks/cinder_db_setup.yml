@@ -18,23 +18,3 @@
   become: yes
   become_user: "{{ cinder_system_user_name }}"
   changed_when: false
-
-- name: Perform online data migrations
-  command: "{{ cinder_bin }}/cinder-manage db online-data-migrations"
-  become: yes
-  become_user: "{{ cinder_system_user_name }}"
-  when:
-    - "(cinder_all_software_updated | default('no')) | bool"
-    - "ansible_local['openstack_ansible']['cinder']['need_online_data_migrations'] | bool"
-  changed_when: false
-  register: data_migrations
-
-- name: Disable the online migrations requirement
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: cinder
-    option: need_online_data_migrations
-    value: False
-  when:
-    - not data_migrations | skipped
-    - data_migrations | succeeded

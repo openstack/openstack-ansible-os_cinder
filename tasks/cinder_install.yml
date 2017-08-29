@@ -97,18 +97,14 @@
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: cinder
-    option: "{{ item }}"
+    option: "need_service_restart"
     value: "True"
-  with_items:
-    - "need_online_data_migrations"
-    - "need_service_restart"
   when: (cinder_get_venv | changed) or
         (cinder_venv_dir | changed) or
         (install_packages | changed) or
         (ansible_local is not defined) or
         ('openstack_ansible' not in ansible_local) or
         ('cinder' not in ansible_local['openstack_ansible']) or
-        ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
         ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
 
 - name: Record the venv tag deployed
