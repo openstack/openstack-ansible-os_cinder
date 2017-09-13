@@ -477,7 +477,7 @@ Define the following parameters.
                  eqlx_pool: default
 
 .. note:: For more details about available configuration options,
-          see http://docs.openstack.org/ocata/config-reference/block-storage/drivers/dell-equallogic-driver.html
+          see https://docs.openstack.org/ocata/config-reference/block-storage/drivers/dell-equallogic-driver.html
 
 
 Configuring cinder to use a NetApp appliance
