@@ -627,3 +627,27 @@ the desired qos spec dictionary.
       options:
         consumer: front-end
         write_iops_sec: 100
+
+Shared storage and synchronized UID/GID
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Specify a custom UID for the cinder user and GID for the cinder group
+to ensure they are identical on each host. This is helpful when using shared
+storage on Compute nodes because it allows instances to migrate without
+filesystem ownership failures.
+
+By default, Ansible creates the cidner user and group without specifying the
+UID or GID. To specify custom values for the UID or GID, set the following
+Ansible variables:
+
+.. code-block:: yaml
+
+    cinder_system_user_uid = <specify a UID>
+    cinder_system_group_gid = <specify a GID>
+
+.. warning::
+
+    Setting this value after deploying an environment with
+    OpenStack-Ansible can cause failures, errors, and general instability. These
+    values should only be set once before deploying an OpenStack environment
+    and then never changed.
