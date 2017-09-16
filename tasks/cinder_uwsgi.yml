@@ -29,4 +29,5 @@
   with_items: "{{ filtered_cinder_services }}"
   when: item.wsgi_app | default(False)
   notify:
+    - Manage LB
     - Restart cinder services
