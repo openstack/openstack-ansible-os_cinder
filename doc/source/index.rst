@@ -47,6 +47,19 @@ Example playbook
 .. literalinclude:: ../../examples/playbook.yml
    :language: yaml
 
+External Restart Hooks
+~~~~~~~~~~~~~~~~~~~~~~
+
+When the role performs a restart of the service, it will notify an Ansible
+handler named ``Manage LB``, which is a noop within this role. In the
+playbook, other roles may be loaded before and after this role which will
+implement Ansible handler listeners for ``Manage LB``, allowing external roles
+to manage the load balancer endpoints responsible for sending traffic to the
+servers being restarted by marking them in maintenance or active mode,
+draining sessions, etc. For an example implementation, please reference the
+`ansible-haproxy-endpoints role <https://github.com/Logan2211/ansible-haproxy-endpoints>`_
+used by the openstack-ansible project.
+
 Tags
 ~~~~
 
@@ -56,4 +69,3 @@ The ``cinder-install`` tag can be used to install and upgrade.
 
 The ``cinder-config`` tag can be used to maintain configuration of the
 service.
-

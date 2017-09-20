@@ -80,7 +80,9 @@
     dest: "{{ cinder_bin | dirname }}"
     copy: "no"
   when: cinder_get_venv | changed
-  notify: Restart cinder services
+  notify:
+    - Manage LB
+    - Restart cinder services
 
 - name: Install pip packages
   pip:
@@ -97,7 +99,9 @@
   retries: 5
   delay: 2
   when: cinder_get_venv | failed or cinder_get_venv | skipped
-  notify: Restart cinder services
+  notify:
+    - Manage LB
+    - Restart cinder services
 
 - name: Remove python from path first (CentOS, openSUSE)
   file:

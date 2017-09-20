@@ -67,3 +67,7 @@
     enabled: yes
     state: restarted
     daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
+
+- meta: noop
+  listen: Manage LB
+  when: false
