@@ -127,7 +127,13 @@ hmac_keys = {{ cinder_profiler_hmac_key }}
 auth_endpoint = {{ keystone_service_internaluri }}/v3
 
 [key_manager]
-api_class = castellan.key_manager.barbican_key_manager.BarbicanKeyManager
+backend = castellan.key_manager.barbican_key_manager.BarbicanKeyManager
+{% else %}
+{# WORKAROUND KEY MANAGER DEFAULT STRING ISSUE #}
+{# See also: https://bugs.launchpad.net/cinder/+bug/1721236 #}
+{# And:  https://review.openstack.org/#/c/468252/ #}
+[key_manager]
+backend = cinder.keymgr.conf_key_mgr.ConfKeyManager
 {% endif %}
 
 [keystone_authtoken]
