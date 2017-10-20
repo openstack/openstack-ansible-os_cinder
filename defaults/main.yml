@@ -79,6 +79,18 @@ cinder_system_comment: cinder system user
 cinder_system_shell: /bin/false
 cinder_system_home_folder: "/var/lib/{{ cinder_system_user_name }}"
 
+## Manually specified cinder UID/GID
+# Deployers can specify a UID for the cinder user as well as the GID for the
+# cinder group if needed. This is commonly used in environments where shared
+# storage is used, such as NFS or GlusterFS, and cinder UID/GID values must be
+# in sync between multiple servers.
+#
+# WARNING: Changing these values on an existing deployment can lead to
+#          failures, errors, and instability.
+#
+# cinder_system_user_uid = <UID>
+# cinder_system_group_gid = <GID>
+
 cinder_lock_path: /var/lock/cinder
 
 ## Cinder Auth
