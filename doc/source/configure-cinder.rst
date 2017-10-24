@@ -321,7 +321,7 @@ Alternatively, you can also selectively override, like this:
            rbd_flatten_volume_from_snapshot: 'false'
            rbd_max_clone_depth: 5
            rbd_store_chunk_size: 4
-           rados_connect_timeout: -1
+           rados_connect_timeout: 30
            volume_backend_name: volumes_hdd
            rbd_user: "{{ cinder_ceph_client }}"
            rbd_secret_uuid: "{{ cinder_ceph_client_uuid }}"
