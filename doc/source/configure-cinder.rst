@@ -310,21 +310,21 @@ Alternatively, you can also selectively override, like this:
    .. code-block:: yaml
 
        container_vars:
-       cinder_storage_availability_zone: cinderAZ_3
-       cinder_default_availability_zone: cinderAZ_1
-       cinder_backends:
-         limit_container_types: cinder_volume
-         volumes_hdd:
-           volume_driver: cinder.volume.drivers.rbd.RBDDriver
-           rbd_pool: volumes_hdd
-           rbd_ceph_conf: /etc/ceph/ceph.conf
-           rbd_flatten_volume_from_snapshot: 'false'
-           rbd_max_clone_depth: 5
-           rbd_store_chunk_size: 4
-           rados_connect_timeout: 30
-           volume_backend_name: volumes_hdd
-           rbd_user: "{{ cinder_ceph_client }}"
-           rbd_secret_uuid: "{{ cinder_ceph_client_uuid }}"
+         cinder_storage_availability_zone: cinderAZ_3
+         cinder_default_availability_zone: cinderAZ_1
+         cinder_backends:
+           limit_container_types: cinder_volume
+           volumes_hdd:
+             volume_driver: cinder.volume.drivers.rbd.RBDDriver
+             rbd_pool: volumes_hdd
+             rbd_ceph_conf: /etc/ceph/ceph.conf
+             rbd_flatten_volume_from_snapshot: 'false'
+             rbd_max_clone_depth: 5
+             rbd_store_chunk_size: 4
+             rados_connect_timeout: 30
+             volume_backend_name: volumes_hdd
+             rbd_user: "{{ cinder_ceph_client }}"
+             rbd_secret_uuid: "{{ cinder_ceph_client_uuid }}"
 
 
 The following example sets cinder to use the ``cinder_volumes`` pool.
