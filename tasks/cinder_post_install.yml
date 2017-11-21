@@ -62,7 +62,7 @@
     state: present
   notify: Ensure tgt service restarted
   when:
-    - inventory_hostname in groups['cinder_volume']
+    - "cinder_services['cinder-volume']['group'] in group_names"
     - cinder_backend_lvm_inuse | bool
 
 - name: Create nfs shares export file
@@ -71,8 +71,8 @@
     dest: "{{ item.value.nfs_shares_config }}"
   with_dict: "{{ cinder_backends | default({}) }}"
   when:
+    - "cinder_services['cinder-volume']['group'] in group_names"
     - item.value.nfs_shares_config is defined
-    - inventory_hostname in groups['cinder_volume']
   tags:
     - cinder-nfs
 
