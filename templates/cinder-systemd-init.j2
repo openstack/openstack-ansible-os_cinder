@@ -15,7 +15,7 @@ ExecStart={{ item.program_override }} {{ item.program_config_options|default('')
 {% else %}
 ExecStart={{ cinder_bin }}/{{ item.service_name }} {{ item.program_config_options|default('') }} --log-file=/var/log/cinder/{{ item.service_name }}.log
 {% endif %}
-{% if item.service_name != "cinder-api" or item.wsgi_app %}
+{% if item.service_name != cinder_services['cinder-api']['service_name'] or item.wsgi_app %}
 ExecReload={{ (item.wsgi_app is defined and item.wsgi_app) | ternary(cinder_bin + '/uwsgi --reload /var/run/' + item.service_name + '/' + item.service_name +'.pid','/bin/kill -HUP $MAINPID') }}
 {% endif %}
 
