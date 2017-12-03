@@ -27,11 +27,12 @@ Default variables
    :start-after: under the License.
 
 
-Required variables
-~~~~~~~~~~~~~~~~~~
+Dependencies
+~~~~~~~~~~~~
 
-This list is not exhaustive at present. See role internals for further
-details.
+This role needs pip >= 7.1 installed on the target host.
+
+This role needs to have the following variables defined:
 
 .. code-block:: yaml
 
@@ -40,6 +41,9 @@ details.
 
       # Hostname or IP address of the Galera database
       cinder_galera_address: "1.2.3.4"
+
+This list is not exhaustive at present. See role internals for further
+details.
 
 Example playbook
 ~~~~~~~~~~~~~~~~
