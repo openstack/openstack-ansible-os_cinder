@@ -22,6 +22,7 @@
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-upgrade-ubuntu-xenial
+        - openstack-ansible-cinder-ssl-nv
     experimental:
       jobs:
         - openstack-ansible-integrated-deploy-aio
@@ -32,3 +33,4 @@
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-upgrade-ubuntu-xenial
+        - openstack-ansible-cinder-ssl-nv

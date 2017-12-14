@@ -103,7 +103,7 @@ enabled_backends={% for backend in cinder_backends|dictsort %}{{ backend.0 }}{% 
 {% endif %}
 
 [database]
-connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8
+connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8{% if cinder_galera_use_ssl | bool %}&ssl_ca={{ cinder_galera_ssl_ca_cert }}{% endif %}
 
 [oslo_messaging_rabbit]
 ssl = {{ cinder_rabbitmq_use_ssl }}
