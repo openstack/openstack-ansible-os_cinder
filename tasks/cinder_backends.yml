@@ -26,7 +26,7 @@
 - name: Create singular cinder_backends variable for all hosts
   set_fact:
     _cinder_backends: "{{ (_cinder_backends | default(cinder_backends | default({}))) | combine(hostvars[item]['cinder_backends'] | default({})) }}"
-  with_items: "{{ groups['cinder_volume'] }}"
+  with_items: "{{ groups[cinder_services['cinder-volume']['group']] }}"
 
 - name: Add in cinder devices types
   shell: |

@@ -94,9 +94,9 @@
 - include: cinder_backends.yml
   static: no
   when:
-    - "groups['cinder_volume'] | length > 0"
-    - "cinder_services['cinder-volume']['group'] in group_names"
-    - "inventory_hostname == ((groups['cinder_volume'] | intersect(ansible_play_hosts)) | list)[0]"
+    - "groups[cinder_services['cinder-volume']['group']] | length > 0"
+    - "cinder_services['cinder-api']['group'] in group_names"
+    - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - cinder-config
 
