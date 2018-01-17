@@ -636,7 +636,7 @@ to ensure they are identical on each host. This is helpful when using shared
 storage on Compute nodes because it allows instances to migrate without
 filesystem ownership failures.
 
-By default, Ansible creates the cidner user and group without specifying the
+By default, Ansible creates the cinder user and group without specifying the
 UID or GID. To specify custom values for the UID or GID, set the following
 Ansible variables:
 
