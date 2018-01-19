@@ -18,7 +18,7 @@ tempest_run: yes
 tempest_plugins:
   - name: cinder
     repo: https://git.openstack.org/openstack/cinder
-    branch: master
+    branch: stable/pike
 
 tempest_test_whitelist:
   - cinder.tests.tempest.api.volume.*
