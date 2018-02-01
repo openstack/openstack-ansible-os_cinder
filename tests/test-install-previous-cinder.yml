@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Ensure the repo is setup for previous version
+- include: common/previous/test-repo-setup.yml
+
 - name: Deploy cinder
   hosts: cinder_all
   user: root

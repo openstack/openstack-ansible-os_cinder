@@ -24,9 +24,3 @@
 
 # Install Keystone
 - include: common/test-install-keystone.yml
-
-# Ensure the repo is setup for previous version
-- include: common/previous/test-repo-setup.yml
-
-# Install previous Cinder
-- include: test-install-previous-cinder.yml

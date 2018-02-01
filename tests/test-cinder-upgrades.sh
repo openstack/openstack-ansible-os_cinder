@@ -55,7 +55,8 @@ echo "TEST_IDEMPOTENCE: ${TEST_IDEMPOTENCE}"
 function execute_ansible_playbook {
 
   export ANSIBLE_CLI_PARAMETERS="${ANSIBLE_PARAMETERS} -e @${ANSIBLE_OVERRIDES}"
-  CMD_TO_EXECUTE="ansible-playbook ${TEST_PLAYBOOK} $@ ${ANSIBLE_CLI_PARAMETERS}"
+  export ANSIBLE_BIN=${ANSIBLE_BIN:-"ansible-playbook"}
+  CMD_TO_EXECUTE="${ANSIBLE_BIN}  ${TEST_PLAYBOOK} $@ ${ANSIBLE_CLI_PARAMETERS}"
 
   echo "Executing: ${CMD_TO_EXECUTE}"
   echo "With:"
@@ -71,12 +72,27 @@ function execute_ansible_playbook {
 # Ensure that the Ansible environment is properly prepared
 source "${COMMON_TESTS_PATH}/test-ansible-env-prep.sh"
 
-# Prepare environment for the initial deploy of previous Cinder
+# Prepare environment for the initial deploy of (previous and current) Cinder
 # No upgrading or testing is done yet.
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-cinder-install.log"
 
+# Execute the setup of current infrastructure
+execute_ansible_playbook
+
+# Prepare environment for the deploy of previous Nova:
+# No upgrading or testing is done yet.
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-install-previous-cinder.yml"
+export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-previous_cinder-install.log"
+export PREVIOUS_VENV="ansible-previous"
+export ANSIBLE_BIN="${WORKING_DIR}/.tox/${PREVIOUS_VENV}/bin/ansible-playbook"
+source ${COMMON_TESTS_PATH}/test-create-previous-venv.sh
+
 # Execute the setup of previous Cinder
 execute_ansible_playbook
+
+# Unset previous branch overrides
+unset PREVIOUS_VENV
+unset ANSIBLE_BIN
 
 # Prepare environment for the upgrade of Cinder
 export TEST_PLAYBOOK="${WORKING_DIR}/tests/benchmark-upgrade.yml"
