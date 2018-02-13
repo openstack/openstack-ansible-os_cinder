@@ -111,10 +111,14 @@
     - ansible_pkg_mgr in ['yum', 'dnf', 'zypper']
     - cinder_get_venv | changed
 
-- name: Update virtualenv path
-  command: >
-    virtualenv-tools --update-path=auto --reinitialize {{ cinder_bin | dirname }}
+- name: Reset virtualenv and update its paths
+  shell: |
+    find {{ cinder_bin }} -name \*.pyc -delete
+    sed -si '1s/^.*python.*$/#!{{ cinder_bin | replace ('/','\/') }}\/python/' {{ cinder_bin }}/*
+    virtualenv {{ cinder_bin | dirname }}
   when: cinder_get_venv | changed
+  tags:
+    - skip_ansible_lint
 
 - name: Initialise the upgrade facts
   ini_file:
