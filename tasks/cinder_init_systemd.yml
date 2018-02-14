@@ -32,15 +32,6 @@
     mode: "02755"
   with_items: "{{ filtered_cinder_services }}"
 
-# TODO(mgariepy):
-# Remove this in Pike as it only needed to handle upgrades
-# from Newton->Newton and Newton->Ocata
-- name: Cleanup old tmpfiles.d entry
-  file:
-    path: "/etc/tmpfiles.d/{{ item.service_name }}.conf"
-    state: absent
-  with_items: "{{ filtered_cinder_services }}"
-
 - name: Create tmpfiles.d entry
   template:
     src: "cinder-systemd-tmpfiles.j2"
