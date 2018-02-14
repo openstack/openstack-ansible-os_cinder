@@ -18,6 +18,8 @@
 cinder_package_state: "latest"
 cinder_pip_package_state: "latest"
 
+cinder_log_dir: /var/log/cinder
+
 cinder_git_repo: https://git.openstack.org/openstack/cinder
 cinder_git_install_branch: master
 cinder_developer_mode: false

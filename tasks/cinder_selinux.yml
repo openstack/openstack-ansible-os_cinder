@@ -1,0 +1,31 @@
+---
+# Copyright 2018, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Stat cinder's log directory
+  stat:
+    path: "{{ cinder_log_dir }}"
+  register: cinder_log_dir_check
+
+- name: Set SELinux file contexts for cinder's log directory
+  sefcontext:
+    target: "{{ (cinder_log_dir_check.stat.islnk) | ternary(cinder_log_dir_check.stat.lnk_target, cinder_log_dir) }}(/.*)?"
+    setype: cinder_log_t
+    state: present
+  register: selinux_file_context_log_files
+
+- name: Apply updated SELinux contexts on cinder log directory
+  command: "restorecon -Rv {{ (cinder_log_dir_check.stat.islnk) | ternary(cinder_log_dir_check.stat.lnk_target, cinder_log_dir) }}"
+  when:
+    - selinux_file_context_log_files | changed
