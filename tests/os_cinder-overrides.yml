@@ -19,7 +19,7 @@ tempest_run: yes
 tempest_plugins:
   - name: cinder
     repo: https://git.openstack.org/openstack/cinder
-    branch: master
+    branch: stable/queens
   - name: cinder-plugins
     repo: https://git.openstack.org/openstack/cinder-tempest-plugin
     branch: master
