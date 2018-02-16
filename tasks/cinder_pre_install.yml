@@ -48,9 +48,9 @@
 
 - name: Test for log directory or link
   shell: |
-    if [ -h "/var/log/cinder"  ]; then
-      chown -h {{ cinder_system_user_name }}:{{ cinder_system_group_name }} "/var/log/cinder"
-      chown -R {{ cinder_system_user_name }}:{{ cinder_system_group_name }} "$(readlink /var/log/cinder)"
+    if [ -h "{{ cinder_log_dir }}"  ]; then
+      chown -h {{ cinder_system_user_name }}:{{ cinder_system_group_name }} "{{ cinder_log_dir }}"
+      chown -R {{ cinder_system_user_name }}:{{ cinder_system_group_name }} "$(readlink {{ cinder_log_dir }})"
     else
       exit 1
     fi
@@ -66,5 +66,5 @@
     group: "{{ item.group|default(cinder_system_group_name) }}"
     mode: "{{ item.mode|default('0755') }}"
   with_items:
-    - { path: "/var/log/cinder" }
+    - { path: "{{ cinder_log_dir }}" }
   when: log_dir.rc != 0
