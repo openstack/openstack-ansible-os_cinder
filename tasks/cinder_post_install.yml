@@ -86,5 +86,4 @@
 
 - include: cinder_selinux.yml
   when:
-    - ansible_selinux.status is defined
     - ansible_selinux.status == "enabled"
