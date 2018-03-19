@@ -13,29 +13,110 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: cinder_service_add.yml
-  vars:
-    service_name: "{{ cinder_service_name }}"
-    service_type: "{{ cinder_service_type }}"
-    service_description: "{{ cinder_service_description }}"
-    service_publicurl: "{{ cinder_service_publicurl }}"
-    service_internalurl: "{{ cinder_service_internalurl }}"
-    service_adminurl: "{{ cinder_service_adminurl }}"
+# Create an admin user
+- name: Ensure cinder user
+  keystone:
+    command: "ensure_user"
+    endpoint: "{{ keystone_service_adminurl }}"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    user_name: "{{ cinder_service_user_name }}"
+    tenant_name: "{{ cinder_service_project_name }}"
+    password: "{{ cinder_service_password }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  when: not cinder_service_in_ldap | bool
+  until: add_service|success
+  retries: 5
+  delay: 10
 
-- include: cinder_service_add.yml
-  vars:
-    service_name: "{{ cinder_service_v2_name }}"
-    service_type: "{{ cinder_service_v2_type }}"
-    service_description: "{{ cinder_service_v2_description }}"
-    service_publicurl: "{{ cinder_service_v2_publicurl }}"
-    service_internalurl: "{{ cinder_service_v2_internalurl }}"
-    service_adminurl: "{{ cinder_service_v2_adminurl }}"
+# Add a role to the user
+- name: Ensure cinder user to admin role
+  keystone:
+    command: "ensure_user_role"
+    endpoint: "{{ keystone_service_adminurl }}"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    user_name: "{{ cinder_service_user_name }}"
+    tenant_name: "{{ cinder_service_project_name }}"
+    role_name: "{{ cinder_service_role_name }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  when: not cinder_service_in_ldap | bool
+  until: add_service|success
+  retries: 5
+  delay: 10
 
-- include: cinder_service_add.yml
-  vars:
-    service_name: "{{ cinder_service_v3_name }}"
-    service_type: "{{ cinder_service_v3_type }}"
-    service_description: "{{ cinder_service_v3_description }}"
-    service_publicurl: "{{ cinder_service_v3_publicurl }}"
-    service_internalurl: "{{ cinder_service_v3_internalurl }}"
-    service_adminurl: "{{ cinder_service_v3_adminurl }}"
+# Create a service
+- name: Ensure cinder service
+  os_keystone_service:
+    auth:
+      auth_url: "{{ keystone_service_adminurl }}"
+      username: "{{ cinder_service_user_name }}"
+      password: "{{ cinder_service_password }}"
+      project_name: "{{ cinder_service_project_name }}"
+      user_domain_name: "{{ cinder_service_user_domain_id }}"
+      project_domain_name: "{{ cinder_service_project_domain_id }}"
+    endpoint_type: admin
+    region_name: "{{ cinder_service_region }}"
+    validate_certs: "{{ keystone_service_adminuri_insecure | ternary(false, true) }}"
+    name: "{{ item.name }}"
+    service_type: "{{ item.type }}"
+    description: "{{ item.description }}"
+    state: "{{ item.state }}"
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 10
+  with_items:
+    - name: "{{ cinder_service_name }}"
+      type: "{{ cinder_service_type }}"
+      description: "{{ cinder_service_description }}"
+      state: absent
+    - name: "{{ cinder_service_v2_name }}"
+      type: "{{ cinder_service_v2_type }}"
+      description: "{{ cinder_service_v2_description }}"
+      state: "{{ cinder_enable_v2_api | bool | ternary('present', 'absent') }}"
+    - name: "{{ cinder_service_v3_name }}"
+      type: "{{ cinder_service_v3_type }}"
+      description: "{{ cinder_service_v3_description }}"
+      state: present
+
+# Create an endpoint
+- name: Ensure cinder endpoint
+  keystone:
+    command: "ensure_endpoint"
+    endpoint: "{{ keystone_service_adminurl }}"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    region_name: "{{ cinder_service_region }}"
+    service_name: "{{ item.name }}"
+    service_type: "{{ item.type }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+    endpoint_list:
+      - url: "{{ item.publicurl }}"
+        interface: "public"
+      - url: "{{ item.internalurl }}"
+        interface: "internal"
+      - url: "{{ item.adminurl }}"
+        interface: "admin"
+  when: item.condition | default(true)
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 10
+  with_items:
+    - name: "{{ cinder_service_v2_name }}"
+      type: "{{ cinder_service_v2_type }}"
+      publicurl: "{{ cinder_service_v2_publicurl }}"
+      internalurl: "{{ cinder_service_v2_internalurl }}"
+      adminurl: "{{ cinder_service_v2_adminurl }}"
+      condition: "{{ cinder_enable_v2_api | bool }}"
+    - name: "{{ cinder_service_v3_name }}"
+      type: "{{ cinder_service_v3_type }}"
+      publicurl: "{{ cinder_service_v3_publicurl }}"
+      internalurl: "{{ cinder_service_v3_internalurl }}"
+      adminurl: "{{ cinder_service_v3_adminurl }}"
