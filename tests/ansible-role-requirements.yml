@@ -55,6 +55,6 @@
   scm: git
   version: stable/queens
 - name: systemd_service
-  src: https://github.com/cloudnull/ansible-systemd_service
+  src: https://git.openstack.org/openstack/ansible-role-systemd_service
   scm: git
   version: master
