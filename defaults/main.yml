@@ -32,8 +32,19 @@ cinder_developer_mode: false
 cinder_developer_constraints:
   - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
 
+# TODO(odyssey4me):
+# This can be simplified once all the roles are using
+# python_venv_build. We can then switch to using a
+# set of constraints in pip.conf inside the venv,
+# perhaps prepared by giving a giving a list of
+# constraints to the role.
+cinder_pip_install_args: >-
+  {{ cinder_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
+  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
+  {{ pip_install_options | default('') }}
+
 # Name of the virtual env to deploy into
-cinder_venv_tag: untagged
+cinder_venv_tag: "{{ venv_tag | default('untagged') }}"
 cinder_bin: "{{ _cinder_bin }}"
 
 # venv_download, even when true, will use the fallback method of building the

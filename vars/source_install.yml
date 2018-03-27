@@ -27,7 +27,7 @@ cinder_package_list: |-
   {%   endif %}
   {% endif %}
   {% if cinder_developer_mode | bool %}
-  {%   set _ = packages.extend(cinder_developer_mode_distro_packages) %}
+  {%   set _ = packages.extend(cinder_devel_distro_packages) %}
   {% endif %}
   {{ packages }}
 

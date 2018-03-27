@@ -42,7 +42,7 @@ cinder_service_distro_packages:
   - uwsgi
   - uwsgi-python
 
-cinder_developer_mode_distro_packages:
+cinder_devel_distro_packages:
   - git-core
   - pkg-config
   - systemd-devel

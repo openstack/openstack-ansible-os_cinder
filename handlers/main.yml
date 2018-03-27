@@ -24,7 +24,9 @@
   until: _stop  is success
   retries: 5
   delay: 2
-  listen: Restart cinder services
+  listen:
+    - "Restart cinder services"
+    - "venv changed"
 
 # Note (odyssey4me):
 # The policy.json file is currently read continually by the services
@@ -42,7 +44,9 @@
     group: "{{ cinder_system_group_name }}"
     mode: "0640"
     remote_src: yes
-  listen: Restart cinder services
+  listen:
+    - "Restart cinder services"
+    - "venv changed"
 
 - name: Start services
   service:
@@ -55,7 +59,9 @@
   until: _start  is success
   retries: 5
   delay: 2
-  listen: Restart cinder services
+  listen:
+    - "Restart cinder services"
+    - "venv changed"
 
 - name: Ensure tgt service restarted
   service:
