@@ -102,9 +102,7 @@ cinder_service_admin_tenant_name: "service"
 cinder_service_admin_username: "cinder"
 
 ## Cinder API's enabled
-cinder_enable_v1_api: true
 cinder_enable_v2_api: true
-cinder_enable_v3_api: true
 
 ## Cinder API check cert validation
 cinder_service_internaluri_insecure: false
@@ -125,11 +123,8 @@ cinder_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(ci
 cinder_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(cinder_service_proto) }}"
 cinder_service_type: volume
 cinder_service_publicuri: "{{ cinder_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_publicurl: "{{ cinder_service_publicuri }}/v1/%(tenant_id)s"
 cinder_service_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_adminurl: "{{ cinder_service_adminuri }}/v1/%(tenant_id)s"
 cinder_service_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_internalurl: "{{ cinder_service_internaluri }}/v1/%(tenant_id)s"
 
 cinder_service_v2_name: cinderv2
 cinder_service_v2_port: 8776
@@ -259,9 +254,9 @@ cinder_service_in_ldap: false
 
 # Cinder packages that must be installed before anything else
 cinder_requires_pip_packages:
-  - virtualenv
   - python-keystoneclient # Keystoneclient needed by the keystone Ansible module
-  - httplib2
+  - shade
+  - virtualenv
 
 # Common pip packages
 cinder_pip_packages:
