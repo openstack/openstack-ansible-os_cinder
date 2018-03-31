@@ -283,29 +283,32 @@ cinder_services:
     service_name: cinder-scheduler
     init_config_overrides: "{{ cinder_scheduler_init_overrides }}"
     start_order: 1
+    execstarts: "{{ cinder_bin }}/cinder-scheduler"
   cinder-volume:
     group: cinder_volume
     service_name: cinder-volume
     init_config_overrides: "{{ cinder_volume_init_overrides }}"
     start_order: 2
+    execstarts: "{{ cinder_bin }}/cinder-volume"
   cinder-backup:
     group: cinder_backup
     service_name: cinder-backup
     condition: "{{ cinder_service_backup_program_enabled | bool }}"
     init_config_overrides: "{{ cinder_backup_init_overrides }}"
     start_order: 3
+    execstarts: "{{ cinder_bin }}/cinder-backup"
   cinder-api:
     group: cinder_api
     service_name: cinder-api
     init_config_overrides: "{{ cinder_api_init_overrides }}"
+    start_order: 4
     wsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
     wsgi_app: True
-    log_string: "--logto "
     wsgi_name: cinder-wsgi
     uwsgi_port: "{{ cinder_service_port }}"
     uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
-    program_override: "{{ cinder_bin }}/uwsgi --ini /etc/uwsgi/cinder-api.ini"
-    start_order: 4
+    execstarts: "{{ cinder_bin }}/uwsgi --ini /etc/uwsgi/cinder-api.ini"
+    execreloads: "{{ cinder_bin }}/uwsgi --reload /var/run/cinder-api/cinder-api.pid"
 
 # Cinder uWSGI settings
 cinder_wsgi_processes_max: 16
