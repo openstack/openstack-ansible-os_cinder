@@ -30,6 +30,7 @@
   until: add_service|success
   retries: 5
   delay: 10
+  no_log: True
 
 # Add a role to the user
 - name: Ensure cinder user to admin role
@@ -48,6 +49,7 @@
   until: add_service|success
   retries: 5
   delay: 10
+  no_log: True
 
 # Create a service
 - name: Ensure cinder service
@@ -83,6 +85,7 @@
       type: "{{ cinder_service_v3_type }}"
       description: "{{ cinder_service_v3_description }}"
       state: present
+  no_log: True
 
 # Create an endpoint
 - name: Ensure cinder endpoint
@@ -120,3 +123,4 @@
       publicurl: "{{ cinder_service_v3_publicurl }}"
       internalurl: "{{ cinder_service_v3_internalurl }}"
       adminurl: "{{ cinder_service_v3_adminurl }}"
+  no_log: True
