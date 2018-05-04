@@ -18,6 +18,9 @@
 cinder_package_state: "latest"
 cinder_pip_package_state: "latest"
 
+# Set installation method.
+cinder_install_method: "source"
+
 cinder_log_dir: /var/log/cinder
 
 cinder_git_repo: https://git.openstack.org/openstack/cinder
@@ -28,7 +31,7 @@ cinder_developer_constraints:
 
 # Name of the virtual env to deploy into
 cinder_venv_tag: untagged
-cinder_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
+cinder_bin: "{{ _cinder_bin }}"
 
 # venv_download, even when true, will use the fallback method of building the
 # venv from scratch if the venv download fails.
@@ -304,7 +307,7 @@ cinder_services:
     wsgi_name: cinder-wsgi
     uwsgi_port: "{{ cinder_service_port }}"
     uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
-    program_override: "{{ cinder_bin }}/uwsgi --autoload --ini /etc/uwsgi/cinder-api.ini"
+    program_override: "{{ _cinder_wsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/cinder-api.ini"
     start_order: 4
 
 # Cinder uWSGI settings

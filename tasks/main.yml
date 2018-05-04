@@ -25,6 +25,21 @@
   tags:
     - always
 
+- name: Fail if service was deployed using a different installation method
+  fail:
+    msg: "Switching installation methods for OpenStack services is not supported"
+  when:
+    - ansible_local is defined
+    - ansible_local.openstack_ansible is defined
+    - ansible_local.openstack_ansible.cinder is defined
+    - ansible_local.openstack_ansible.cinder.install_method is defined
+    - ansible_local.openstack_ansible.cinder.install_method != cinder_install_method
+
+- name: Gather variables for installation method
+  include_vars: "{{ cinder_install_method }}_install.yml"
+  tags:
+    - always
+
 - include: cinder_pre_install.yml
   tags:
     - cinder-install

@@ -28,6 +28,13 @@ cinder_distro_packages:
   - which
   - iscsi-initiator-utils
 
+cinder_service_distro_packages:
+  - openstack-cinder
+  - python-cinderclient
+  - python2-shade
+  - uwsgi
+  - uwsgi-plugin-python
+
 cinder_developer_mode_distro_packages:
   - git
 
@@ -39,3 +46,5 @@ cinder_lvm_volume_distro_packages:
   - lvm2
   - parted
   - scsi-target-utils
+
+cinder_wsgi_bin: '/usr/sbin'

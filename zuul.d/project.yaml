@@ -21,6 +21,9 @@
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-cinder-ssl-nv
+        - openstack-ansible-functional-distro_install-ubuntu-xenial
+        - openstack-ansible-functional-distro_install-centos-7
+        - openstack-ansible-functional-distro_install-opensuse-423
     experimental:
       jobs:
         - openstack-ansible-integrated-deploy-aio
