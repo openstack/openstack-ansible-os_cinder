@@ -304,7 +304,7 @@ cinder_services:
     wsgi_name: cinder-wsgi
     uwsgi_port: "{{ cinder_service_port }}"
     uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
-    program_override: "{{ cinder_bin }}/uwsgi --ini /etc/uwsgi/cinder-api.ini"
+    program_override: "{{ cinder_bin }}/uwsgi --autoload --ini /etc/uwsgi/cinder-api.ini"
     start_order: 4
 
 # Cinder uWSGI settings
