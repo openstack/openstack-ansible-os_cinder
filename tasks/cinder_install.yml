@@ -24,112 +24,9 @@
   retries: 5
   delay: 2
 
-- name: Create developer mode constraint file
-  copy:
-    dest: "/opt/developer-pip-constraints.txt"
-    content: |
-      {% for item in cinder_developer_constraints %}
-      {{ item }}
-      {% endfor %}
-  when: cinder_developer_mode | bool
-
-- name: Install requires pip packages
-  pip:
-    name: "{{ cinder_requires_pip_packages }}"
-    state: "{{ cinder_pip_package_state }}"
-    extra_args: >-
-      {{ cinder_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
-      {{ pip_install_options | default('') }}
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-
-- name: Retrieve checksum for venv download
-  uri:
-    url: "{{ cinder_venv_download_url | replace('tgz', 'checksum') }}"
-    return_content: yes
-  register: cinder_venv_checksum
-  when: cinder_venv_download | bool
-
-- name: Attempt venv download
-  get_url:
-    url: "{{ cinder_venv_download_url }}"
-    dest: "/var/cache/{{ cinder_venv_download_url | basename }}"
-    checksum: "sha1:{{ cinder_venv_checksum.content | trim }}"
-  register: cinder_get_venv
-  when: cinder_venv_download | bool
-
-- name: Remove existing venv
-  file:
-    path: "{{ cinder_bin | dirname }}"
-    state: absent
-  when: cinder_get_venv | changed
-
-- name: Create cinder venv dir
-  file:
-    path: "{{ cinder_bin | dirname }}"
-    state: directory
-  register: cinder_venv_dir
-  when: cinder_get_venv | changed
-
-- name: Unarchive pre-built venv
-  unarchive:
-    src: "/var/cache/{{ cinder_venv_download_url | basename }}"
-    dest: "{{ cinder_bin | dirname }}"
-    copy: "no"
-  when: cinder_get_venv | changed
-  notify:
-    - Manage LB
-    - Restart cinder services
-
-- name: Install pip packages
-  pip:
-    name: "{{ cinder_pip_packages }}"
-    state: "{{ cinder_pip_package_state }}"
-    virtualenv: "{{ cinder_bin | dirname }}"
-    virtualenv_site_packages: "no"
-    extra_args: >-
-      {{ cinder_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
-      {{ pip_install_options | default('') }}
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  when: cinder_get_venv | failed or cinder_get_venv | skipped
-  notify:
-    - Manage LB
-    - Restart cinder services
-
-- name: Remove python from path first (CentOS, openSUSE)
-  file:
-    path:  "{{ cinder_bin | dirname }}/bin/python2.7"
-    state: "absent"
-  when:
-    - ansible_pkg_mgr in ['yum', 'dnf', 'zypper']
-    - cinder_get_venv | changed
-
-# NOTE(odyssey4me):
-# We reinitialize the venv to ensure that the right
-# version of python is in the venv, but we do not
-# want virtualenv to also replace pip, setuptools
-# and wheel so we tell it not to.
-# We do not use --always-copy for CentOS/SuSE due
-# to https://github.com/pypa/virtualenv/issues/565
-- name: Reset virtualenv and update its paths
-  shell: |
-    find {{ cinder_bin }} -name \*.pyc -delete
-    sed -si '1s/^.*python.*$/#!{{ cinder_bin | replace ('/','\/') }}\/python/' {{ cinder_bin }}/*
-    virtualenv {{ cinder_bin | dirname }} \
-        {{ (ansible_pkg_mgr == 'apt') | ternary('--always-copy', '') }} \
-        --no-pip \
-        --no-setuptools \
-        --no-wheel
-  when: cinder_get_venv | changed
-  tags:
-    - skip_ansible_lint
+- name: Install cinder packages from PIP
+  include_tasks: cinder_install_source.yml
+  when: cinder_install_method == 'source'
 
 - name: Initialise the upgrade facts
   ini_file:
@@ -138,20 +35,18 @@
     option: "{{ item }}"
     value: "True"
   with_items:
-    - "need_online_data_migrations"
-    - "need_service_restart"
-  when: (cinder_get_venv | changed) or
-        (cinder_venv_dir | changed) or
+    - name: "need_online_data_migrations"
+      state: "True"
+    - name: "need_service_restart"
+      state: "True"
+    - name: "install_method"
+      state: "{{ cinder_install_method }}"
+  when: (cinder_install_method == 'source' and
+         ((cinder_get_venv | changed) or
+          (cinder_venv_dir | changed))) or
         (install_packages | changed) or
         (ansible_local is not defined) or
         ('openstack_ansible' not in ansible_local) or
         ('cinder' not in ansible_local['openstack_ansible']) or
         ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
         ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
-
-- name: Record the venv tag deployed
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: cinder
-    option: venv_tag
-    value: "{{ cinder_venv_tag }}"

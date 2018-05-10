@@ -2,7 +2,9 @@
 uid = {{ cinder_system_user_name }}
 gid = {{ cinder_system_group_name }}
 
+{% if cinder_install_method == 'source' %}
 virtualenv = /openstack/venvs/cinder-{{ cinder_venv_tag }}
+{% endif %}
 wsgi-file = {{ cinder_bin }}/{{ item.wsgi_name }}
 http = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
 

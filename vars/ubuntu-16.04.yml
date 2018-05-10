@@ -35,6 +35,16 @@ cinder_distro_packages:
   - zlib1g
   - zlibc
 
+cinder_service_distro_packages:
+  - cinder-api
+  - cinder-backup
+  - cinder-scheduler
+  - cinder-volume
+  - python-cinderclient
+  - python-shade
+  - uwsgi
+  - uwsgi-plugin-python
+
 cinder_developer_mode_distro_packages:
   - git-core
 
@@ -47,3 +57,5 @@ cinder_lvm_volume_distro_packages:
   - parted
   - tgt
   - thin-provisioning-tools
+
+cinder_wsgi_bin: '/usr/bin'
