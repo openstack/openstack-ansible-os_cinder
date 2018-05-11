@@ -32,8 +32,8 @@
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: cinder
-    option: "{{ item }}"
-    value: "True"
+    option: "{{ item.name }}"
+    value: "{{ item.state }}"
   with_items:
     - name: "need_online_data_migrations"
       state: "True"
@@ -49,4 +49,5 @@
         ('openstack_ansible' not in ansible_local) or
         ('cinder' not in ansible_local['openstack_ansible']) or
         ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
-        ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
+        ('need_service_restart' not in ansible_local['openstack_ansible']['cinder']) or
+        ('install_method' not in ansible_local['openstack_ansible']['cinder'])

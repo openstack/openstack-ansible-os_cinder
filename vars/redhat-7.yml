@@ -47,4 +47,4 @@ cinder_lvm_volume_distro_packages:
   - parted
   - scsi-target-utils
 
-cinder_wsgi_bin: '/usr/sbin'
+cinder_uwsgi_bin: '/usr/sbin'

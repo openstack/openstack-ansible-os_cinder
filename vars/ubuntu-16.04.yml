@@ -58,4 +58,4 @@ cinder_lvm_volume_distro_packages:
   - tgt
   - thin-provisioning-tools
 
-cinder_wsgi_bin: '/usr/bin'
+cinder_uwsgi_bin: '/usr/bin'

@@ -32,4 +32,4 @@ cinder_package_list: |-
   {{ packages }}
 
 _cinder_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"
-_cinder_wsgi_bin: "{{ _cinder_bin }}"
+cinder_uwsgi_bin: "{{ _cinder_bin }}"

@@ -52,4 +52,4 @@ cinder_lvm_volume_distro_packages:
   - parted
   - tgt
 
-cinder_wsgi_bin: '/usr/sbin'
+cinder_uwsgi_bin: '/usr/sbin'
