@@ -120,6 +120,20 @@
   tags:
     - skip_ansible_lint
 
+- name: Initialise the upgrade facts
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: cinder
+    option: "{{ item }}"
+    value: true
+  with_items:
+    - "need_online_data_migrations"
+    - "need_service_restart"
+  when: (cinder_get_venv | changed) or
+        (cinder_venv_dir | changed) or
+        ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
+        ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
+
 - name: Record the venv tag deployed
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"

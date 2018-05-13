@@ -13,6 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Record the installation method
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: "cinder"
+    option: "install_method"
+    value: "{{ cinder_install_method }}"
+
+- name: Refresh local facts to ensure the cinder section is present
+  setup:
+    filter: ansible_local
+    gather_subset: "!all"
+
 - name: Install distro packages
   package:
     name: "{{ cinder_package_list }}"
@@ -28,26 +40,16 @@
   include_tasks: cinder_install_source.yml
   when: cinder_install_method == 'source'
 
-- name: Initialise the upgrade facts
+- name: Set the upgrade facts
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: cinder
-    option: "{{ item.name }}"
-    value: "{{ item.state }}"
+    option: "{{ item }}"
+    value: true
   with_items:
-    - name: "need_online_data_migrations"
-      state: "True"
-    - name: "need_service_restart"
-      state: "True"
-    - name: "install_method"
-      state: "{{ cinder_install_method }}"
-  when: (cinder_install_method == 'source' and
-         ((cinder_get_venv | changed) or
-          (cinder_venv_dir | changed))) or
+    - "need_online_data_migrations"
+    - "need_service_restart"
+  when:
         (install_packages | changed) or
-        (ansible_local is not defined) or
-        ('openstack_ansible' not in ansible_local) or
-        ('cinder' not in ansible_local['openstack_ansible']) or
         ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
-        ('need_service_restart' not in ansible_local['openstack_ansible']['cinder']) or
-        ('install_method' not in ansible_local['openstack_ansible']['cinder'])
+        ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
