@@ -36,3 +36,5 @@
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-upgrade-ubuntu-xenial
+        - openstack-ansible-functional-distro_install-ubuntu-xenial
+        - openstack-ansible-functional-distro_install-opensuse-423
