@@ -22,7 +22,8 @@ tempest_plugins:
     branch: master
   - name: cinder-plugins
     repo: https://git.openstack.org/openstack/cinder-tempest-plugin
-    branch: master
+    # Temporarily freeze branch before http://git.openstack.org/cgit/openstack/cinder-tempest-plugin/commit/?id=1d87444aa4e1e4131f99adeb393c119c9403f7ff
+    branch: 751fdf0f4552b4b2aa95b30a76b9d62c14bbf24c
 
 tempest_test_whitelist:
   - cinder_tempest_plugin.api.volume.*
