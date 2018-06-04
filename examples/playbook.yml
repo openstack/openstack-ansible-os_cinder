@@ -6,3 +6,7 @@
   vars:
     cinder_glance_api_servers: "http://glance_server:9292"
     cinder_galera_address: "{{ internal_lb_vip_address }}"
+    galera_root_user: root
+  vars_prompt:
+    - name: "galera_root_password"
+      prompt: "What is galera_root_password?"

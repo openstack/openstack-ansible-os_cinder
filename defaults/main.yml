@@ -57,6 +57,8 @@ cinder_nova_catalog_admin_info: compute:nova:adminURL
 cinder_fatal_deprecations: False
 
 ## Database info
+cinder_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+cinder_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 cinder_galera_user: cinder
 cinder_galera_database: cinder
 cinder_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
