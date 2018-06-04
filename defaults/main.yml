@@ -257,7 +257,6 @@ cinder_service_in_ldap: false
 
 # Cinder packages that must be installed before anything else
 cinder_requires_pip_packages:
-  - python-keystoneclient # Keystoneclient needed by the keystone Ansible module
   - shade
   - virtualenv
 

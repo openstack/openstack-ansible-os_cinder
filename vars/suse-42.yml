@@ -23,6 +23,7 @@ cinder_distro_packages:
   - rpcbind
   - libxslt-devel
   - postgresql-devel
+  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
   - libkmod-devel
   - libkmod2
   - zlib-devel
