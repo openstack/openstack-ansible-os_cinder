@@ -274,6 +274,7 @@ cinder_pip_packages:
   - ecdsa
   - httplib2
   - keystonemiddleware
+  - osprofiler
   - PyMySQL
   - python-openstackclient
   - python-cinderclient
