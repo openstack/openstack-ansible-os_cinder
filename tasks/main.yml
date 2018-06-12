@@ -106,10 +106,6 @@
   tags:
     - cinder-config
 
-- include: "cinder_init_{{ ansible_service_mgr }}.yml"
-  tags:
-    - cinder-config
-
 - name: Include ceph_client role
   include_role:
     name: ceph_client

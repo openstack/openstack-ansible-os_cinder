@@ -33,11 +33,13 @@ cinder_service_distro_packages:
   - openstack-cinder
   - python-openstackclient
   - python2-shade
+  - systemd-python
   - uwsgi
   - uwsgi-plugin-python
 
 cinder_developer_mode_distro_packages:
   - git
+  - systemd-devel
 
 cinder_volume_distro_packages:
   - qemu-img-ev

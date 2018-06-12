@@ -40,6 +40,34 @@
   include_tasks: cinder_install_source.yml
   when: cinder_install_method == 'source'
 
+- name: Run the systemd service role
+  include_role:
+    name: systemd_service
+    private: true
+  vars:
+    systemd_user_name: "{{ cinder_system_user_name }}"
+    systemd_group_name: "{{ cinder_system_group_name }}"
+    systemd_tempd_prefix: openstack
+    systemd_slice_name: cinder
+    systemd_lock_path: /var/lock/cinder
+    systemd_CPUAccounting: true
+    systemd_BlockIOAccounting: true
+    systemd_MemoryAccounting: true
+    systemd_TasksAccounting: true
+    systemd_services:
+      - service_name: "{{ service_var.service_name }}"
+        enabled: yes
+        state: started
+        execstarts: "{{ service_var.execstarts }}"
+        execreloads: "{{ service_var.execreloads | default([]) }}"
+        config_overrides: "{{ cinder_environment_overrides | combine(service_var.init_config_overrides) }}"
+  with_items: "{{ filtered_cinder_services }}"
+  loop_control:
+    loop_var: service_var
+  tags:
+    - cinder-config
+    - systemd-service
+
 - name: Set the upgrade facts
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"

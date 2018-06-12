@@ -43,11 +43,15 @@ cinder_service_distro_packages:
   - cinder-volume
   - python-openstackclient
   - python-shade
+  - python-systemd
+  - python3-systemd
   - uwsgi
   - uwsgi-plugin-python
 
 cinder_developer_mode_distro_packages:
+  - build-essential
   - git-core
+  - libsystemd-dev
 
 cinder_volume_distro_packages:
   - qemu-utils

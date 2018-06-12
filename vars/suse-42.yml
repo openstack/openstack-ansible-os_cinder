@@ -38,11 +38,14 @@ cinder_service_distro_packages:
   - openstack-cinder-volume
   - python-openstackclient
   - python-shade
+  - python-systemd
   - uwsgi
   - uwsgi-python
 
 cinder_developer_mode_distro_packages:
   - git-core
+  - pkg-config
+  - systemd-devel
 
 cinder_volume_distro_packages:
   - qemu-tools

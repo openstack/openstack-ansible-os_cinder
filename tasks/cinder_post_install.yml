@@ -72,7 +72,3 @@
     mode: "0440"
     owner: "root"
     group: "root"
-
-- include: cinder_selinux.yml
-  when:
-    - ansible_selinux.status == "enabled"

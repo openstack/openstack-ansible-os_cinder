@@ -26,8 +26,6 @@ cinder_service_setup_host: "{{ openstack_service_setup_host | default('localhost
 # Set installation method.
 cinder_install_method: "source"
 
-cinder_log_dir: /var/log/cinder
-
 cinder_git_repo: https://git.openstack.org/openstack/cinder
 cinder_git_install_branch: master
 cinder_developer_mode: false
@@ -284,6 +282,7 @@ cinder_pip_packages:
   - python-openstackclient
   - python-keystoneclient
   - python-memcached
+  - systemd-python
   - uwsgi
 
 cinder_api_init_overrides: {}
@@ -298,29 +297,35 @@ cinder_services:
     service_name: cinder-scheduler
     init_config_overrides: "{{ cinder_scheduler_init_overrides }}"
     start_order: 1
+    execstarts: "{{ cinder_bin }}/cinder-scheduler"
+    execreloads: "/bin/kill -HUP $MAINPID"
   cinder-volume:
     group: cinder_volume
     service_name: cinder-volume
     init_config_overrides: "{{ cinder_volume_init_overrides }}"
     start_order: 2
+    execstarts: "{{ cinder_bin }}/cinder-volume"
+    execreloads: "/bin/kill -HUP $MAINPID"
+  cinder-api:
+    group: cinder_api
+    service_name: cinder-api
+    init_config_overrides: "{{ cinder_api_init_overrides }}"
+    start_order: 3
+    execstarts: "{{ cinder_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/cinder-api.ini"
+    execreloads: "{{ cinder_uwsgi_bin }}/uwsgi --reload /var/run/cinder-api/cinder-api.pid"
+    wsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
+    wsgi_app: True
+    wsgi_name: cinder-wsgi
+    uwsgi_port: "{{ cinder_service_port }}"
+    uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
   cinder-backup:
     group: cinder_backup
     service_name: cinder-backup
     condition: "{{ cinder_service_backup_program_enabled | bool }}"
     init_config_overrides: "{{ cinder_backup_init_overrides }}"
-    start_order: 3
-  cinder-api:
-    group: cinder_api
-    service_name: cinder-api
-    init_config_overrides: "{{ cinder_api_init_overrides }}"
-    wsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
-    wsgi_app: True
-    log_string: "--logto "
-    wsgi_name: cinder-wsgi
-    uwsgi_port: "{{ cinder_service_port }}"
-    uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
-    program_override: "{{ cinder_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/cinder-api.ini"
     start_order: 4
+    execstarts: "{{ cinder_bin }}/cinder-backup"
+    execreloads: "/bin/kill -HUP $MAINPID"
 
 # Cinder uWSGI settings
 cinder_wsgi_processes_max: 16
@@ -355,5 +360,10 @@ cinder_rootwrap_conf_overrides: {}
 cinder_api_paste_ini_overrides: {}
 cinder_cinder_conf_overrides: {}
 cinder_api_uwsgi_ini_overrides: {}
+
+## Set default cinder path in service units. The default override sets the
+## execution path for the cinder service.
+cinder_environment_overrides:
+  Environment: "PATH='{{ cinder_bin }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
 
 _UUID_regex: "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}"
