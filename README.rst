@@ -16,6 +16,9 @@ This Ansible role installs and configures OpenStack cinder.
 Documentation for the project can be found at:
   https://docs.openstack.org/openstack-ansible-os_cinder/latest/
 
+Release notes for the project can be found at:
+  https://docs.openstack.org/releasenotes/openstack-ansible-os_cinder
+
 The project home is at:
   https://launchpad.net/openstack-ansible
 
