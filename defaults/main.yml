@@ -195,7 +195,11 @@ cinder_osapi_volume_workers_max: 16
 cinder_osapi_volume_workers: "{{ [[ansible_processor_vcpus|default(2) // 2, 1] | max, cinder_osapi_volume_workers_max] | min }}"
 
 ## Cinder iscsi
-cinder_iscsi_helper: tgtadm
+cinder_iscsi_helper_mapping:
+  RedHat: lioadm
+  Debian: tgtadm
+  Suse: tgtadm
+cinder_iscsi_helper: "{{ cinder_iscsi_helper_mapping[ansible_os_family] }}"
 cinder_iscsi_iotype: fileio
 cinder_iscsi_num_targets: 100
 cinder_iscsi_port: 3260
@@ -271,6 +275,7 @@ cinder_pip_packages:
   - httplib2
   - keystonemiddleware
   - PyMySQL
+  - python-openstackclient
   - python-cinderclient
   - python-keystoneclient
   - python-memcached

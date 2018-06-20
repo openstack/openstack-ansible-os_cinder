@@ -31,6 +31,7 @@ cinder_distro_packages:
 
 cinder_service_distro_packages:
   - openstack-cinder
+  - python-openstackclient
   - python-cinderclient
   - python2-shade
   - uwsgi
@@ -46,6 +47,6 @@ cinder_lvm_volume_distro_packages:
   - device-mapper-event
   - lvm2
   - parted
-  - scsi-target-utils
+  - targetcli
 
 cinder_uwsgi_bin: '/usr/sbin'

@@ -63,6 +63,7 @@
   notify: Ensure tgt service restarted
   when:
     - "cinder_services['cinder-volume']['group'] in group_names"
+    - "cinder_iscsi_helper == 'tgtadm'"
     - cinder_backend_lvm_inuse | bool
 
 - name: Create nfs shares export file

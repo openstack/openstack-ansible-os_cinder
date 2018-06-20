@@ -41,6 +41,7 @@ cinder_service_distro_packages:
   - cinder-backup
   - cinder-scheduler
   - cinder-volume
+  - python-openstackclient
   - python-cinderclient
   - python-shade
   - uwsgi
