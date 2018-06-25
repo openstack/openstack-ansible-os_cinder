@@ -276,7 +276,6 @@ cinder_pip_packages:
   - keystonemiddleware
   - PyMySQL
   - python-openstackclient
-  - python-cinderclient
   - python-keystoneclient
   - python-memcached
   - uwsgi

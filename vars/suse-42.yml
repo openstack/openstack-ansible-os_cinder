@@ -37,7 +37,6 @@ cinder_service_distro_packages:
   - openstack-cinder-scheduler
   - openstack-cinder-volume
   - python-openstackclient
-  - python-cinderclient
   - python-shade
   - uwsgi
   - uwsgi-python
