@@ -32,7 +32,6 @@ cinder_distro_packages:
 cinder_service_distro_packages:
   - openstack-cinder
   - python-openstackclient
-  - python-cinderclient
   - python2-shade
   - uwsgi
   - uwsgi-plugin-python
