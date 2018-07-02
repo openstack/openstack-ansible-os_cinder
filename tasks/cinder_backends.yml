@@ -23,6 +23,14 @@
   retries: 10
   delay: 10
 
+# TODO(odyssey4me):
+# Once these tasks can be replaced by using Ansible modules instead,
+# we should do that and use the delegation to the service setup host
+# so that we can remove the openrc file from the target host.
+- name: Implement openrc/clouds.yaml
+  include_role:
+    name: "openstack_openrc"
+
 - name: Create singular cinder_backends variable for all hosts
   set_fact:
     _cinder_backends: "{{ (_cinder_backends | default(cinder_backends | default({}))) | combine(hostvars[item]['cinder_backends'] | default({})) }}"

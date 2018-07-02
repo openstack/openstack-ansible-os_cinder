@@ -18,6 +18,11 @@
 cinder_package_state: "latest"
 cinder_pip_package_state: "latest"
 
+# Set the host which will execute the shade modules
+# for the service setup. The host must already have
+# clouds.yaml properly configured.
+cinder_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+
 # Set installation method.
 cinder_install_method: "source"
 
@@ -261,11 +266,6 @@ cinder_backend_rbd_inuse: '{{ (cinder_backends|default("")|to_json).find("cinder
 cinder_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | netorigin }}"
 
 cinder_service_in_ldap: false
-
-# Cinder packages that must be installed before anything else
-cinder_requires_pip_packages:
-  - shade
-  - virtualenv
 
 # Common pip packages
 cinder_pip_packages:
