@@ -43,18 +43,6 @@
     - Manage LB
     - Restart cinder services
 
-- name: Copy cinder configs
-  copy:
-    src: "{{ item }}"
-    dest: "/etc/cinder/rootwrap.d/"
-    owner: "root"
-    group: "root"
-  with_fileglob:
-    - rootwrap.d/*
-  notify:
-    - Manage LB
-    - Restart cinder services
-
 - name: Ensure cinder tgt include
   lineinfile:
     dest: /etc/tgt/targets.conf

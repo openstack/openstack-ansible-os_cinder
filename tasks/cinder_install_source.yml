@@ -92,6 +92,18 @@
     - Manage LB
     - Restart cinder services
 
+- name: Copy cinder configs
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/cinder/rootwrap.d/"
+    owner: "root"
+    group: "root"
+  with_fileglob:
+    - rootwrap.d/*
+  notify:
+    - Manage LB
+    - Restart cinder services
+
 - name: Remove python from path first (CentOS, openSUSE)
   file:
     path:  "{{ cinder_bin | dirname }}/bin/python2.7"
