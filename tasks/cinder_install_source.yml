@@ -93,10 +93,14 @@
     - Restart cinder services
 
 - name: Copy cinder rootwrap filters
-  synchronize:
-    src: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/etc/cinder/rootwrap.d/"
-    dest: /etc/cinder/rootwrap.d/
-  delegate_to: "{{ inventory_hostname }}"
+  command: >-
+    rsync --archive --itemize-changes --delete
+    /openstack/venvs/cinder-{{ cinder_venv_tag }}/etc/cinder/rootwrap.d/
+    /etc/cinder/rootwrap.d/
+  args:
+    warn: no
+  register: _copy_rootwraps
+  changed_when: _copy_rootwraps.stdout != ''
   notify:
     - Manage LB
     - Restart cinder services
