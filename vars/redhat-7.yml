@@ -49,4 +49,9 @@ cinder_lvm_volume_distro_packages:
   - parted
   - targetcli
 
+cinder_oslomsg_amqp1_distro_packages:
+  - cyrus-sasl-lib
+  - cyrus-sasl-plain
+  - cyrus-sasl-md5
+
 cinder_uwsgi_bin: '/usr/sbin'
