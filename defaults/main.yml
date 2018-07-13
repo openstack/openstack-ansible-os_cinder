@@ -90,6 +90,10 @@ cinder_oslomsg_notify_userid: "{{ cinder_oslomsg_rpc_userid }}"
 cinder_oslomsg_notify_password: "{{ cinder_oslomsg_rpc_password }}"
 cinder_oslomsg_notify_vhost: "{{ cinder_oslomsg_rpc_vhost }}"
 
+## (Qdrouterd) integration
+# TODO(evrardjp): Change structure when more backends will be supported
+cinder_oslomsg_amqp1_enabled: "{{ cinder_oslomsg_rpc_transport == 'amqp' }}"
+
 ## Cinder User / Group
 cinder_system_user_name: cinder
 cinder_system_group_name: cinder
@@ -283,6 +287,9 @@ cinder_pip_packages:
   - python-memcached
   - systemd-python
   - uwsgi
+
+cinder_optional_oslomsg_amqp1_pip_packages:
+  - oslo.messaging[amqp1]
 
 cinder_api_init_overrides: {}
 cinder_scheduler_init_overrides: {}
