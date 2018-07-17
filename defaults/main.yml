@@ -72,18 +72,22 @@ cinder_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/gale
 ## Oslo Messaging
 
 # RPC
-cinder_oslomsg_rpc_transport: rabbit
-cinder_oslomsg_rpc_servers: 127.0.0.1
-cinder_oslomsg_rpc_port: 5672
-cinder_oslomsg_rpc_use_ssl: False
+cinder_oslomsg_rpc_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
+cinder_oslomsg_rpc_setup_host: "{{ (cinder_oslomsg_rpc_host_group in groups) | ternary(groups[cinder_oslomsg_rpc_host_group][0], 'localhost') }}"
+cinder_oslomsg_rpc_transport: "{{ oslomsg_rpc_transport | default('rabbit') }}"
+cinder_oslomsg_rpc_servers: "{{ oslomsg_rpc_servers | default('127.0.0.1') }}"
+cinder_oslomsg_rpc_port: "{{ oslomsg_rpc_port | default('5672') }}"
+cinder_oslomsg_rpc_use_ssl: "{{ oslomsg_rpc_use_ssl | default(False) }}"
 cinder_oslomsg_rpc_userid: cinder
 cinder_oslomsg_rpc_vhost: /cinder
 
 # Notify
-cinder_oslomsg_notify_transport: rabbit
-cinder_oslomsg_notify_servers: 127.0.0.1
-cinder_oslomsg_notify_port: 5672
-cinder_oslomsg_notify_use_ssl: False
+cinder_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
+cinder_oslomsg_notify_setup_host: "{{ (cinder_oslomsg_notify_host_group in groups) | ternary(groups[cinder_oslomsg_notify_host_group][0], 'localhost') }}"
+cinder_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"
+cinder_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
+cinder_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
+cinder_oslomsg_notify_use_ssl: "{{ oslomsg_notify_use_ssl | default(False) }}"
 cinder_oslomsg_notify_userid: cinder
 cinder_oslomsg_notify_vhost: /cinder
 
