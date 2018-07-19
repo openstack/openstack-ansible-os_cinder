@@ -3,6 +3,7 @@ localhost
 infra1
 keystone
 cinder
+storage1
 
 [all_containers]
 infra1
@@ -45,7 +46,7 @@ cinder
 cinder
 
 [cinder_volume]
-localhost
+storage1
 
 [cinder_all:children]
 cinder_api
