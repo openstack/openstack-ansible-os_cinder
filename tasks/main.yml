@@ -65,6 +65,25 @@
   tags:
     - cinder-config
 
+- include_tasks: mq_setup.yml
+  when:
+    - "cinder_services['cinder-api']['group'] in group_names"
+    - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
+  with_items:
+    - oslomsg_setup_host: "{{ cinder_oslomsg_rpc_setup_host }}"
+      oslomsg_userid: "{{ cinder_oslomsg_rpc_userid }}"
+      oslomsg_password: "{{ cinder_oslomsg_rpc_password }}"
+      oslomsg_vhost: "{{ cinder_oslomsg_rpc_vhost }}"
+      oslomsg_transport: "{{ cinder_oslomsg_rpc_transport }}"
+    - oslomsg_setup_host: "{{ cinder_oslomsg_notify_setup_host }}"
+      oslomsg_userid: "{{ cinder_oslomsg_notify_userid }}"
+      oslomsg_password: "{{ cinder_oslomsg_notify_password }}"
+      oslomsg_vhost: "{{ cinder_oslomsg_notify_vhost }}"
+      oslomsg_transport: "{{ cinder_oslomsg_notify_transport }}"
+  no_log: true
+  tags:
+    - cinder-config
+
 - include: cinder_db_setup.yml
   static: no
   when:
