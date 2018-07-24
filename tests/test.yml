@@ -14,19 +14,19 @@
 # limitations under the License.
 
 # Setup the host
-- include: common/test-setup-host.yml
+- import_playbook: common/test-setup-host.yml
 
 # Prepare the cinder-volumes VG
-- include: common/test-setup-cinder-localhost.yml
+- import_playbook: common/test-setup-cinder-localhost.yml
 
 # Install RabbitMQ/MariaDB
-- include: common/test-install-infra.yml
+- import_playbook: common/test-install-infra.yml
 
 # Install Keystone
-- include: common/test-install-keystone.yml
+- import_playbook: common/test-install-keystone.yml
 
 # Install Cinder
-- include: common/test-install-cinder.yml
+- import_playbook: common/test-install-cinder.yml
 
 # Install and execute Tempest
-- include: common/test-install-tempest.yml
+- import_playbook: common/test-install-tempest.yml
