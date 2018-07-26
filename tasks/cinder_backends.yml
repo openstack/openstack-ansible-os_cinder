@@ -19,7 +19,7 @@
     status_code: 200,300
     validate_certs: "{{ cinder_service_internaluri_insecure | bool }}"
   register: api_status
-  until: api_status | success
+  until: api_status  is success
   retries: 10
   delay: 10
 

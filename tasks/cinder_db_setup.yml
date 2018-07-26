@@ -63,4 +63,4 @@
     value: False
   when:
     - not data_migrations | skipped
-    - data_migrations | succeeded
+    - data_migrations  is succeeded

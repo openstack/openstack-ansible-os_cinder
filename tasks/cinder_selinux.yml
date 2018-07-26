@@ -28,4 +28,4 @@
 - name: Apply updated SELinux contexts on cinder log directory
   command: "restorecon -Rv {{ (cinder_log_dir_check.stat.islnk) | ternary(cinder_log_dir_check.stat.lnk_target, cinder_log_dir) }}"
   when:
-    - selinux_file_context_log_files | changed
+    - selinux_file_context_log_files  is changed

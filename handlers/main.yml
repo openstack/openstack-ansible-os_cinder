@@ -21,7 +21,7 @@
     daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
   with_items: "{{ filtered_cinder_services }}"
   register: _stop
-  until: _stop | success
+  until: _stop  is success
   retries: 5
   delay: 2
   listen: Restart cinder services
@@ -52,7 +52,7 @@
     daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
   with_items: "{{ filtered_cinder_services }}"
   register: _start
-  until: _start | success
+  until: _start  is success
   retries: 5
   delay: 2
   listen: Restart cinder services
