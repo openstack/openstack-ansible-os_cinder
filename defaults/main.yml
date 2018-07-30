@@ -88,8 +88,9 @@ cinder_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit'
 cinder_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
 cinder_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
 cinder_oslomsg_notify_use_ssl: "{{ oslomsg_notify_use_ssl | default(False) }}"
-cinder_oslomsg_notify_userid: cinder
-cinder_oslomsg_notify_vhost: /cinder
+cinder_oslomsg_notify_userid: "{{ cinder_oslomsg_rpc_userid }}"
+cinder_oslomsg_notify_password: "{{ cinder_oslomsg_rpc_password }}"
+cinder_oslomsg_notify_vhost: "{{ cinder_oslomsg_rpc_vhost }}"
 
 ## Cinder User / Group
 cinder_system_user_name: cinder
