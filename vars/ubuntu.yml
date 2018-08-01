@@ -30,7 +30,6 @@ cinder_distro_packages:
   - libxslt1-dev
   - nfs-common
   - open-iscsi
-  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
   - rpcbind
   - rsync
   - zlib1g

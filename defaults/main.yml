@@ -291,7 +291,6 @@ cinder_pip_packages:
   - osprofiler
   - PyMySQL
   - python-openstackclient
-  - python-keystoneclient
   - python-memcached
   - systemd-python
   - uwsgi

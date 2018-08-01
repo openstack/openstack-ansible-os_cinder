@@ -24,7 +24,6 @@ cinder_distro_packages:
   - postgresql-devel
   - kmod-devel
   - kmod-libs
-  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
   - zlib-devel
   - which
   - iscsi-initiator-utils
