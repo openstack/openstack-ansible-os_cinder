@@ -56,6 +56,12 @@
         option: "venv_tag"
         value: "{{ cinder_venv_tag }}"
 
+- name: Link in the os-brick rootwrap filters
+  file:
+    src: "{{ cinder_bin | dirname }}/etc/os-brick/rootwrap.d/os-brick.filters"
+    dest: /etc/cinder/rootwrap.d/os-brick.filters
+    state: link
+
 - name: Copy cinder rootwrap filters
   command: >-
     rsync --archive --itemize-changes --delete
