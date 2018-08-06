@@ -1,3 +1,4 @@
+---
 - name: Installation and setup of cinder
   hosts: cinder_all
   user: root
