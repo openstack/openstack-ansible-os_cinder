@@ -14,15 +14,5 @@
 # limitations under the License.
 
 tempest_run: yes
-
-# Cinder repo is needed because it's imported from cinder-tempest-plugin
-tempest_plugins:
-  - name: cinder
-    repo: https://git.openstack.org/openstack/cinder
-    branch: master
-  - name: cinder-plugins
-    repo: https://git.openstack.org/openstack/cinder-tempest-plugin
-    branch: master
-
 tempest_test_whitelist:
-  - cinder_tempest_plugin.api.volume.*
+  - smoke
