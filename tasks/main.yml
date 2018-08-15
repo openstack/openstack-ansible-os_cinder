@@ -40,6 +40,13 @@
   tags:
     - always
 
+- include: cinder_lvm_config.yml
+  when:
+    - "cinder_services['cinder-volume']['group'] in group_names"
+    - "cinder_backend_lvm_inuse | bool"
+  tags:
+    - cinder-config
+
 - include: cinder_pre_install.yml
   tags:
     - cinder-install
@@ -128,12 +135,5 @@
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
     - "cinder_services['cinder-api']['group'] in group_names"
     - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | list)[-1]"
-  tags:
-    - cinder-config
-
-- include: cinder_lvm_config.yml
-  when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
-    - "cinder_backend_lvm_inuse | bool"
   tags:
     - cinder-config
