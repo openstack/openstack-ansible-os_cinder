@@ -5,10 +5,6 @@ use_journal = True
 # Disable stderr logging
 use_stderr = False
 debug = {{ debug }}
-# JSON logging is set to true when debug is enabled. This is done to resolve an issue with unicode
-# logging that can result in a stacktrace with "python2.7". The following bug covers the issues
-# we're seeing in the logs [ https://bugs.launchpad.net/cinder/+bug/1703493 ].
-use_json = {{ debug }}
 fatal_deprecations = {{ cinder_fatal_deprecations }}
 my_ip = {{ cinder_management_address }}
 
