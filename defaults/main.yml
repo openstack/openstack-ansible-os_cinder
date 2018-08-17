@@ -306,11 +306,19 @@ cinder_services:
     start_order: 2
     execstarts: "{{ cinder_bin }}/cinder-volume"
     execreloads: "/bin/kill -HUP $MAINPID"
+  cinder-backup:
+    group: cinder_backup
+    service_name: cinder-backup
+    condition: "{{ cinder_service_backup_program_enabled | bool }}"
+    init_config_overrides: "{{ cinder_backup_init_overrides }}"
+    start_order: 3
+    execstarts: "{{ cinder_bin }}/cinder-backup"
+    execreloads: "/bin/kill -HUP $MAINPID"
   cinder-api:
     group: cinder_api
     service_name: cinder-api
     init_config_overrides: "{{ cinder_api_init_overrides }}"
-    start_order: 3
+    start_order: 4
     execstarts: "{{ cinder_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/cinder-api.ini"
     execreloads: "{{ cinder_uwsgi_bin }}/uwsgi --reload /var/run/cinder-api/cinder-api.pid"
     wsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
@@ -318,14 +326,6 @@ cinder_services:
     wsgi_name: cinder-wsgi
     uwsgi_port: "{{ cinder_service_port }}"
     uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
-  cinder-backup:
-    group: cinder_backup
-    service_name: cinder-backup
-    condition: "{{ cinder_service_backup_program_enabled | bool }}"
-    init_config_overrides: "{{ cinder_backup_init_overrides }}"
-    start_order: 4
-    execstarts: "{{ cinder_bin }}/cinder-backup"
-    execreloads: "/bin/kill -HUP $MAINPID"
 
 # Cinder uWSGI settings
 cinder_wsgi_processes_max: 16
