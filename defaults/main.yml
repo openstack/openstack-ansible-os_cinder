@@ -27,7 +27,7 @@ cinder_service_setup_host: "{{ openstack_service_setup_host | default('localhost
 cinder_install_method: "source"
 
 cinder_git_repo: https://git.openstack.org/openstack/cinder
-cinder_git_install_branch: master
+cinder_git_install_branch: 'stable/rocky'
 cinder_developer_mode: false
 cinder_developer_constraints:
   - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
