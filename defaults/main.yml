@@ -262,6 +262,13 @@ cinder_quota_backup_gigabytes: 1000
 #       - lvm_high_iops
 #       - lvm_low_iops
 
+# Override generated device filter in lvm.conf
+# Example:
+# cinder_lvm_devices_filter_override:
+#  - '"a/sd.*/"'
+#  - '"a/hd.*/"'
+cinder_lvm_devices_filter_override: []
+
 # cinder_backend_lvm_inuse: True if current host has an lvm backend
 cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") != -1 }}'
 # cinder_backend_rbd_inuse: True if the current host has an rbd backend
