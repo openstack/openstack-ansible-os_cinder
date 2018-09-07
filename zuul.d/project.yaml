@@ -20,14 +20,11 @@
       - release-notes-jobs
     check:
       jobs:
-        - openstack-ansible-upgrade-ubuntu-xenial
-        - openstack-ansible-cinder-ssl-nv
         - openstack-ansible-functional-distro_install-centos-7
         - openstack-ansible-functional-distro_install-opensuse-423
         - openstack-ansible-functional-distro_install-ubuntu-bionic
     gate:
       jobs:
-        - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-functional-distro_install-centos-7
         - openstack-ansible-functional-distro_install-opensuse-423
         - openstack-ansible-functional-distro_install-ubuntu-bionic
