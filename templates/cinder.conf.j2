@@ -15,8 +15,6 @@ api_paste_config = /etc/cinder/api-paste.ini
 auth_strategy = {{ cinder_auth_strategy }}
 
 ## Cinder API's enabled
-enable_v2_api = {{ cinder_enable_v2_api }}
-
 {% if cinder_services['cinder-volume']['group'] in group_names %}
 {% if cinder_service_backup_program_enabled == true %}
 ## Cinder Backup
@@ -78,9 +76,9 @@ default_availability_zone = {{ cinder_default_availability_zone }}
 
 target_helper = {{ cinder_target_helper }}
 iscsi_iotype = {{ cinder_iscsi_iotype }}
-iscsi_ip_address = {{ cinder_storage_address }}
+target_ip_address = {{ cinder_storage_address }}
 iscsi_num_targets = {{ cinder_iscsi_num_targets }}
-iscsi_port = {{ cinder_iscsi_port }}
+target_port = {{ cinder_iscsi_port }}
 
 client_socket_timeout = {{ cinder_client_socket_timeout }}
 
@@ -130,12 +128,6 @@ auth_endpoint = {{ keystone_service_internaluri }}/v3
 
 [key_manager]
 backend = castellan.key_manager.barbican_key_manager.BarbicanKeyManager
-{% else %}
-{# WORKAROUND KEY MANAGER DEFAULT STRING ISSUE #}
-{# See also: https://bugs.launchpad.net/cinder/+bug/1721236 #}
-{# And:  https://review.openstack.org/#/c/468252/ #}
-[key_manager]
-backend = cinder.keymgr.conf_key_mgr.ConfKeyManager
 {% endif %}
 
 [keystone_authtoken]
