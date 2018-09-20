@@ -87,7 +87,6 @@
     _oslomsg_notify_password: "{{ cinder_oslomsg_notify_password }}"
     _oslomsg_notify_vhost: "{{ cinder_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ cinder_oslomsg_notify_transport }}"
-    _oslomsg_configure_notify: "{{ cinder_ceilometer_enabled | bool }}"
   tags:
     - common-mq
     - cinder-config
