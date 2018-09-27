@@ -21,7 +21,7 @@ auth_strategy = {{ cinder_auth_strategy }}
 backup_driver = {{ cinder_service_backup_driver }}
 backup_metadata_version = {{ cinder_service_backup_metadata_version }}
 backup_compression_algorithm = {{ cinder_service_backup_compression_algorithm }}
-{% if cinder_service_backup_driver == 'cinder.backup.drivers.swift' %}
+{% if cinder_service_backup_driver == 'cinder.backup.drivers.swift.SwiftBackupDriver' %}
 swift_catalog_info = {{ cinder_swift_catalog_info }}
 backup_swift_auth = {{ cinder_service_backup_swift_auth }}
 {% if cinder_service_backup_swift_auth == 'single_user' %}
@@ -35,7 +35,7 @@ backup_swift_container = {{ cinder_service_backup_swift_container }}
 backup_swift_object_size = {{ cinder_service_backup_swift_object_size }}
 backup_swift_retry_attempts = {{ cinder_service_backup_swift_retry_attempts }}
 backup_swift_retry_backoff = {{ cinder_service_backup_swift_retry_backoff }}
-{% elif cinder_service_backup_driver == 'cinder.backup.drivers.ceph' %}
+{% elif cinder_service_backup_driver == 'cinder.backup.drivers.ceph.CephBackupDriver' %}
 backup_ceph_user = {{ cinder_service_backup_ceph_user }}
 backup_ceph_pool = {{ cinder_service_backup_ceph_pool }}
 {% endif %}

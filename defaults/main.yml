@@ -187,9 +187,9 @@ cinder_keystone_auth_type: password
 
 ## In order to enable the cinder backup you MUST set ``cinder_service_backup_program_enabled`` to "true"
 cinder_service_backup_program_enabled: false
-# cinder_service_backup_driver: Options include 'cinder.backup.drivers.swift' or
-#                               'cinder.backup.drivers.ceph'
-cinder_service_backup_driver: cinder.backup.drivers.swift
+# cinder_service_backup_driver: Options include 'cinder.backup.drivers.swift.SwiftBackupDriver' or
+#                               'cinder.backup.drivers.ceph.CephBackupDriver'
+cinder_service_backup_driver: cinder.backup.drivers.swift.SwiftBackupDriver
 # cinder_service_backup_swift_auth: Options include 'per_user' or 'single_user', we default to
 #                                   'per_user' so that backups are saved to a user's swift account.
 cinder_service_backup_swift_auth: per_user

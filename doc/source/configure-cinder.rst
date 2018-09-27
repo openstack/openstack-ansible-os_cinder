@@ -160,7 +160,7 @@ variable:
 
 .. code-block:: yaml
 
-    cinder_service_backup_driver: cinder.backup.drivers.ceph
+    cinder_service_backup_driver: cinder.backup.drivers.ceph.CephBackupDriver
 
 Configure the Ceph user and the pool to use for backups. The defaults
 are shown here:
