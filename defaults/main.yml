@@ -47,6 +47,10 @@ cinder_barbican_enabled: False
 # Enable/Disable Ceilometer
 cinder_ceilometer_enabled: False
 
+# Time period for which to generate volume usages. The options are hour, day,
+# month, or year. (string value)
+cinder_volume_usage_audit: hour
+
 cinder_storage_availability_zone: nova
 cinder_default_availability_zone: "{{ cinder_storage_availability_zone }}"
 
