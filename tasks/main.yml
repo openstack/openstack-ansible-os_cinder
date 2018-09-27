@@ -72,6 +72,28 @@
   tags:
     - cinder-config
 
+- name: Run the systemd service role
+  include_role:
+    name: systemd_service
+    private: true
+  vars:
+    systemd_service_enabled: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary(true, false) }}"
+    systemd_service_restart_changed: false
+    systemd_user_name: "{{ cinder_system_user_name }}"
+    systemd_group_name: "{{ cinder_system_group_name }}"
+    systemd_services:
+      - service_name: "cinder-volume-usage-audit"
+        execstarts:
+          - '/bin/bash -c "{{ cinder_bin }}/cinder-volume-usage-audit --start_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00\s-d\s-1{{ cinder_volume_usage_audit }})\" --end_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00)\" --send_actions"'
+        timer:
+          state: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary('started', 'stopped') }}"
+          options:
+            OnBootSec: 30min
+            OnCalendar: "{{ (cinder_volume_usage_audit == 'day') | ternary('daily', cinder_volume_usage_audit+'ly') }}"
+            Persistent: true
+  tags:
+    - cinder-config
+
 - import_tasks: mq_setup.yml
   when:
     - "cinder_services['cinder-api']['group'] in group_names"
