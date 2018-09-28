@@ -15,16 +15,7 @@
 - project:
     templates:
       - openstack-ansible-role-jobs
+      - openstack-ansible-role-distro_install-jobs
       - check-requirements
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
-    check:
-      jobs:
-        - openstack-ansible-functional-distro_install-centos-7
-        - openstack-ansible-functional-distro_install-opensuse-423
-        - openstack-ansible-functional-distro_install-ubuntu-bionic
-    gate:
-      jobs:
-        - openstack-ansible-functional-distro_install-centos-7
-        - openstack-ansible-functional-distro_install-opensuse-423
-        - openstack-ansible-functional-distro_install-ubuntu-bionic
