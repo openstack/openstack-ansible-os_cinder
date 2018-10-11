@@ -62,8 +62,7 @@
   with_dict: "{{ _cinder_backends|default({}) }}"
   when: item.value.extra_volume_types is defined
 
-- include: cinder_qos.yml
-  static: no
+- include_tasks: cinder_qos.yml
   when: cinder_qos_specs is defined
   tags:
     - cinder-qos
