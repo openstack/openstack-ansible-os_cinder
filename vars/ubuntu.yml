@@ -34,6 +34,7 @@ cinder_distro_packages:
   - rsync
   - zlib1g
   - zlibc
+  - libpython2.7
 
 cinder_service_distro_packages:
   - cinder-api
