@@ -25,6 +25,7 @@ cinder_distro_packages:
   - libkmod2
   - zlib-devel
   - which
+  - libpython2_7-1_0
 
 cinder_service_distro_packages:
   - openstack-cinder
