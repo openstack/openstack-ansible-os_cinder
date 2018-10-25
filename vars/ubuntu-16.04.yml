@@ -34,6 +34,7 @@ cinder_distro_packages:
   - rsync
   - zlib1g
   - zlibc
+  - libpython2.7
 
 cinder_developer_mode_distro_packages:
   - git-core
