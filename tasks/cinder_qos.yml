@@ -17,9 +17,10 @@
   shell: |
     . {{ ansible_env.HOME }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
-    {{ cinder_bin }}/cinder qos-list | grep {{ item.name }} || \
-    {{ cinder_bin }}/cinder qos-create {{ item.name }}\
-    {% for k,v in item.options.items() %} {{ k }}={{ v }}{% endfor %}
+    {{ cinder_bin }}/openstack volume qos list --format value --column Name | grep -x {{ item.name }} || \
+    {{ cinder_bin }}/openstack volume qos create {{ item.name }} \
+    --consumer {{ item.options.consumer }}\
+    {% for k,v in item.options.items() %} --property {{ k }}={{ v }}{% endfor %}
   args:
     executable: /bin/bash
   with_items: "{{ cinder_qos_specs }}"
@@ -32,9 +33,7 @@
     . {{ ansible_env.HOME }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for vtype in item.cinder_volume_types %}
-    {{ cinder_bin }}/cinder qos-associate \
-      $({{ cinder_bin }}/cinder qos-list | grep {{ item.name }} | grep -oE "{{ _UUID_regex }}") \
-      $({{ cinder_bin }}/cinder type-list | grep {{ vtype }} | grep -oE "{{ _UUID_regex }}")
+    {{ cinder_bin }}/openstack volume qos associate {{ item.name }} {{ vtype }}
     {% endfor %}
   args:
     executable: /bin/bash
