@@ -26,9 +26,6 @@ cinder_package_list: |-
   {%     set _ = packages.extend(cinder_lvm_volume_distro_packages) %}
   {%   endif %}
   {% endif %}
-  {% if cinder_developer_mode | bool %}
-  {%   set _ = packages.extend(cinder_devel_distro_packages) %}
-  {% endif %}
   {% if cinder_oslomsg_amqp1_enabled | bool %}
   {%   set _ = packages.extend(cinder_oslomsg_amqp1_distro_packages) %}
   {% endif %}

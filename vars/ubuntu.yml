@@ -22,12 +22,7 @@ tgt_service_name: tgt
 
 # Common apt packages
 cinder_distro_packages:
-  - libffi-dev
-  - libkmod-dev
   - libkmod2
-  - libpq-dev
-  - libssl-dev
-  - libxslt1-dev
   - nfs-common
   - open-iscsi
   - rpcbind
@@ -48,8 +43,12 @@ cinder_service_distro_packages:
   - uwsgi-plugin-python
 
 cinder_devel_distro_packages:
-  - build-essential
   - git-core
+  - libffi-dev
+  - libkmod-dev
+  - libpq-dev
+  - libssl-dev
+  - libxslt1-dev
   - libsystemd-dev
 
 cinder_volume_distro_packages:
