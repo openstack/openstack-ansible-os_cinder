@@ -19,15 +19,12 @@ tgt_service_name: tgtd
 
 # Common yum packages
 cinder_distro_packages:
-  - nfs-utils
-  - rpcbind
   - libxslt-devel
   - postgresql-devel
   - libkmod-devel
   - libkmod2
   - zlib-devel
   - which
-  - open-iscsi
 
 cinder_service_distro_packages:
   - openstack-cinder
@@ -49,12 +46,20 @@ cinder_developer_mode_distro_packages:
 
 cinder_volume_distro_packages:
   - qemu-tools
+  - open-iscsi
+  - nfs-utils
+  - rpcbind
 
 cinder_lvm_volume_distro_packages:
   - device-mapper
   - lvm2
   - parted
   - tgt
+
+cinder_backup_distro_packages:
+  - open-iscsi
+  - nfs-utils
+  - rpcbind
 
 cinder_oslomsg_amqp1_distro_packages:
   - cyrus-sasl
