@@ -21,11 +21,7 @@ tgt_service_name: tgtd
 cinder_distro_packages:
   - nfs-utils
   - rpcbind
-  - libxslt-devel
-  - postgresql-devel
-  - libkmod-devel
   - libkmod2
-  - zlib-devel
   - which
   - open-iscsi
   - libpython2_7-1_0
@@ -45,8 +41,11 @@ cinder_service_distro_packages:
 
 cinder_devel_distro_packages:
   - git-core
-  - pkg-config
+  - libxslt-devel
+  - libkmod-devel
+  - postgresql-devel
   - systemd-devel
+  - zlib-devel
 
 cinder_volume_distro_packages:
   - qemu-tools

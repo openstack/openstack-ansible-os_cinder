@@ -41,7 +41,6 @@
   vars:
     venv_build_distro_package_list: "{{ cinder_devel_distro_packages }}"
     venv_install_destination_path: "{{ cinder_bin | dirname }}"
-    venv_install_distro_package_list: "{{ cinder_distro_packages }}"
     venv_pip_install_args: "{{ cinder_pip_install_args }}"
     venv_pip_packages: >-
       {{ cinder_pip_packages +

@@ -20,9 +20,6 @@ tgt_service_name: tgtd
 cinder_distro_packages:
   - nfs-utils
   - rpcbind
-  - libxslt-devel
-  - postgresql-devel
-  - kmod-devel
   - kmod-libs
   - zlib-devel
   - which
@@ -38,6 +35,9 @@ cinder_service_distro_packages:
 
 cinder_devel_distro_packages:
   - git
+  - libxslt-devel
+  - kmod-devel
+  - postgresql-devel
   - systemd-devel
 
 cinder_volume_distro_packages:
