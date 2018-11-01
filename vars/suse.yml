@@ -28,6 +28,7 @@ cinder_distro_packages:
   - zlib-devel
   - which
   - open-iscsi
+  - libpython2_7-1_0
 
 cinder_service_distro_packages:
   - openstack-cinder
