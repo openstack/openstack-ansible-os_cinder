@@ -18,12 +18,13 @@ tgt_service_name: tgtd
 
 # Common yum packages
 cinder_distro_packages:
+  - iscsi-initiator-utils
+  - kmod-libs
+  - libxml2
   - nfs-utils
   - rpcbind
-  - kmod-libs
-  - zlib-devel
   - which
-  - iscsi-initiator-utils
+  - zlib-devel
 
 cinder_service_distro_packages:
   - openstack-cinder

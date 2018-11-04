@@ -19,12 +19,13 @@ tgt_service_name: tgtd
 
 # Common yum packages
 cinder_distro_packages:
-  - nfs-utils
-  - rpcbind
   - libkmod2
-  - which
-  - open-iscsi
   - libpython2_7-1_0
+  - libxml2
+  - nfs-utils
+  - open-iscsi
+  - rpcbind
+  - which
 
 cinder_service_distro_packages:
   - openstack-cinder
