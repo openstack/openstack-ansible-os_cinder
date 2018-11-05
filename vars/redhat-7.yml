@@ -24,7 +24,6 @@ cinder_distro_packages:
   - nfs-utils
   - rpcbind
   - which
-  - zlib-devel
 
 cinder_service_distro_packages:
   - openstack-cinder
@@ -40,6 +39,7 @@ cinder_devel_distro_packages:
   - kmod-devel
   - postgresql-devel
   - systemd-devel
+  - zlib-devel
 
 cinder_volume_distro_packages:
   - qemu-img-ev
