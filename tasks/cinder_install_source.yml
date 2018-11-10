@@ -134,6 +134,18 @@
         ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
         ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
 
+- name: Install optional pip packages
+  pip:
+    name: "{{ cinder_optional_oslomsg_amqp1_pip_packages }}"
+    state: "{{ cinder_pip_package_state }}"
+    virtualenv: "{{ cinder_bin | dirname }}"
+    virtualenv_site_packages: "no"
+  when: cinder_oslomsg_amqp1_enabled
+  register: install_optional_packages
+  until: install_optional_packages is success
+  retries: 5
+  delay: 2
+
 - name: Record the venv tag deployed
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"

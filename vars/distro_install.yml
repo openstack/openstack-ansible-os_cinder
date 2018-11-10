@@ -29,6 +29,9 @@ cinder_package_list: |-
   {% if cinder_developer_mode | bool %}
   {%   set _ = packages.extend(cinder_developer_mode_distro_packages) %}
   {% endif %}
+  {% if cinder_oslomsg_amqp1_enabled | bool %}
+  {%   set _ = packages.extend(cinder_oslomsg_amqp1_distro_packages) %}
+  {% endif %}
   {{ packages }}
 
 _cinder_bin: "/usr/bin"

@@ -62,4 +62,8 @@ cinder_lvm_volume_distro_packages:
   - tgt
   - thin-provisioning-tools
 
+cinder_oslomsg_amqp1_distro_packages:
+  - libsasl2-modules
+  - sasl2-bin
+
 cinder_uwsgi_bin: '/usr/bin'
