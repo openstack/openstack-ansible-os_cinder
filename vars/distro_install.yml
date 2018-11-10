@@ -26,6 +26,9 @@ cinder_package_list: |-
   {%     set _ = packages.extend(cinder_lvm_volume_distro_packages) %}
   {%   endif %}
   {% endif %}
+  {% if cinder_services['cinder-backup']['group'] in group_names %}
+  {%   set _ = packages.extend(cinder_backup_distro_packages) %}
+  {% endif %}
   {% if cinder_oslomsg_amqp1_enabled | bool %}
   {%   set _ = packages.extend(cinder_oslomsg_amqp1_distro_packages) %}
   {% endif %}

@@ -21,8 +21,6 @@ cinder_distro_packages:
   - iscsi-initiator-utils
   - kmod-libs
   - libxml2
-  - nfs-utils
-  - rpcbind
   - which
 
 cinder_service_distro_packages:
@@ -43,12 +41,20 @@ cinder_devel_distro_packages:
 
 cinder_volume_distro_packages:
   - qemu-img-ev
+  - iscsi-initiator-utils
+  - nfs-utils
+  - rpcbind
 
 cinder_lvm_volume_distro_packages:
   - device-mapper-event
   - lvm2
   - parted
   - targetcli
+
+cinder_backup_distro_packages:
+  - iscsi-initiator-utils
+  - nfs-utils
+  - rpcbind
 
 cinder_oslomsg_amqp1_distro_packages:
   - cyrus-sasl-lib
