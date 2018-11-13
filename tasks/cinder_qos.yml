@@ -33,7 +33,9 @@
     . {{ ansible_env.HOME }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for vtype in item.cinder_volume_types %}
-    {{ cinder_bin }}/openstack volume qos associate {{ item.name }} {{ vtype }}
+    if {{ cinder_bin }}/openstack volume type show "{{ vtype }}"; then
+      {{ cinder_bin }}/openstack volume qos associate {{ item.name }} {{ vtype }}
+    fi
     {% endfor %}
   args:
     executable: /bin/bash
