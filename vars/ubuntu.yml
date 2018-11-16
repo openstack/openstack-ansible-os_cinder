@@ -28,9 +28,6 @@ cinder_distro_packages:
   - libpq-dev
   - libssl-dev
   - libxslt1-dev
-  - nfs-common
-  - open-iscsi
-  - rpcbind
   - rsync
   - zlib1g
   - zlibc
@@ -54,6 +51,9 @@ cinder_developer_mode_distro_packages:
 
 cinder_volume_distro_packages:
   - qemu-utils
+  - open-iscsi
+  - nfs-common
+  - rpcbind
 
 cinder_lvm_volume_distro_packages:
   - dmeventd
@@ -61,6 +61,11 @@ cinder_lvm_volume_distro_packages:
   - parted
   - tgt
   - thin-provisioning-tools
+
+cinder_backup_distro_packages:
+  - open-iscsi
+  - nfs-common
+  - rpcbind
 
 cinder_oslomsg_amqp1_distro_packages:
   - libsasl2-modules
