@@ -628,6 +628,20 @@ the desired qos spec dictionary.
         consumer: front-end
         write_iops_sec: 100
 
+Configure cinder to create a private volume type
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, a define cinder-backend will create a public volume type.
+In order to create a private volume type, add the variable ``public``
+and set it to ``false``. If it is set to ``true`` or not set at all
+the volume type created will be public.
+
+.. code-block:: yaml
+
+    cinder_backends:
+      private_type:
+        public: false
+
 Shared storage and synchronized UID/GID
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
