@@ -78,6 +78,6 @@
     - "need_online_data_migrations"
     - "need_service_restart"
   when:
-        (install_packages | changed) or
+        (install_packages is changed) or
         ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
         ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
