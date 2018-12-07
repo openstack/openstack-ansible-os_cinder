@@ -93,6 +93,9 @@ enabled_backends={% for backend in cinder_backends|dictsort %}{{ backend.0 }}{% 
 {% for backend_section in cinder_backends|dictsort %}
 [{{ backend_section.0 }}]
 {% for key, value in (backend_section.1 | dictsort) if key not in ['extra_volume_types', 'shares'] %}
+{% if key == "volume_driver" and value == "cinder.volume.drivers.rbd.RBDDriver" %}
+backend_host="rbd:volumes"
+{% endif %}
 {{ key }}={{ value }}
 {% endfor %}
 
