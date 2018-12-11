@@ -72,3 +72,19 @@
     mode: "0440"
     owner: "root"
     group: "root"
+
+- name: Disable cinder-wsgi apache2 configuration
+  command: a2disconf cinder-wsgi
+  args:
+    removes: "/etc/apache2/conf-enabled/cinder-wsgi.conf"
+  when:
+    - cinder_install_method == 'distro'
+    - ansible_pkg_mgr == 'apt'
+    - "cinder_services['cinder-api']['group'] in group_names"
+  register: cinder_wsgi_conf_disable
+
+- name: Reload apache2
+  service:
+    name: apache2
+    state: reloaded
+  when: cinder_wsgi_conf_disable is changed
