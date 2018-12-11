@@ -54,16 +54,22 @@
     systemd_BlockIOAccounting: true
     systemd_MemoryAccounting: true
     systemd_TasksAccounting: true
-    systemd_services:
-      - service_name: "{{ service_var.service_name }}"
-        enabled: yes
-        state: started
-        execstarts: "{{ service_var.execstarts }}"
-        execreloads: "{{ service_var.execreloads | default([]) }}"
-        config_overrides: "{{ cinder_environment_overrides | combine(service_var.init_config_overrides) }}"
-  with_items: "{{ filtered_cinder_services }}"
-  loop_control:
-    loop_var: service_var
+    systemd_services: |-
+      {% set services = [] %}
+      {% for service in filtered_cinder_services %}
+      {%
+        set _ = service.update(
+          {
+            'enabled': 'yes',
+            'state': 'started',
+            'config_overrides': cinder_environment_overrides.update(service.init_config_overrides)
+          }
+        )
+      %}
+      {%   set _ = service.pop('init_config_overrides') -%}
+      {%   set _ = services.append(service) -%}
+      {% endfor %}
+      {{ services }}
   tags:
     - cinder-config
     - systemd-service
