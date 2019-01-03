@@ -371,6 +371,7 @@ cinder_rootwrap_conf_overrides: {}
 cinder_api_paste_ini_overrides: {}
 cinder_cinder_conf_overrides: {}
 cinder_api_uwsgi_ini_overrides: {}
+cinder_resource_filters_overrides: {}
 
 ## Set default cinder path in service units. The default override sets the
 ## execution path for the cinder service.
