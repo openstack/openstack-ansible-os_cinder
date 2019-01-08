@@ -14,6 +14,7 @@
 
 - project:
     templates:
+      - openstack-ansible-deploy-aio_metal-jobs
       - openstack-ansible-role-jobs
       - openstack-ansible-role-distro_install-jobs
       - check-requirements
