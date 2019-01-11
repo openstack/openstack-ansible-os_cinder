@@ -35,13 +35,16 @@
       dest: "/etc/cinder/rootwrap.conf"
       config_overrides: "{{ cinder_rootwrap_conf_overrides }}"
       config_type: "ini"
-    - src: "policy.json.j2"
-      dest: "/etc/cinder/policy.json-{{ cinder_venv_tag }}"
-      config_overrides: "{{ cinder_policy_overrides }}"
-      config_type: "json"
   notify:
     - Manage LB
     - Restart cinder services
+
+- name: Implement policy.json if there are overrides configured
+  copy:
+    content: "{{ cinder_policy_overrides | to_nice_json }}"
+    dest: "/etc/cinder/policy.json-{{ cinder_venv_tag }}"
+  when:
+    - cinder_policy_overrides != {}
 
 - name: Copy cinder configs
   copy:
