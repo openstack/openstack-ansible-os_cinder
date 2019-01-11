@@ -42,6 +42,16 @@
     group: "{{ cinder_system_group_name }}"
     mode: "0640"
     remote_src: yes
+  when:
+    - cinder_policy_overrides != {}
+  listen: Restart cinder services
+
+- name: Remove legacy policy.json file
+  file:
+    path: "/etc/cinder/policy.json"
+    state: absent
+  when:
+    - cinder_policy_overrides == {}
   listen: Restart cinder services
 
 - name: Start services
