@@ -41,7 +41,7 @@
     . {{ ansible_env.HOME }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     if ! {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type show "{{ item.key }}"; then
-      {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not item.value.public|default(True) %} --private {% endif %} "{{ item.key }}"
+      {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ item.key }}"
     fi
   args:
     executable: /bin/bash
@@ -54,7 +54,7 @@
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for evtype in item.value.extra_volume_types %}
       if ! {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type show "{{ evtype }}"; then
-        {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not item.value.public|default(True) %} --private {% endif %} "{{ evtype }}"
+        {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ evtype }}"
       fi
     {% endfor %}
   args:
