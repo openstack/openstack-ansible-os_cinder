@@ -13,6 +13,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE(cloudnull): This task is required to copy rootwrap filters that we need
+#                  and cinder does not provide by default.
+- name: Create aux cinder dir
+  file:
+    path: "/etc/cinder/rootwrap.d"
+    state: "directory"
+    owner: "root"
+    group: "root"
+
+- name: Generate cinder config
+  config_template:
+    src: "cinder.conf.j2"
+    dest: "/etc/cinder/cinder.conf"
+    owner: "root"
+    group: "{{ cinder_system_group_name }}"
+    mode: "0640"
+    config_overrides: "{{ cinder_cinder_conf_overrides }}"
+    config_type: "ini"
+  notify:
+    - Manage LB
+    - Restart cinder services
+  tags:
+    - cinder-config
+    - cinder-post-install
+
+# TODO(cloudnull): Once "master" OSA is using a recent pull for
+#                  cinder this task and templte can be removed.
 - name: Copy cinder configs
   config_template:
     src: "{{ item.src }}"
@@ -23,29 +50,71 @@
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
   with_items:
-    - src: "cinder.conf.j2"
-      dest: "/etc/cinder/cinder.conf"
-      config_overrides: "{{ cinder_cinder_conf_overrides }}"
-      config_type: "ini"
-    - src: "api-paste.ini.j2"
-      dest: "/etc/cinder/api-paste.ini"
-      config_overrides: "{{ cinder_api_paste_ini_overrides }}"
-      config_type: "ini"
     - src: "resource_filters.json.j2"
       dest: "/etc/cinder/resource_filters.json"
       config_overrides: "{{ cinder_resource_filters_overrides }}"
       config_type: "json"
-    - src: "rootwrap.conf.j2"
-      dest: "/etc/cinder/rootwrap.conf"
-      config_overrides: "{{ cinder_rootwrap_conf_overrides }}"
-      config_type: "ini"
-    - src: "policy.json.j2"
-      dest: "/etc/cinder/policy.json-{{ cinder_venv_tag }}"
-      config_overrides: "{{ cinder_policy_overrides }}"
-      config_type: "json"
   notify:
     - Manage LB
     - Restart cinder services
+  tags:
+    - cinder-config
+    - cinder-post-install
+
+- name: Implement policy.json if there are overrides configured
+  copy:
+    content: "{{ cinder_policy_overrides | to_nice_json }}"
+    dest: "/etc/cinder/policy.json"
+  when:
+    - cinder_policy_overrides != {}
+
+# NOTE(cloudnull): This is using "cp" instead of copy with a remote_source
+#                  because we only want to copy the original files once. and we
+#                  don't want to need multiple tasks.
+- name: Preserve original configuration file(s)
+  command: "cp {{ item.target_f }} {{ item.target_f }}.original"
+  args:
+    creates: "{{ item.target_f }}.original"
+  with_items: "{{ cinder_core_files }}"
+
+- name: Fetch override files
+  fetch:
+    src: "{{ item.target_f }}.original"
+    dest: "{{ item.tmp_f }}"
+    flat: yes
+  changed_when: false
+  with_items: "{{ cinder_core_files }}"
+  run_once: true
+
+- name: Copy common config
+  config_template:
+    src: "{{ item.tmp_f }}"
+    dest: "{{ item.target_f }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default(cinder_system_group_name) }}"
+    mode: "{{ item.mode | default('0640') }}"
+    config_overrides: "{{ item.config_overrides }}"
+    config_type: "{{ item.config_type }}"
+  with_items: "{{ cinder_core_files }}"
+  notify:
+    - Restart cinder services
+
+- name: Cleanup fetched temp files
+  file:
+    path: "{{ item.tmp_f }}"
+    state: absent
+  changed_when: false
+  delegate_to: localhost
+  with_items: "{{ cinder_core_files }}"
+
+# NOTE(cloudnull): This will ensure strong permissions on all rootwrap files.
+- name: Set rootwrap.d permissions
+  file:
+    path: "/etc/cinder/rootwrap.d"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    recurse: true
 
 - name: Ensure cinder tgt include
   lineinfile:

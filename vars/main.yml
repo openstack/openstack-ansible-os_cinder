@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+_cinder_rootwrap_conf_overrides:
+  DEFAULT:
+    filters_path: "/etc/cinder/rootwrap.d,/usr/share/cinder/rootwrap"
+    exec_dirs: "{{ cinder_bin }},/sbin,/usr/sbin,/bin,/usr/bin,/usr/local/bin,/usr/local/sbin"
+
 #
 # Compile a list of the services on a host based on whether
 # the host is in the host group and the service is enabled.
@@ -29,3 +34,23 @@ filtered_cinder_services: |-
   {%   endif %}
   {% endfor %}
   {{ services | sort(attribute='start_order') }}
+
+cinder_core_files:
+  - tmp_f: "/tmp/api-paste.ini"
+    target_f: "/etc/cinder/api-paste.ini"
+    config_overrides: "{{ cinder_api_paste_ini_overrides }}"
+    config_type: "ini"
+  - tmp_f: "/tmp/rootwrap.conf"
+    target_f: "/etc/cinder/rootwrap.conf"
+    config_overrides: "{{ _cinder_rootwrap_conf_overrides | combine(cinder_rootwrap_conf_overrides, recursive=True) }}"
+    config_type: "ini"
+    owner: "root"
+    group: "{{ cinder_system_group_name }}"
+    mode: "0640"
+  - tmp_f: "/tmp/resource_filters.json"
+    target_f: "/etc/cinder/resource_filters.json"
+    config_overrides: "{{ cinder_resource_filters_overrides }}"
+    config_type: "json"
+    owner: "root"
+    group: "{{ cinder_system_group_name }}"
+    mode: "0640"

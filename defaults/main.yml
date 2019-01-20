@@ -279,8 +279,8 @@ cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") 
 cinder_backend_rbd_inuse: '{{ (cinder_backends|default("")|to_json).find("cinder.volume.drivers.rbd.RBDDriver") != -1 }}'
 
 ## Policy vars
-# Provide a list of access controls to update the default policy.json with. These changes will be merged
-# with the access controls in the default policy.json. E.g.
+# Provide a list of access controls to merge with the default
+# access controls in the service code.
 #cinder_policy_overrides:
 #  "volume:create": ""
 #  "volume:delete": ""
