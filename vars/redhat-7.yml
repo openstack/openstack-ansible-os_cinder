@@ -47,6 +47,10 @@ cinder_volume_distro_packages_tools:
   - nfs-utils
   - rpcbind
 
+cinder_api_distro_packages: []
+
+cinder_scheduler_distro_packages: []
+
 cinder_lvm_volume_distro_packages:
   - device-mapper-event
   - lvm2
