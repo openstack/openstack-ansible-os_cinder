@@ -45,7 +45,9 @@ cinder_developer_mode_distro_packages:
   - pkg-config
   - systemd-devel
 
-cinder_volume_distro_packages:
+cinder_volume_distro_packages: []
+
+cinder_volume_distro_packages_tools:
   - qemu-tools
   - open-iscsi
   - nfs-utils

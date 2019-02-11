@@ -50,7 +50,9 @@ cinder_developer_mode_distro_packages:
   - git-core
   - libsystemd-dev
 
-cinder_volume_distro_packages:
+cinder_volume_distro_packages: []
+
+cinder_volume_distro_packages_tools:
   - qemu-utils
   - open-iscsi
   - nfs-common
