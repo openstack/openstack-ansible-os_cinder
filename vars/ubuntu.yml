@@ -50,7 +50,9 @@ cinder_devel_distro_packages:
   - libxslt1-dev
   - libsystemd-dev
 
-cinder_volume_distro_packages:
+cinder_volume_distro_packages: []
+
+cinder_volume_distro_packages_tools:
   - qemu-utils
   - open-iscsi
   - nfs-common

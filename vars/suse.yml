@@ -45,7 +45,9 @@ cinder_devel_distro_packages:
   - systemd-devel
   - zlib-devel
 
-cinder_volume_distro_packages:
+cinder_volume_distro_packages: []
+
+cinder_volume_distro_packages_tools:
   - qemu-tools
   - open-iscsi
   - nfs-utils
