@@ -150,3 +150,7 @@ token_cache_time = 300
 # if your memcached server is shared, use these settings to avoid cache poisoning
 memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcached_encryption_key }}
+
+[nova]
+interface = internal
+insecure = {{ keystone_service_internaluri_insecure | bool }}
