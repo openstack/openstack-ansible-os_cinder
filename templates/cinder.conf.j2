@@ -20,6 +20,12 @@ enable_v3_api = {{ cinder_enable_v3_api }}
 
 {% if cinder_services['cinder-volume']['group'] in group_names %}
 {% if cinder_service_backup_program_enabled == true %}
+
+## Cinder Scheduler
+{% if cinder_scheduler_default_filters is defined %}
+scheduler_default_filters={{ cinder_scheduler_default_filters | join(',') }}
+{% endif %}
+
 ## Cinder Backup
 backup_driver = {{ cinder_service_backup_driver }}
 backup_metadata_version = {{ cinder_service_backup_metadata_version }}
