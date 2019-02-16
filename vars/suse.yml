@@ -26,6 +26,10 @@ cinder_distro_packages:
 
 cinder_service_distro_packages:
   - openstack-cinder
+  - openstack-cinder-api
+  - openstack-cinder-backup
+  - openstack-cinder-scheduler
+  - openstack-cinder-volume
   - python-openstackclient
   - python-cursive
   - python-shade
@@ -41,20 +45,13 @@ cinder_devel_distro_packages:
   - systemd-devel
   - zlib-devel
 
-cinder_volume_distro_packages:
-  - openstack-cinder-volume
+cinder_volume_distro_packages: []
 
 cinder_volume_distro_packages_tools:
   - qemu-tools
   - open-iscsi
   - nfs-utils
   - rpcbind
-
-cinder_api_distro_packages:
-  - openstack-cinder-api
-
-cinder_scheduler_distro_packages:
-  - openstack-cinder-scheduler
 
 cinder_lvm_volume_distro_packages:
   - device-mapper
@@ -63,7 +60,6 @@ cinder_lvm_volume_distro_packages:
   - tgt
 
 cinder_backup_distro_packages:
-  - openstack-cinder-backup
   - open-iscsi
   - nfs-utils
   - rpcbind
