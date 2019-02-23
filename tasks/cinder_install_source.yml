@@ -42,7 +42,7 @@
     venv_install_destination_path: "{{ cinder_bin | dirname }}"
     venv_pip_install_args: "{{ cinder_pip_install_args }}"
     venv_pip_packages: >-
-      {{ cinder_pip_packages +
+      {{ cinder_pip_packages | union(cinder_user_pip_packages) +
          (cinder_oslomsg_amqp1_enabled | bool) | ternary(cinder_optional_oslomsg_amqp1_pip_packages, []) }}
     venv_facts_when_changed:
       - section: "cinder"

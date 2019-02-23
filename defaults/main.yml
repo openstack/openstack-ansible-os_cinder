@@ -304,6 +304,9 @@ cinder_pip_packages:
   - systemd-python
   - uwsgi
 
+# Specific pip packages provided by the user
+cinder_user_pip_packages: []
+
 cinder_optional_oslomsg_amqp1_pip_packages:
   - oslo.messaging[amqp1]
 
