@@ -75,7 +75,6 @@
 - name: Run the systemd service role
   include_role:
     name: systemd_service
-    private: true
   vars:
     systemd_service_enabled: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary(true, false) }}"
     systemd_service_restart_changed: false
