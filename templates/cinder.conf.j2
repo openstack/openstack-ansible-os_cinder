@@ -17,13 +17,13 @@ auth_strategy = {{ cinder_auth_strategy }}
 ## Cinder API's enabled
 enable_v2_api = {{ cinder_enable_v2_api }}
 
-{% if cinder_services['cinder-volume']['group'] in group_names %}
-{% if cinder_service_backup_program_enabled == true %}
-
 ## Cinder Scheduler
 {% if cinder_scheduler_default_filters is defined %}
 scheduler_default_filters={{ cinder_scheduler_default_filters | join(',') }}
 {% endif %}
+
+{% if cinder_services['cinder-volume']['group'] in group_names %}
+{% if cinder_service_backup_program_enabled == true %}
 
 ## Cinder Backup
 backup_driver = {{ cinder_service_backup_driver }}
