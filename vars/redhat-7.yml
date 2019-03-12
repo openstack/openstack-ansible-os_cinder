@@ -37,7 +37,9 @@ cinder_developer_mode_distro_packages:
   - git
   - systemd-devel
 
-cinder_volume_distro_packages:
+cinder_volume_distro_packages: []
+
+cinder_volume_distro_packages_tools:
   - qemu-img-ev
   - iscsi-initiator-utils
   - nfs-utils
