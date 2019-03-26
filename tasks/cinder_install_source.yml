@@ -13,37 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO(odyssey4me):
-# This can be simplified once all the roles are using
-# python_venv_build. We can then switch to using a
-# set of constraints in pip.conf inside the venv,
-# perhaps prepared by giving a giving a list of
-# constraints to the role.
-- name: Create developer mode constraint file
-  copy:
-    dest: "/opt/developer-pip-constraints.txt"
-    content: |
-      {% for item in cinder_developer_constraints %}
-      {{ item }}
-      {% endfor %}
-  when: cinder_developer_mode | bool
-
-- name: Ensure remote wheel building is disabled in developer mode
-  set_fact:
-    venv_build_host: "{{ inventory_hostname }}"
-  when:
-    - cinder_developer_mode | bool
-
 - name: Install the python venv
-  include_role:
+  import_role:
     name: "python_venv_build"
   vars:
+    venv_build_constraints: "{{ cinder_git_constraints }}"
     venv_build_distro_package_list: "{{ cinder_devel_distro_packages }}"
     venv_install_destination_path: "{{ cinder_bin | dirname }}"
     venv_pip_install_args: "{{ cinder_pip_install_args }}"
     venv_pip_packages: >-
-      {{ cinder_pip_packages | union(cinder_user_pip_packages) +
-         (cinder_oslomsg_amqp1_enabled | bool) | ternary(cinder_optional_oslomsg_amqp1_pip_packages, []) }}
+      {{ cinder_pip_packages |
+           union(cinder_user_pip_packages) |
+             union(((cinder_oslomsg_amqp1_enabled | bool) | ternary(cinder_optional_oslomsg_amqp1_pip_packages, []))) }}
     venv_facts_when_changed:
       - section: "cinder"
         option: "need_service_restart"

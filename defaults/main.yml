@@ -29,29 +29,16 @@ cinder_install_method: "source"
 
 cinder_git_repo: https://git.openstack.org/openstack/cinder
 cinder_git_install_branch: master
-cinder_developer_mode: false
-cinder_developer_constraints:
+cinder_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+cinder_git_constraints:
   - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
+  - "--constraint {{ cinder_upper_constraints_url }}"
 
-# TODO(odyssey4me):
-# This can be simplified once all the roles are using
-# python_venv_build. We can then switch to using a
-# set of constraints in pip.conf inside the venv,
-# perhaps prepared by giving a giving a list of
-# constraints to the role.
-cinder_pip_install_args: >-
-  {{ cinder_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
-  {{ pip_install_options | default('') }}
+cinder_pip_install_args: "{{ pip_install_options | default('') }}"
 
 # Name of the virtual env to deploy into
 cinder_venv_tag: "{{ venv_tag | default('untagged') }}"
 cinder_bin: "{{ _cinder_bin }}"
-
-# venv_download, even when true, will use the fallback method of building the
-# venv from scratch if the venv download fails.
-cinder_venv_download: "{{ not cinder_developer_mode | bool }}"
-cinder_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/cinder.tgz
 
 # Enable/Disable Barbican
 cinder_barbican_enabled: False
