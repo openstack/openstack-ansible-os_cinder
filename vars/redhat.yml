@@ -28,8 +28,6 @@ cinder_service_distro_packages:
   - python-openstackclient
   - python2-shade
   - systemd-python
-  - uwsgi
-  - uwsgi-plugin-python
 
 cinder_devel_distro_packages:
   - git
@@ -38,6 +36,10 @@ cinder_devel_distro_packages:
   - postgresql-devel
   - systemd-devel
   - zlib-devel
+
+cinder_api_distro_packages:
+  - uwsgi
+  - uwsgi-plugin-python
 
 cinder_volume_distro_packages: []
 
