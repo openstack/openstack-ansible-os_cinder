@@ -30,16 +30,11 @@ cinder_distro_packages:
   - zlibc
 
 cinder_service_distro_packages:
-  - cinder-api
-  - cinder-backup
-  - cinder-scheduler
-  - cinder-volume
+  - python3-cinder
   - python-openstackclient
   - python-shade
   - python-systemd
   - python3-systemd
-  - uwsgi
-  - uwsgi-plugin-python
 
 cinder_devel_distro_packages:
   - git-core
@@ -49,6 +44,10 @@ cinder_devel_distro_packages:
   - libssl-dev
   - libxslt1-dev
   - libsystemd-dev
+
+cinder_api_distro_packages:
+  - uwsgi
+  - uwsgi-plugin-python3
 
 cinder_volume_distro_packages: []
 
