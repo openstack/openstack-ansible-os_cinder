@@ -139,7 +139,18 @@
   tags:
     - cinder-config
 
-- import_tasks: cinder_service_setup.yml
+- include_tasks: service_setup.yml
+  vars:
+    _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
+    _service_in_ldap: "{{ cinder_service_in_ldap }}"
+    _service_setup_host: "{{ cinder_service_setup_host }}"
+    _service_setup_host_python_interpreter: "{{ cinder_service_setup_host_python_interpreter }}"
+    _service_user_name: "{{ cinder_service_user_name }}"
+    _service_user_password: "{{ cinder_service_password }}"
+    _service_project_name: "{{ cinder_service_project_name }}"
+    _service_role_name: "{{ cinder_service_role_name }}"
+    _service_endpoints: "{{ cinder_service_endpoints }}"
+    _service_catalog: "{{ cinder_service_catalog }}"
   when:
     - "groups['cinder_api'] | length > 0"
     - "cinder_services['cinder-api']['group'] in group_names"
