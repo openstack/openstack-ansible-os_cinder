@@ -40,18 +40,18 @@
   tags:
     - always
 
-- include: cinder_lvm_config.yml
+- import_tasks: cinder_lvm_config.yml
   when:
     - "cinder_services['cinder-volume']['group'] in group_names"
     - "cinder_backend_lvm_inuse | bool"
   tags:
     - cinder-config
 
-- include_tasks: cinder_pre_install.yml
+- import_tasks: cinder_pre_install.yml
   tags:
     - cinder-install
 
-- include_tasks: cinder_install.yml
+- import_tasks: cinder_install.yml
   tags:
     - cinder-install
 
@@ -62,18 +62,18 @@
   tags:
     - cinder-config
 
-- include_tasks: cinder_cleanup_old_facts.yml
+- import_tasks: cinder_cleanup_old_facts.yml
   when:
     - "'need_db_sync' in ansible_local['openstack_ansible']['cinder']"
   tags:
     - cinder-config
 
-- include_tasks: cinder_post_install.yml
+- import_tasks: cinder_post_install.yml
   tags:
     - cinder-config
 
 - name: Run the systemd service role
-  include_role:
+  import_role:
     name: systemd_service
   vars:
     systemd_service_enabled: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary(true, false) }}"
@@ -112,7 +112,7 @@
     - common-mq
     - cinder-config
 
-- include_tasks: cinder_db_setup.yml
+- import_tasks: cinder_db_setup.yml
   when:
     - "groups['cinder_api'] | length > 0"
     - "cinder_services['cinder-api']['group'] in group_names"
@@ -120,11 +120,11 @@
   tags:
     - cinder-config
 
-- include_tasks: cinder_uwsgi.yml
+- import_tasks: cinder_uwsgi.yml
   tags:
     - cinder-config
 
-- include_tasks: cinder_service_setup.yml
+- import_tasks: cinder_service_setup.yml
   when:
     - "groups['cinder_api'] | length > 0"
     - "cinder_services['cinder-api']['group'] in group_names"
@@ -133,7 +133,7 @@
     - cinder-config
 
 - name: Include ceph_client role
-  include_role:
+  import_role:
     name: ceph_client
   vars:
     openstack_service_system_user: "{{ cinder_system_user_name }}"
@@ -163,7 +163,7 @@
 - name: Flush handlers
   meta: flush_handlers
 
-- include_tasks: cinder_backends.yml
+- import_tasks: cinder_backends.yml
   when:
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
     - "cinder_services['cinder-api']['group'] in group_names"
