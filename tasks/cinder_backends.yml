@@ -28,7 +28,7 @@
 # we should do that and use the delegation to the service setup host
 # so that we can remove the openrc file from the target host.
 - name: Implement openrc/clouds.yaml
-  include_role:
+  import_role:
     name: "openstack_openrc"
 
 - name: Create singular cinder_backends variable for all hosts
@@ -62,7 +62,7 @@
   with_dict: "{{ _cinder_backends|default({}) }}"
   when: item.value.extra_volume_types is defined
 
-- include_tasks: cinder_qos.yml
+- import_tasks: cinder_qos.yml
   when: cinder_qos_specs is defined
   tags:
     - cinder-qos

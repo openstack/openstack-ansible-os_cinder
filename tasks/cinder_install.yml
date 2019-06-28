@@ -37,11 +37,11 @@
   delay: 2
 
 - name: Install cinder packages from PIP
-  include_tasks: cinder_install_source.yml
+  import_tasks: cinder_install_source.yml
   when: cinder_install_method == 'source'
 
 - name: Run the systemd service role
-  include_role:
+  import_role:
     name: systemd_service
   vars:
     systemd_user_name: "{{ cinder_system_user_name }}"
