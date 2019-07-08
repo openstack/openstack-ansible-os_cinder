@@ -280,7 +280,7 @@ cinder_backend_rbd_inuse: '{{ (cinder_backends|default("")|to_json).find("cinder
 #  "volume:delete": ""
 
 # Comma separated list of Glance API servers
-cinder_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_interalurl | default('http://localhost')) | urlsplit('netloc') }}"
+cinder_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_internalurl | default('http://localhost')) | urlsplit('netloc') }}"
 
 cinder_service_in_ldap: false
 
