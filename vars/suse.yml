@@ -20,22 +20,16 @@ tgt_service_name: tgtd
 # Common yum packages
 cinder_distro_packages:
   - libkmod2
-  - libpython2_7-1_0
-  - libxml2
-  - which
+  - libxslt1
 
 cinder_service_distro_packages:
-  - openstack-cinder
-  - openstack-cinder-api
-  - openstack-cinder-backup
   - openstack-cinder-scheduler
-  - openstack-cinder-volume
   - python-openstackclient
-  - python-cursive
   - python-shade
   - python-systemd
 
 cinder_api_distro_packages:
+  - openstack-cinder-api
   - uwsgi
   - uwsgi-python
 
@@ -47,7 +41,8 @@ cinder_devel_distro_packages:
   - systemd-devel
   - zlib-devel
 
-cinder_volume_distro_packages: []
+cinder_volume_distro_packages:
+  - openstack-cinder-volume
 
 cinder_volume_distro_packages_tools:
   - qemu-tools
@@ -62,6 +57,7 @@ cinder_lvm_volume_distro_packages:
   - tgt
 
 cinder_backup_distro_packages:
+  - openstack-cinder-backup
   - open-iscsi
   - nfs-utils
   - rpcbind
