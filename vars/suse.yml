@@ -34,6 +34,8 @@ cinder_service_distro_packages:
   - python-cursive
   - python-shade
   - python-systemd
+
+cinder_api_distro_packages:
   - uwsgi
   - uwsgi-python
 

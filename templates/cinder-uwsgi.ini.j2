@@ -5,6 +5,9 @@ gid = {{ cinder_system_group_name }}
 {% if cinder_install_method == 'source' %}
 virtualenv = /openstack/venvs/cinder-{{ cinder_venv_tag }}
 {% endif %}
+{% if cinder_install_method == 'distro' and (ansible_os_family | lower) == 'debian' %}
+plugin = python3
+{% endif %}
 wsgi-file = {{ cinder_bin }}/{{ item.wsgi_name }}
 http = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
 
