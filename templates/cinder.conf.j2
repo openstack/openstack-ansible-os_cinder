@@ -14,6 +14,10 @@ rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_config = /etc/cinder/api-paste.ini
 auth_strategy = {{ cinder_auth_strategy }}
 
+{% if cinder_backend_rbd_inuse | bool %}
+cluster = ceph
+{% endif %}
+
 ## Cinder Scheduler
 {% if cinder_scheduler_default_filters is defined %}
 scheduler_default_filters={{ cinder_scheduler_default_filters | join(',') }}
@@ -101,9 +105,6 @@ allowed_direct_url_schemes = cinder
 {% for backend_section in cinder_backends|dictsort %}
 [{{ backend_section.0 }}]
 {% for key, value in (backend_section.1 | dictsort) if key not in ['extra_volume_types', 'shares'] %}
-{% if key == "volume_driver" and value == "cinder.volume.drivers.rbd.RBDDriver" %}
-backend_host="rbd:volumes"
-{% endif %}
 {{ key }}={{ value }}
 {% endfor %}
 
