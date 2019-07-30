@@ -148,6 +148,7 @@
     _service_project_name: "{{ cinder_service_project_name }}"
     _service_endpoints: "{{ cinder_service_endpoints }}"
     _service_catalog: "{{ cinder_service_catalog }}"
+    _service_region: "{{ cinder_service_region }}"
     _service_users:
       - name: "{{ cinder_service_user_name }}"
         password: "{{ cinder_service_password }}"
