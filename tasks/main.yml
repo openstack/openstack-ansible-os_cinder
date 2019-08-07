@@ -139,7 +139,7 @@
   tags:
     - cinder-config
 
-- include_tasks: service_setup.yml
+- import_tasks: service_setup.yml
   vars:
     _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
     _service_in_ldap: "{{ cinder_service_in_ldap }}"
@@ -160,7 +160,7 @@
   tags:
     - cinder-config
 
-- name: Include ceph_client role
+- name: Import ceph_client role
   import_role:
     name: ceph_client
   vars:
