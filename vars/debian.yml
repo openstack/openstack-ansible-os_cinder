@@ -45,9 +45,7 @@ cinder_devel_distro_packages:
   - libxslt1-dev
   - libsystemd-dev
 
-cinder_api_distro_packages:
-  - uwsgi
-  - uwsgi-plugin-python3
+cinder_api_distro_packages: []
 
 cinder_volume_distro_packages: []
 
@@ -72,5 +70,3 @@ cinder_backup_distro_packages:
 cinder_oslomsg_amqp1_distro_packages:
   - libsasl2-modules
   - sasl2-bin
-
-cinder_uwsgi_bin: '/usr/bin'

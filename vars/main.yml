@@ -28,12 +28,34 @@ filtered_cinder_services: |-
   {% for key, value in cinder_services.items() %}
   {%   if (value['group'] in group_names) and
           (('condition' not in value) or
-           ('condition' in value and value['condition'])) %}
+           ('condition' in value and value['condition'])) and
+           not ('wsgi_app' in value and value['wsgi_app']) %}
   {%     set _ = value.update({'service_key': key}) %}
   {%     set _ = services.append(value) %}
   {%   endif %}
   {% endfor %}
   {{ services | sort(attribute='start_order') }}
+
+uwsgi_cinder_services: |-
+  {% set services = {} %}
+  {% for key, value in cinder_services.items() %}
+  {%   if (value['group'] in group_names) and
+         (('condition' not in value) or ('condition' in value and value['condition']))
+         and ('wsgi_app' in value and value['wsgi_app']) %}
+  {%     set _ = value.update(
+            {
+             'wsgi_path':  cinder_bin ~ '/' ~ value.wsgi_name,
+             'wsgi_venv': ((cinder_install_method == 'source') | ternary(cinder_bin | dirname, None)),
+             'uwsgi_uid': cinder_system_user_name,
+             'uwsgi_guid': cinder_system_group_name,
+             'uwsgi_processes': cinder_wsgi_processes,
+             'uwsgi_threads': cinder_wsgi_threads
+           }
+         ) %}
+  {%     set _ = services.update({key: value}) %}
+  {%   endif %}
+  {% endfor %}
+  {{ services }}
 
 cinder_core_files:
   - tmp_f: "/tmp/api-paste.ini"
