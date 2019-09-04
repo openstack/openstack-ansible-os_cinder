@@ -25,16 +25,18 @@ cinder_package_list: |-
   {% endif %}
   {% if cinder_services['cinder-volume']['group'] in group_names %}
   {%   set _ = packages.extend(cinder_volume_distro_packages) %}
+  {%   set _ = packages.extend(cinder_volume_service_distro_packages) %}
   {%   if cinder_backend_lvm_inuse | bool %}
   {%     set _ = packages.extend(cinder_lvm_volume_distro_packages) %}
   {%   endif %}
   {% endif %}
   {% if cinder_services['cinder-backup']['group'] in group_names %}
   {%   set _ = packages.extend(cinder_backup_distro_packages) %}
+  {%   set _ = packages.extend(cinder_backup_service_distro_packages) %}
   {% endif %}
   {% if cinder_oslomsg_amqp1_enabled | bool %}
   {%   set _ = packages.extend(cinder_oslomsg_amqp1_distro_packages) %}
   {% endif %}
-  {{ packages }}
+  {{ packages | unique }}
 
 _cinder_bin: "/usr/bin"

@@ -49,10 +49,12 @@ cinder_api_distro_packages:
   - uwsgi
   - uwsgi-plugin-python3
 
-cinder_volume_distro_packages: []
+cinder_volume_service_distro_packages: []
 
 cinder_volume_distro_packages_tools:
   - qemu-utils
+
+cinder_volume_distro_packages:
   - open-iscsi
   - nfs-common
   - rpcbind
@@ -63,6 +65,8 @@ cinder_lvm_volume_distro_packages:
   - parted
   - tgt
   - thin-provisioning-tools
+
+cinder_backup_service_distro_packages: []
 
 cinder_backup_distro_packages:
   - open-iscsi

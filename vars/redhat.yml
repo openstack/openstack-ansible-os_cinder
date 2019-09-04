@@ -41,10 +41,12 @@ cinder_api_distro_packages:
   - uwsgi
   - uwsgi-plugin-python
 
-cinder_volume_distro_packages: []
+cinder_volume_service_distro_packages: []
 
 cinder_volume_distro_packages_tools:
   - "qemu-img{% if ansible_distribution_major_version|int <= 7 %}-ev{% endif %}"
+
+cinder_volume_distro_packages:
   - iscsi-initiator-utils
   - nfs-utils
   - rpcbind
@@ -54,6 +56,8 @@ cinder_lvm_volume_distro_packages:
   - lvm2
   - parted
   - targetcli
+
+cinder_backup_service_distro_packages: []
 
 cinder_backup_distro_packages:
   - iscsi-initiator-utils

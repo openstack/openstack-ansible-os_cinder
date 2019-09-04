@@ -41,11 +41,13 @@ cinder_devel_distro_packages:
   - systemd-devel
   - zlib-devel
 
-cinder_volume_distro_packages:
+cinder_volume_service_distro_packages:
   - openstack-cinder-volume
 
 cinder_volume_distro_packages_tools:
   - qemu-tools
+
+cinder_volume_distro_packages:
   - open-iscsi
   - nfs-utils
   - rpcbind
@@ -56,8 +58,10 @@ cinder_lvm_volume_distro_packages:
   - parted
   - tgt
 
-cinder_backup_distro_packages:
+cinder_backup_service_distro_packages:
   - openstack-cinder-backup
+
+cinder_backup_distro_packages:
   - open-iscsi
   - nfs-utils
   - rpcbind
