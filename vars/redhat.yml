@@ -37,9 +37,7 @@ cinder_devel_distro_packages:
   - systemd-devel
   - zlib-devel
 
-cinder_api_distro_packages:
-  - uwsgi
-  - uwsgi-plugin-python
+cinder_api_distro_packages: []
 
 cinder_volume_service_distro_packages: []
 
@@ -68,5 +66,3 @@ cinder_oslomsg_amqp1_distro_packages:
   - cyrus-sasl-lib
   - cyrus-sasl-plain
   - cyrus-sasl-md5
-
-cinder_uwsgi_bin: '/usr/sbin'

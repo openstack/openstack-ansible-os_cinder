@@ -30,8 +30,6 @@ cinder_service_distro_packages:
 
 cinder_api_distro_packages:
   - openstack-cinder-api
-  - uwsgi
-  - uwsgi-python
 
 cinder_devel_distro_packages:
   - git-core
@@ -70,5 +68,3 @@ cinder_oslomsg_amqp1_distro_packages:
   - cyrus-sasl
   - cyrus-sasl-plain
   - cyrus-sasl-digestmd5
-
-cinder_uwsgi_bin: '/usr/sbin'

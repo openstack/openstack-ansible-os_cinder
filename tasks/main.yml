@@ -135,9 +135,15 @@
   tags:
     - cinder-config
 
-- import_tasks: cinder_uwsgi.yml
+- name: Import uwsgi role
+  import_role:
+    name: uwsgi
+  vars:
+    uwsgi_services: "{{ uwsgi_cinder_services }}"
+    uwsgi_install_method: "{{ cinder_install_method }}"
   tags:
     - cinder-config
+    - uwsgi
 
 - import_tasks: service_setup.yml
   vars:
