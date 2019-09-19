@@ -24,9 +24,8 @@ cinder_distro_packages:
 
 cinder_service_distro_packages:
   - openstack-cinder-scheduler
-  - python-openstackclient
-  - python-shade
-  - python-systemd
+  - python3-openstackclient
+  - python3-shade
 
 cinder_api_distro_packages:
   - openstack-cinder-api
