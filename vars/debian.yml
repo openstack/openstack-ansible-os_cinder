@@ -31,9 +31,8 @@ cinder_distro_packages:
 
 cinder_service_distro_packages:
   - python3-cinder
-  - python-openstackclient
-  - python-shade
-  - python-systemd
+  - python3-openstackclient
+  - python3-shade
   - python3-systemd
 
 cinder_devel_distro_packages:
