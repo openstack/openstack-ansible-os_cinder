@@ -28,9 +28,9 @@ cinder_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_p
 cinder_install_method: "source"
 cinder_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
 
-cinder_git_repo: https://git.openstack.org/openstack/cinder
+cinder_git_repo: https://opendev.org/openstack/cinder
 cinder_git_install_branch: master
-cinder_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+cinder_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 cinder_git_constraints:
   - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
   - "--constraint {{ cinder_upper_constraints_url }}"
