@@ -294,6 +294,7 @@ cinder_pip_packages:
   - keystonemiddleware
   - osprofiler
   - PyMySQL
+  - pymemcache
   - python-openstackclient
   - python-memcached
   - systemd-python
@@ -385,3 +386,5 @@ cinder_environment_overrides:
     Environment: "PATH={{ cinder_bin }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 _UUID_regex: "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}"
+
+cinder_memcached_servers: "{{ memcached_servers }}"
