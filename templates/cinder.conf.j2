@@ -14,8 +14,8 @@ rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_config = /etc/cinder/api-paste.ini
 auth_strategy = {{ cinder_auth_strategy }}
 
-{% if cinder_backend_rbd_inuse | bool %}
-cluster = ceph
+{% if cinder_active_active_cluster | bool %}
+cluster = {{ cinder_active_active_cluster_name }}
 {% endif %}
 
 ## Cinder Scheduler
