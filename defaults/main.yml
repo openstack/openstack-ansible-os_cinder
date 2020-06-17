@@ -273,6 +273,10 @@ cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") 
 # cinder_backend_rbd_inuse: True if the current host has an rbd backend
 cinder_backend_rbd_inuse: '{{ (cinder_backends|default("")|to_json).find("cinder.volume.drivers.rbd.RBDDriver") != -1 }}'
 
+# Set to false if you want to explicitly disable active/active cluster
+cinder_active_active_cluster: "{{ cinder_backend_rbd_inuse }}"
+cinder_active_active_cluster_name: ceph
+
 ## Policy vars
 # Provide a list of access controls to merge with the default
 # access controls in the service code.
