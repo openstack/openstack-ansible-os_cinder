@@ -25,9 +25,7 @@ cinder_distro_packages:
 
 cinder_service_distro_packages:
   - openstack-cinder
-  - python-openstackclient
-  - python2-shade
-  - systemd-python
+  - "{{ ansible_distribution_major_version is version('8', '<') | ternary('systemd-python', 'python3-systemd') }}"
 
 cinder_devel_distro_packages:
   - git
