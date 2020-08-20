@@ -46,6 +46,9 @@
     - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | list)[0]"
   vars:
     _oslodb_setup_host: "{{ cinder_db_setup_host }}"
+    _oslodb_ansible_python_interpreter: "{{ cinder_db_setup_python_interpreter }}"
+    _oslodb_setup_endpoint: "{{ cinder_galera_address }}"
+    _oslodb_setup_port: "{{ cinder_galera_port }}"
     _oslodb_databases:
       - name: "{{ cinder_galera_database }}"
         users:
