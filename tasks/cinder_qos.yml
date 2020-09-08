@@ -17,13 +17,14 @@
   shell: |
     . {{ ansible_env.HOME }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
-    {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume qos list --format value --column Name | grep -x {{ item.name }} || \
-    {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume qos create {{ item.name }} \
+    {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos list --format value --column Name | grep -x {{ item.name }} || \
+    {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos create {{ item.name }} \
     --consumer {{ item.options.consumer }}\
     {% for k,v in item.options.items() %} --property {{ k }}={{ v }}{% endfor %}
   args:
     executable: /bin/bash
   with_items: "{{ cinder_qos_specs }}"
+  delegate_to: "{{ cinder_service_setup_host }}"
   changed_when: false
   tags:
     - cinder-qos
@@ -33,13 +34,14 @@
     . {{ ansible_env.HOME }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for vtype in item.cinder_volume_types %}
-    if {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume type show "{{ vtype }}"; then
-      {{ cinder_bin }}/openstack ${CLI_OPTIONS} volume qos associate {{ item.name }} {{ vtype }}
+    if {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ vtype }}"; then
+      {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos associate {{ item.name }} {{ vtype }}
     fi
     {% endfor %}
   args:
     executable: /bin/bash
   with_items: "{{ cinder_qos_specs }}"
+  delegate_to: "{{ cinder_service_setup_host }}"
   when:
     - item.cinder_volume_types is defined
   tags:
