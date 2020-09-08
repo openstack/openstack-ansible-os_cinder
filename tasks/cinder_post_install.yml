@@ -111,12 +111,13 @@
   with_items: "{{ cinder_core_files }}"
 
 # NOTE(cloudnull): This will ensure strong permissions on all rootwrap files.
+# NOTE(noonedeadpunk): X keeps execute permissions for rootwrap.d itself.
 - name: Set rootwrap.d permissions
   file:
     path: "/etc/cinder/rootwrap.d"
     owner: "root"
     group: "root"
-    mode: "0640"
+    mode: "u=rwX,g=rX,o="
     recurse: true
 
 - name: Ensure cinder tgt include
