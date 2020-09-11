@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+_cinder_is_first_play_host: "{{ (cinder_services['cinder-api']['group'] in group_names and inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | first) | bool }}"
+
 _cinder_rootwrap_conf_overrides:
   DEFAULT:
     filters_path: "/etc/cinder/rootwrap.d,/usr/share/cinder/rootwrap"

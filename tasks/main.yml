@@ -42,8 +42,7 @@
 
 - import_tasks: db_setup.yml
   when:
-    - "cinder_services['cinder-api']['group'] in group_names"
-    - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | list)[0]"
+    - _cinder_is_first_play_host
   vars:
     _oslodb_setup_host: "{{ cinder_db_setup_host }}"
     _oslodb_databases:
@@ -57,8 +56,7 @@
 
 - import_tasks: mq_setup.yml
   when:
-    - "cinder_services['cinder-api']['group'] in group_names"
-    - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
+    - _cinder_is_first_play_host
   vars:
     _oslomsg_rpc_setup_host: "{{ cinder_oslomsg_rpc_setup_host }}"
     _oslomsg_rpc_userid: "{{ cinder_oslomsg_rpc_userid }}"
@@ -129,9 +127,7 @@
 
 - import_tasks: cinder_db_sync.yml
   when:
-    - "groups['cinder_api'] | length > 0"
-    - "cinder_services['cinder-api']['group'] in group_names"
-    - "inventory_hostname == ((groups['cinder_api'] | intersect(ansible_play_hosts)) | list)[0]"
+    - _cinder_is_first_play_host
   tags:
     - cinder-config
 
@@ -160,9 +156,7 @@
         password: "{{ cinder_service_password }}"
         role: "{{ cinder_service_role_name }}"
   when:
-    - "groups['cinder_api'] | length > 0"
-    - "cinder_services['cinder-api']['group'] in group_names"
-    - "inventory_hostname == ((groups['cinder_api'] | intersect(ansible_play_hosts)) | list)[0]"
+    - "_cinder_is_first_play_host"
   tags:
     - cinder-config
 
@@ -200,7 +194,6 @@
 - import_tasks: cinder_backends.yml
   when:
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
-    - "cinder_services['cinder-api']['group'] in group_names"
-    - "inventory_hostname == ((groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | list)[-1]"
+    - "_cinder_is_first_play_host"
   tags:
     - cinder-config
