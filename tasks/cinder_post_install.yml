@@ -84,7 +84,7 @@
     flat: yes
   changed_when: false
   with_items: "{{ cinder_core_files }}"
-  when: _cinder_is_first_play_host
+  run_once: true
 
 - name: Copy common config
   config_template:
