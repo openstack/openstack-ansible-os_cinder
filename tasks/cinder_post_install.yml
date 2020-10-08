@@ -34,6 +34,7 @@
   notify:
     - Manage LB
     - Restart cinder services
+    - Restart uwsgi services
   tags:
     - cinder-config
     - cinder-post-install
@@ -57,6 +58,7 @@
   notify:
     - Manage LB
     - Restart cinder services
+    - Restart uwsgi services
   tags:
     - cinder-config
     - cinder-post-install
@@ -98,6 +100,7 @@
   with_items: "{{ cinder_core_files }}"
   notify:
     - Restart cinder services
+    - Restart uwsgi services
 
 - name: Cleanup fetched temp files
   file:
