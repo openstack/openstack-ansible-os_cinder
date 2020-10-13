@@ -19,6 +19,7 @@ tgt_service_name: tgtd
 # Common yum packages
 cinder_distro_packages:
   - iscsi-initiator-utils
+  - rsync
   - kmod-libs
   - libxml2
   - which
