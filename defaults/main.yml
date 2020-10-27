@@ -210,7 +210,7 @@ cinder_swift_catalog_info: "object-store:swift:internalURL"
 
 ## Cap the maximun number of threads / workers when a user value is unspecified.
 cinder_osapi_volume_workers_max: 16
-cinder_osapi_volume_workers: "{{ [ (ansible_processor_vcpus|default(2)) // 2, cinder_osapi_volume_workers_max] | min }}"
+cinder_osapi_volume_workers: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, cinder_osapi_volume_workers_max] | min }}"
 
 ## Cinder iscsi
 cinder_target_helper_mapping:
