@@ -142,7 +142,7 @@ backend = castellan.key_manager.barbican_key_manager.BarbicanKeyManager
 
 [keystone_authtoken]
 insecure = {{ keystone_service_internaluri_insecure | bool }}
-auth_type = {{ cinder_keystone_auth_plugin }}
+auth_type = {{ cinder_keystone_auth_type }}
 auth_url = {{ keystone_service_adminurl }}
 www_authenticate_uri = {{ keystone_service_internaluri }}
 project_domain_id = {{ cinder_service_project_domain_id }}
@@ -163,6 +163,14 @@ memcache_secret_key = {{ memcached_encryption_key }}
 [nova]
 interface = internal
 insecure = {{ keystone_service_internaluri_insecure | bool }}
+auth_type = {{ cinder_keystone_auth_type }}
+auth_url = {{ keystone_service_internalurl }}
+password = {{ cinder_service_password }}
+project_domain_id = {{ cinder_service_project_domain_id }}
+project_name = {{ cinder_service_project_name }}
+region_name = {{ keystone_service_region }}
+user_domain_id = {{ cinder_service_user_domain_id }}
+username = {{ cinder_service_user_name }}
 
 [oslo_policy]
 policy_file = /etc/cinder/policy.json
