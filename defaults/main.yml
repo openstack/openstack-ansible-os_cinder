@@ -13,10 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Set the package install state for distribution and pip packages
+# Set the package install state for distribution packages
 # Options are 'present' and 'latest'
-cinder_package_state: "latest"
-cinder_pip_package_state: "latest"
+cinder_package_state: "{{ package_state | default('latest') }}"
 
 # Set the host which will execute the shade modules
 # for the service setup. The host must already have
@@ -25,7 +24,7 @@ cinder_service_setup_host: "{{ openstack_service_setup_host | default('localhost
 cinder_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((cinder_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
 # Set installation method.
-cinder_install_method: "source"
+cinder_install_method: "{{ service_install_method | default('source') }}"
 cinder_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
 
 cinder_git_repo: https://opendev.org/openstack/cinder
@@ -42,10 +41,10 @@ cinder_venv_tag: "{{ venv_tag | default('untagged') }}"
 cinder_bin: "{{ _cinder_bin }}"
 
 # Enable/Disable Barbican
-cinder_barbican_enabled: False
+cinder_barbican_enabled: "{{ (groups['barbican_all'] is defined) and (groups['barbican_all'] | length > 0) }}"
 
 # Enable/Disable Ceilometer
-cinder_ceilometer_enabled: False
+cinder_ceilometer_enabled: "{{ (groups['ceilometer_all'] is defined) and (groups['ceilometer_all'] | length > 0) }}"
 
 # Time period for which to generate volume usages. The options are hour, day,
 # month, or year. (string value)
@@ -71,7 +70,7 @@ cinder_galera_user: cinder
 cinder_galera_database: cinder
 cinder_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 cinder_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
-cinder_galera_port: 3306
+cinder_galera_port: "{{ galera_port | default('3306') }}"
 
 ## Oslo Messaging
 
@@ -128,9 +127,6 @@ cinder_service_admin_username: "cinder"
 ## Cinder API's enabled
 cinder_enable_v2_api: true
 
-## Cinder API check cert validation
-cinder_service_internaluri_insecure: false
-
 ## Cinder api service type and data
 cinder_service_name: cinder
 cinder_service_project_domain_id: default
@@ -138,7 +134,7 @@ cinder_service_user_domain_id: default
 cinder_service_user_name: cinder
 cinder_service_project_name: service
 cinder_service_role_name: admin
-cinder_service_region: RegionOne
+cinder_service_region: "{{ service_region | default('RegionOne') }}"
 cinder_service_description: "Cinder Volume Service"
 cinder_service_port: 8776
 cinder_service_proto: http
@@ -289,7 +285,7 @@ cinder_active_active_cluster_name: ceph
 # Comma separated list of Glance API servers
 cinder_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_internalurl | default('http://localhost')) | urlsplit('netloc') }}"
 
-cinder_service_in_ldap: false
+cinder_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 # Common pip packages
 cinder_pip_packages:

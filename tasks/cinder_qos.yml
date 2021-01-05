@@ -16,7 +16,7 @@
 - name: Add in cinder qos types
   shell: |
     . {{ ansible_env.HOME }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos list --format value --column Name | grep -x {{ item.name }} || \
     {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos create {{ item.name }} \
     --consumer {{ item.options.consumer }}\
@@ -32,7 +32,7 @@
 - name: Associate qos types to volume types
   shell: |
     . {{ ansible_env.HOME }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for vtype in item.cinder_volume_types %}
     if {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ vtype }}"; then
       {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos associate {{ item.name }} {{ vtype }}

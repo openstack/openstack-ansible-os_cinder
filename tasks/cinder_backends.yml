@@ -17,7 +17,7 @@
   uri:
     url: "{{ cinder_service_internaluri }}"
     status_code: 200,300
-    validate_certs: "{{ cinder_service_internaluri_insecure | bool }}"
+    validate_certs: "{{ keystone_service_internaluri_insecure | bool }}"
   register: api_status
   until: api_status  is success
   retries: 10
@@ -39,7 +39,7 @@
 - name: Add in cinder devices types
   shell: |
     . {{ ansible_env.HOME }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     if ! {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ item.key }}"; then
       {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ item.key }}"
     fi
@@ -52,7 +52,7 @@
 - name: Add extra cinder volume types
   shell: |
     . {{ ansible_env.HOME }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (cinder_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for evtype in item.value.extra_volume_types %}
       if ! {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ evtype }}"; then
         {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ evtype }}"
