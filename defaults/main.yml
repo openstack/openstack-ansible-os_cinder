@@ -31,7 +31,6 @@ cinder_git_repo: https://opendev.org/openstack/cinder
 cinder_git_install_branch: master
 cinder_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 cinder_git_constraints:
-  - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
   - "--constraint {{ cinder_upper_constraints_url }}"
 
 cinder_pip_install_args: "{{ pip_install_options | default('') }}"
@@ -289,7 +288,7 @@ cinder_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 # Common pip packages
 cinder_pip_packages:
-  - cinder
+  - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
   - cryptography
   - ecdsa
   - httplib2
