@@ -67,8 +67,15 @@
   copy:
     content: "{{ cinder_policy_overrides | to_nice_json }}"
     dest: "/etc/cinder/policy.json"
+  notify:
+    - Manage LB
+    - Restart cinder services
+    - Restart uwsgi services
   when:
     - cinder_policy_overrides != {}
+  tags:
+    - cinder-config
+    - cinder-policy-override
 
 # NOTE(cloudnull): This is using "cp" instead of copy with a remote_source
 #                  because we only want to copy the original files once. and we
