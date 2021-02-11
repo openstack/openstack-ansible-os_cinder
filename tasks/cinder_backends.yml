@@ -17,7 +17,7 @@
   uri:
     url: "{{ cinder_service_internaluri }}"
     status_code: 200,300
-    validate_certs: "{{ keystone_service_internaluri_insecure | bool }}"
+    validate_certs: "{{ not keystone_service_internaluri_insecure | bool }}"
   register: api_status
   until: api_status  is success
   retries: 10
