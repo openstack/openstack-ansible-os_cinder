@@ -205,14 +205,14 @@ cinder_swift_catalog_info: "object-store:swift:internalURL"
 
 ## Cap the maximun number of threads / workers when a user value is unspecified.
 cinder_osapi_volume_workers_max: 16
-cinder_osapi_volume_workers: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, cinder_osapi_volume_workers_max] | min }}"
+cinder_osapi_volume_workers: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, cinder_osapi_volume_workers_max] | min }}"
 
 ## Cinder iscsi
 cinder_target_helper_mapping:
   RedHat: lioadm
   Debian: tgtadm
   Suse: tgtadm
-cinder_target_helper: "{{ cinder_target_helper_mapping[ansible_os_family] }}"
+cinder_target_helper: "{{ cinder_target_helper_mapping[ansible_facts['os_family']] }}"
 cinder_iscsi_iotype: fileio
 cinder_iscsi_num_targets: 100
 cinder_iscsi_port: 3260
@@ -347,7 +347,7 @@ cinder_services:
 
 # Cinder uWSGI settings
 cinder_wsgi_processes_max: 16
-cinder_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, cinder_wsgi_processes_max] | min }}"
+cinder_wsgi_processes: "{{ [[ansible_facts['processor_vcpus']|default(1), 1] | max * 2, cinder_wsgi_processes_max] | min }}"
 cinder_wsgi_threads: 1
 
 # Define the following dictionary variable to enable qos settings on volumes.

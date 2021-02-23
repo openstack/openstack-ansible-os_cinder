@@ -38,7 +38,7 @@
 
 - name: Add in cinder devices types
   shell: |
-    . {{ ansible_env.HOME }}/openrc
+    . {{ ansible_facts['env']['HOME'] }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     if ! {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ item.key }}"; then
       {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ item.key }}"
@@ -51,7 +51,7 @@
 
 - name: Add extra cinder volume types
   shell: |
-    . {{ ansible_env.HOME }}/openrc
+    . {{ ansible_facts['env']['HOME'] }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
     {% for evtype in item.value.extra_volume_types %}
       if ! {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ evtype }}"; then

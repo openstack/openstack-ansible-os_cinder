@@ -26,7 +26,7 @@ cinder_distro_packages:
 
 cinder_service_distro_packages:
   - openstack-cinder
-  - "{{ ansible_distribution_major_version is version('8', '<') | ternary('systemd-python', 'python3-systemd') }}"
+  - "{{ ansible_facts['distribution_major_version'] is version('8', '<') | ternary('systemd-python', 'python3-systemd') }}"
 
 cinder_devel_distro_packages:
   - git
@@ -41,7 +41,7 @@ cinder_api_distro_packages: []
 cinder_volume_service_distro_packages: []
 
 cinder_volume_distro_packages_tools:
-  - "qemu-img{% if ansible_distribution_major_version|int <= 7 %}-ev{% endif %}"
+  - "qemu-img{% if ansible_facts['distribution_major_version']|int <= 7 %}-ev{% endif %}"
 
 cinder_volume_distro_packages:
   - iscsi-initiator-utils
