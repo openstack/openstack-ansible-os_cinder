@@ -25,7 +25,7 @@ cinder_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_p
 
 # Set installation method.
 cinder_install_method: "{{ service_install_method | default('source') }}"
-cinder_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
+cinder_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
 cinder_git_repo: https://opendev.org/openstack/cinder
 cinder_git_install_branch: master
