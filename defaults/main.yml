@@ -211,7 +211,6 @@ cinder_osapi_volume_workers: "{{ [[(ansible_facts['processor_vcpus']//ansible_fa
 cinder_target_helper_mapping:
   RedHat: lioadm
   Debian: tgtadm
-  Suse: tgtadm
 cinder_target_helper: "{{ cinder_target_helper_mapping[ansible_facts['os_family']] }}"
 cinder_iscsi_iotype: fileio
 cinder_iscsi_num_targets: 100
