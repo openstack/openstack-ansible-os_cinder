@@ -21,7 +21,7 @@ cinder_package_state: "{{ package_state | default('latest') }}"
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 cinder_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-cinder_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((cinder_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+cinder_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((cinder_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 
 # Set installation method.
 cinder_install_method: "{{ service_install_method | default('source') }}"
@@ -63,7 +63,7 @@ cinder_fatal_deprecations: False
 
 ## Database info
 cinder_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-cinder_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((cinder_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+cinder_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((cinder_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 cinder_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 cinder_galera_user: cinder
 cinder_galera_database: cinder
