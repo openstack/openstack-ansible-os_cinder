@@ -63,18 +63,27 @@
     - cinder-config
     - cinder-post-install
 
-- name: Implement policy.json if there are overrides configured
-  copy:
-    content: "{{ cinder_policy_overrides | to_nice_json }}"
-    dest: "/etc/cinder/policy.json"
-  notify:
-    - Manage LB
-    - Restart cinder services
-    - Restart uwsgi services
+- name: Implement policy.yaml if there are overrides configured
+  config_template:
+    content: "{{ cinder_policy_overrides }}"
+    dest: "/etc/cinder/policy.yaml"
+    owner: "root"
+    group: "{{ cinder_system_group_name }}"
+    mode: "0640"
+    config_type: yaml
   when:
-    - cinder_policy_overrides != {}
+    - cinder_policy_overrides | length > 0
   tags:
     - cinder-config
+    - cinder-policy-override
+
+- name: Remove legacy policy.yaml file
+  file:
+    path: "/etc/cinder/policy.yaml"
+    state: absent
+  when:
+    - cinder_policy_overrides | length == 0
+  tags:
     - cinder-policy-override
 
 # NOTE(cloudnull): This is using "cp" instead of copy with a remote_source
