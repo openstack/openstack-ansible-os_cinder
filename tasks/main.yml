@@ -197,6 +197,6 @@
 - import_tasks: cinder_backends.yml
   when:
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
-    - "_cinder_is_first_play_host"
+    - "_cinder_is_last_play_host"
   tags:
     - cinder-config
