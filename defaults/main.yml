@@ -128,7 +128,7 @@ cinder_service_admin_tenant_name: "service"
 cinder_service_admin_username: "cinder"
 
 ## Cinder API's enabled
-cinder_enable_v2_api: true
+cinder_enable_v2_api: false
 
 ## Cinder api service type and data
 cinder_service_name: cinder
