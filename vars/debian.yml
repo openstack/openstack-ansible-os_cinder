@@ -23,11 +23,9 @@ tgt_service_name: tgt
 # Common apt packages
 cinder_distro_packages:
   - libkmod2
-  - libpython2.7
   - libxml2
   - rsync
   - zlib1g
-  - zlibc
 
 cinder_service_distro_packages:
   - python3-cinder
