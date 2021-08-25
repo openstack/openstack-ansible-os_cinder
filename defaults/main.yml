@@ -53,7 +53,7 @@ cinder_storage_availability_zone: nova
 cinder_default_availability_zone: "{{ cinder_storage_availability_zone }}"
 
 cinder_storage_address: 127.0.0.1
-cinder_management_address: 127.0.0.1
+cinder_management_address: "{{ management_address | default('127.0.0.1') }}"
 cinder_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 
 cinder_nova_catalog_info: compute:nova:internalURL
