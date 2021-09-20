@@ -115,7 +115,7 @@ allowed_direct_url_schemes = cinder
 target_helper = {{ cinder_target_helper }}
 
 [database]
-connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8{% if cinder_galera_use_ssl | bool %}&ssl_ca={{ cinder_galera_ssl_ca_cert }}{% endif %}
+connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8{% if cinder_galera_use_ssl | bool %}&ssl_verify_cert=true{% if cinder_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ cinder_galera_ssl_ca_cert }}{% endif %}{% endif %}
 
 [oslo_messaging_notifications]
 driver = {{ (cinder_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
