@@ -108,6 +108,7 @@ cinder_system_group_name: cinder
 cinder_system_comment: cinder system user
 cinder_system_shell: /bin/false
 cinder_system_home_folder: "/var/lib/{{ cinder_system_user_name }}"
+cinder_system_slice_name: cinder
 
 ## Manually specified cinder UID/GID
 # Deployers can specify a UID for the cinder user as well as the GID for the
@@ -121,7 +122,7 @@ cinder_system_home_folder: "/var/lib/{{ cinder_system_user_name }}"
 # cinder_system_user_uid = <UID>
 # cinder_system_group_gid = <GID>
 
-cinder_lock_path: /var/lock/cinder
+cinder_lock_dir: "{{ openstack_lock_dir | default('/run/lock') }}"
 
 ## Cinder Auth
 cinder_service_admin_tenant_name: "service"
