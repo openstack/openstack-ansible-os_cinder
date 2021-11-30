@@ -23,7 +23,7 @@
     group: "root"
 
 - name: Generate cinder config
-  config_template:
+  openstack.config_template.config_template:
     src: "cinder.conf.j2"
     dest: "/etc/cinder/cinder.conf"
     owner: "root"
@@ -42,7 +42,7 @@
 # TODO(cloudnull): Once "master" OSA is using a recent pull for
 #                  cinder this task and templte can be removed.
 - name: Copy cinder configs
-  config_template:
+  openstack.config_template.config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "root"
@@ -64,7 +64,7 @@
     - cinder-post-install
 
 - name: Implement policy.yaml if there are overrides configured
-  config_template:
+  openstack.config_template.config_template:
     content: "{{ cinder_policy_overrides }}"
     dest: "/etc/cinder/policy.yaml"
     owner: "root"
@@ -105,7 +105,7 @@
   run_once: true
 
 - name: Copy common config
-  config_template:
+  openstack.config_template.config_template:
     src: "{{ item.tmp_f }}"
     dest: "{{ item.target_f }}"
     owner: "{{ item.owner | default('root') }}"
