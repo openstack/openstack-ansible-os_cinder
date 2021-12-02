@@ -70,6 +70,10 @@ cinder_galera_database: cinder
 cinder_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 cinder_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('') }}"
 cinder_galera_port: "{{ galera_port | default('3306') }}"
+cinder_db_max_overflow: "{{ openstack_db_max_overflow | default('50') }}"
+cinder_db_max_pool_size: "{{ openstack_db_max_pool_size | default('5') }}"
+cinder_db_pool_timeout: "{{ openstack_db_pool_timeout | default('30') }}"
+cinder_db_connection_recycle_time: "{{ openstack_db_connection_recycle_time | default('600') }}"
 
 ## Oslo Messaging
 
