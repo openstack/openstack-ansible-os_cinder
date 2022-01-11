@@ -61,7 +61,7 @@
           {
             'enabled': 'yes',
             'state': 'started',
-            'config_overrides': cinder_environment_overrides | combine(service.init_config_overrides)
+            'config_overrides': cinder_environment_overrides | combine(service.init_config_overrides, recursive=True)
           }
         )
       %}
