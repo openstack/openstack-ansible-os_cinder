@@ -134,7 +134,7 @@
 
 - import_tasks: cinder_db_sync.yml
   when:
-    - _cinder_is_first_play_host
+    - _cinder_is_first_api_play_host
   tags:
     - cinder-config
 
