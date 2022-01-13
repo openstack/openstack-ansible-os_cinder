@@ -44,7 +44,12 @@
   tags:
     - always
 
-- import_tasks: db_setup.yml
+- include_role:
+    name: openstack.osa.db_setup
+    apply:
+      tags:
+        - common-db
+        - cinder-config
   when:
     - _cinder_is_first_play_host
   vars:
@@ -58,10 +63,14 @@
           - username: "{{ cinder_galera_user }}"
             password: "{{ cinder_container_mysql_password }}"
   tags:
-    - common-db
-    - cinder-config
+    - always
 
-- import_tasks: mq_setup.yml
+- include_role:
+    name: openstack.osa.mq_setup
+    apply:
+      tags:
+        - common-mq
+        - cinder-config
   when:
     - _cinder_is_first_play_host
   vars:
@@ -76,8 +85,7 @@
     _oslomsg_notify_vhost: "{{ cinder_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ cinder_oslomsg_notify_transport }}"
   tags:
-    - common-mq
-    - cinder-config
+    - always
 
 - import_tasks: cinder_lvm_config.yml
   when:
@@ -148,7 +156,12 @@
     - cinder-config
     - uwsgi
 
-- import_tasks: service_setup.yml
+- include_role:
+    name: openstack.osa.service_setup
+    apply:
+      tags:
+        - common-service
+        - cinder-config
   vars:
     _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
     _service_in_ldap: "{{ cinder_service_in_ldap }}"
@@ -165,7 +178,7 @@
   when:
     - "_cinder_is_first_play_host"
   tags:
-    - cinder-config
+    - always
 
 - name: Import ceph_client role
   import_role:
