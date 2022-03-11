@@ -77,6 +77,9 @@ cinder_db_connection_recycle_time: "{{ openstack_db_connection_recycle_time | de
 
 ## Oslo Messaging
 
+# RabbitMQ
+cinder_oslomsg_heartbeat_in_pthread: "{{ oslomsg_heartbeat_in_pthread | default(_cinder_oslomsg_heartbeat_in_pthread) }}"
+
 # RPC
 cinder_oslomsg_rpc_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
 cinder_oslomsg_rpc_setup_host: "{{ (cinder_oslomsg_rpc_host_group in groups) | ternary(groups[cinder_oslomsg_rpc_host_group][0], 'localhost') }}"
