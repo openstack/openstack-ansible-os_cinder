@@ -121,6 +121,9 @@ max_pool_size = {{ cinder_db_max_pool_size }}
 pool_timeout = {{ cinder_db_pool_timeout }}
 connection_recycle_time = {{ cinder_db_connection_recycle_time }}
 
+[oslo_messaging_rabbit]
+heartbeat_in_pthread = {{ cinder_oslomsg_heartbeat_in_pthread }}
+
 [oslo_messaging_notifications]
 driver = {{ (cinder_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
 transport_url = {{ cinder_oslomsg_notify_transport }}://{% for host in cinder_oslomsg_notify_servers.split(',') %}{{ cinder_oslomsg_notify_userid }}:{{ cinder_oslomsg_notify_password }}@{{ host }}:{{ cinder_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ cinder_oslomsg_notify_vhost }}{% if cinder_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_notify_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
