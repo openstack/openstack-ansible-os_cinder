@@ -117,6 +117,9 @@ target_helper = {{ cinder_target_helper }}
 [database]
 connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8{% if cinder_galera_use_ssl | bool %}&ssl_ca={{ cinder_galera_ssl_ca_cert }}{% endif %}
 
+[oslo_messaging_rabbit]
+heartbeat_in_pthread = {{ cinder_oslomsg_heartbeat_in_pthread }}
+
 [oslo_messaging_notifications]
 driver = {{ (cinder_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
 transport_url = {{ cinder_oslomsg_notify_transport }}://{% for host in cinder_oslomsg_notify_servers.split(',') %}{{ cinder_oslomsg_notify_userid }}:{{ cinder_oslomsg_notify_password }}@{{ host }}:{{ cinder_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ cinder_oslomsg_notify_vhost }}{% if cinder_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_notify_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
