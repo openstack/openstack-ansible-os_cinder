@@ -48,6 +48,7 @@ cinder_ceilometer_enabled: "{{ (groups['ceilometer_all'] is defined) and (groups
 # Time period for which to generate volume usages. The options are hour, day,
 # month, or year. (string value)
 cinder_volume_usage_audit: hour
+cinder_volume_usage_audit_send_actions_enabled: True
 
 cinder_storage_availability_zone: nova
 cinder_default_availability_zone: "{{ cinder_storage_availability_zone }}"

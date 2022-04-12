@@ -118,7 +118,7 @@
     systemd_services:
       - service_name: "cinder-volume-usage-audit"
         execstarts:
-          - '/bin/bash -c "{{ cinder_bin }}/cinder-volume-usage-audit --start_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00\s-d\s-1{{ cinder_volume_usage_audit }})\" --end_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00)\" --send_actions"'
+          - '/bin/bash -c "{{ cinder_bin }}/cinder-volume-usage-audit --start_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00\s-d\s-1{{ cinder_volume_usage_audit }})\" --end_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00)\" {{ (cinder_volume_usage_audit_send_actions_enabled | bool) | ternary( "--send_actions", "--nosend_actions" ) }}"'
         timer:
           state: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary('started', 'stopped') }}"
           options:
