@@ -103,6 +103,7 @@
   changed_when: false
   with_items: "{{ cinder_core_files }}"
   run_once: true
+  check_mode: false
 
 - name: Copy common config
   openstack.config_template.config_template:

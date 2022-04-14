@@ -42,6 +42,7 @@
     src: "{{ cinder_bin | dirname }}/etc/os-brick/rootwrap.d/os-brick.filters"
     dest: /etc/cinder/rootwrap.d/os-brick.filters
     state: link
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Copy cinder rootwrap filters
   command: >-
