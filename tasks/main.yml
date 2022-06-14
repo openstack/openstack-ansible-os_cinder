@@ -180,7 +180,7 @@
     _service_users:
       - name: "{{ cinder_service_user_name }}"
         password: "{{ cinder_service_password }}"
-        role: "{{ cinder_service_role_name }}"
+        role: "{{ cinder_service_role_names }}"
   when:
     - "_cinder_is_first_play_host"
   tags:

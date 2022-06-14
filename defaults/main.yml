@@ -145,7 +145,12 @@ cinder_service_project_domain_id: default
 cinder_service_user_domain_id: default
 cinder_service_user_name: cinder
 cinder_service_project_name: service
-cinder_service_role_name: admin
+cinder_service_role_names:
+  - admin
+  - service
+cinder_service_token_roles:
+  - service
+cinder_service_token_roles_required: "{{ openstack_service_token_roles_required | default(True) }}"
 cinder_service_region: "{{ service_region | default('RegionOne') }}"
 cinder_service_description: "Cinder Volume Service"
 cinder_service_port: 8776
