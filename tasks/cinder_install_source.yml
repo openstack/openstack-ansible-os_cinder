@@ -54,6 +54,5 @@
   register: _copy_rootwraps
   changed_when: _copy_rootwraps.stdout | length > 0
   notify:
-    - Manage LB
     - Restart cinder services
     - Restart uwsgi services

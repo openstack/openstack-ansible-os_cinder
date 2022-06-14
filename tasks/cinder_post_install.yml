@@ -32,7 +32,6 @@
     config_overrides: "{{ cinder_cinder_conf_overrides }}"
     config_type: "ini"
   notify:
-    - Manage LB
     - Restart cinder services
     - Restart uwsgi services
   tags:
@@ -56,7 +55,6 @@
       config_overrides: "{{ cinder_resource_filters_overrides }}"
       config_type: "json"
   notify:
-    - Manage LB
     - Restart cinder services
     - Restart uwsgi services
   tags:
