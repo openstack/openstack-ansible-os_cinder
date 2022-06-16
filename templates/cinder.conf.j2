@@ -165,6 +165,10 @@ token_cache_time = 300
 memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcached_encryption_key }}
 
+service_token_roles_required = {{ cinder_service_token_roles_required | bool }}
+service_token_roles = {{ cinder_service_token_roles | join(',') }}
+service_type = {{ cinder_service_type }}
+
 [nova]
 interface = internal
 insecure = {{ keystone_service_internaluri_insecure | bool }}
