@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # service names
-tgt_service_name: tgtd
+tgt_service_name: iscsid
 
 # Common yum packages
 cinder_distro_packages:

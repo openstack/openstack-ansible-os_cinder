@@ -146,6 +146,16 @@
     - "cinder_target_helper == 'tgtadm'"
     - cinder_backend_lvm_inuse | bool
 
+- name: Ensure iscsi service is started
+  service:
+    name: "{{ tgt_service_name }}"
+    state: started
+    enabled: true
+  when:
+    - "cinder_services['cinder-volume']['group'] in group_names"
+    - "cinder_target_helper == 'lioadm'"
+    - cinder_backend_lvm_inuse | bool
+
 - name: Create nfs shares export file
   template:
     src: nfs_shares.j2
