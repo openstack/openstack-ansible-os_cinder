@@ -32,7 +32,7 @@ cinder_service_distro_packages:
   - python3-systemd
 
 cinder_devel_distro_packages:
-  - git-core
+  - git
   - libffi-dev
   - libkmod-dev
   - libpq-dev
