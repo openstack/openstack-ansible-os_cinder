@@ -110,6 +110,16 @@ cinder_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | default('') 
 # TODO(evrardjp): Change structure when more backends will be supported
 cinder_oslomsg_amqp1_enabled: "{{ cinder_oslomsg_rpc_transport == 'amqp' }}"
 
+## Coordintation
+cinder_coordination_driver: "{{ coordination_driver | default('zookeeper') }}"
+cinder_coordination_group: "{{ coordination_host_group | default('zookeeper_all') }}"
+cinder_coordination_enable: "{{ cinder_active_active_cluster and (cinder_coordination_group in groups and groups[cinder_coordination_group] | length > 0) }}"
+cinder_coordination_namespace: cinder
+cinder_coordination_client_ssl: "{{ coordination_client_ssl | default(False) }}"
+cinder_coordination_verify_cert: "{{ coordination_verify_cert | default(True) }}"
+cinder_coordination_port: "{{ coordination_port | default(cinder_coordination_client_ssl | ternary('2281', '2181')) }}"
+cinder_coordination_url: "{{ _cinder_coordination_url | default() }}"
+
 ## Cinder User / Group
 cinder_system_user_name: cinder
 cinder_system_group_name: cinder
@@ -312,6 +322,7 @@ cinder_pip_packages:
   - pymemcache
   - python-memcached
   - systemd-python
+  - "tooz[{{ cinder_coordination_driver }}]"
 
 # Specific pip packages provided by the user
 cinder_user_pip_packages: []

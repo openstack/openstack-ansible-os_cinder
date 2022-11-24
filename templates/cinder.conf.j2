@@ -111,6 +111,11 @@ allowed_direct_url_schemes = cinder
 {% endfor %}
 {% endif %}
 
+{% if cinder_coordination_enable %}
+[coordination]
+backend_url = {{ cinder_coordination_url }}
+{% endif %}
+
 [backend_defaults]
 target_helper = {{ cinder_target_helper }}
 
