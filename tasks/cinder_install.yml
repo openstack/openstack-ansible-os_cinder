@@ -35,6 +35,8 @@
   until: install_packages  is success
   retries: 5
   delay: 2
+  notify:
+    - "Restart cinder services"
 
 - name: Install cinder packages from PIP
   import_tasks: cinder_install_source.yml
@@ -73,16 +75,26 @@
     - cinder-config
     - systemd-service
 
-- name: Set the upgrade facts
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: cinder
-    option: "{{ item }}"
-    value: true
-  with_items:
-    - "need_online_data_migrations"
-    - "need_service_restart"
-  when:
-        (install_packages is changed) or
-        ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
-        ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
+- name: Record local facts for distro path
+  when: cinder_install_method == 'distro'
+  block:
+    - name: Record the osa version deployed
+      ini_file:
+        dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+        section: cinder
+        option: venv_tag
+        value: "{{ cinder_venv_tag }}"
+
+    - name: Set the upgrade facts
+      ini_file:
+        dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+        section: cinder
+        option: "{{ item }}"
+        value: true
+      with_items:
+        - "need_online_data_migrations"
+        - "need_service_restart"
+      when:
+            (install_packages is changed) or
+            ('need_online_data_migrations' not in ansible_local['openstack_ansible']['cinder']) or
+            ('need_service_restart' not in ansible_local['openstack_ansible']['cinder'])
