@@ -122,3 +122,10 @@ cinder_service_catalog:
     state: present
 
 _cinder_oslomsg_heartbeat_in_pthread: "{{ (cinder_services['cinder-volume']['group'] in group_names) | ternary(False, True) }}"
+
+_cinder_coordination_url: >-
+  {{ cinder_coordination_driver }}://{{
+      groups[cinder_coordination_group]
+        | map('extract', hostvars, 'ansible_host')
+        | list | join(':' ~ cinder_coordination_port ~ ',')
+    }}:{{ cinder_coordination_port }}?namespace={{ cinder_coordination_namespace }}{% if cinder_coordination_client_ssl | bool %}&use_ssl=True&verify_certs={{ cinder_coordination_verify_cert | bool }}{% endif %}
