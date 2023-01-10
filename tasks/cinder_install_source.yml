@@ -43,16 +43,3 @@
     dest: /etc/cinder/rootwrap.d/os-brick.filters
     state: link
   ignore_errors: "{{ ansible_check_mode }}"
-
-- name: Copy cinder rootwrap filters
-  command: >-
-    rsync --archive --itemize-changes --delete
-    /openstack/venvs/cinder-{{ cinder_venv_tag }}/etc/cinder/rootwrap.d/
-    /etc/cinder/rootwrap.d/
-  args:
-    warn: no
-  register: _copy_rootwraps
-  changed_when: _copy_rootwraps.stdout | length > 0
-  notify:
-    - Restart cinder services
-    - Restart uwsgi services

@@ -24,7 +24,6 @@ tgt_service_name: tgt
 cinder_distro_packages:
   - libkmod2
   - libxml2
-  - rsync
   - zlib1g
 
 cinder_service_distro_packages:
