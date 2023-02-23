@@ -28,6 +28,7 @@
     - "Restart cinder services"
     - "venv changed"
     - "systemd service changed"
+    - "cert installed"
 
 - name: Start services
   service:
@@ -44,6 +45,7 @@
     - "Restart cinder services"
     - "venv changed"
     - "systemd service changed"
+    - "cert installed"
 
 - name: Ensure tgt service restarted
   service:
