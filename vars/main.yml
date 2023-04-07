@@ -34,7 +34,15 @@ filtered_cinder_services: |-
           (('condition' not in value) or
            ('condition' in value and value['condition'])) and
            not ('wsgi_app' in value and value['wsgi_app']) %}
-  {%     set _ = value.update({'service_key': key}) %}
+  {%     set _ = value.update(
+            {
+              'service_key': key,
+              'enabled': value['enabled'] | default(True),
+              'state': value['state'] | default('started'),
+              'config_overrides': cinder_environment_overrides | combine(value.init_config_overrides, recursive=True)
+            }
+          ) %}
+  {%     set _ = value.pop('init_config_overrides') -%}
   {%     set _ = services.append(value) %}
   {%   endif %}
   {% endfor %}
