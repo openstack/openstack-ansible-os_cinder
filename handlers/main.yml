@@ -27,6 +27,7 @@
   listen:
     - "Restart cinder services"
     - "venv changed"
+    - "systemd service changed"
 
 - name: Start services
   service:
@@ -42,6 +43,7 @@
   listen:
     - "Restart cinder services"
     - "venv changed"
+    - "systemd service changed"
 
 - name: Ensure tgt service restarted
   service:
