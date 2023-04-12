@@ -216,6 +216,12 @@
 - name: Flush handlers
   meta: flush_handlers
 
+- import_tasks: cinder_db_post_setup.yml
+  when:
+    - "_cinder_is_last_play_host"
+  tags:
+    - cinder-config
+
 - import_tasks: cinder_backends.yml
   when:
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
