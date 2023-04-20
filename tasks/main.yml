@@ -248,3 +248,34 @@
     - "_cinder_is_last_play_host"
   tags:
     - cinder-config
+
+- name: Create service and timer for archiving deleted records
+  include_role:
+    name: systemd_service
+  vars:
+    systemd_service_restart_changed: false
+    systemd_user_name: "{{ cinder_system_user_name }}"
+    systemd_group_name: "{{ cinder_system_group_name }}"
+    systemd_tempd_prefix: openstack
+    systemd_slice_name: "{{ cinder_system_slice_name }}"
+    systemd_lock_dir: "{{ cinder_lock_dir }}"
+    systemd_services:
+      - service_name: "cinder-purge-deleted"
+        execstarts:
+          - "{{ cinder_bin }}/cinder-manage db purge {{ cinder_purge_deleted_before_days }}"
+        environment:
+          UMASK: '0640'
+          UMASK_DIR: '0750'
+        program_sandboxing:
+          RuntimeDirectory: 'cinder-purge-deleted'
+        enabled: "{{ cinder_purge_deleted }}"
+        timer:
+          state: "{{ cinder_purge_deleted | ternary('started', 'stopped') }}"
+          enabled: "{{ cinder_purge_deleted }}"
+          options:
+            OnCalendar: "{{ cinder_purge_deleted_on_calendar }}"
+            RandomizedDelaySec: "{{ cinder_purge_deleted_randomized_delay_sec }}"
+            Persistent: true
+            Unit: "cinder-purge-deleted.service"
+  when:
+    - inventory_hostname == groups[cinder_services['cinder-api']['group']] | first

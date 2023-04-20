@@ -459,3 +459,13 @@ cinder_pki_install_certificates:
 # Define user-provided SSL certificates
 #cinder_user_ssl_cert: <path to cert on ansible deployment host>
 #cinder_user_ssl_key: <path to cert on ansible deployment host>
+
+# Database cleanup
+# Periodically purge shadow tables, where archived records are stored
+cinder_purge_deleted: False
+# When to start purge task.
+cinder_purge_deleted_on_calendar: "*-*-* 01:00:00"
+# Purge events that are older then the number of days below.
+cinder_purge_deleted_before_days: "364"
+# Delay the timer by a randomly selected amount of time.
+cinder_purge_deleted_randomized_delay_sec: 0
