@@ -368,12 +368,16 @@ cinder_services:
     wsgi_name: cinder-wsgi
     uwsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ cinder_service_port }}"
+    uwsgi_tls: "{{ cinder_backend_ssl | ternary(cinder_uwsgi_tls, {}) }}"
     uwsgi_bind_address: "{{ cinder_uwsgi_bind_address }}"
 
 # Cinder uWSGI settings
 cinder_wsgi_processes_max: 16
 cinder_wsgi_processes: "{{ [[ansible_facts['processor_vcpus']|default(1), 1] | max * 2, cinder_wsgi_processes_max] | min }}"
 cinder_wsgi_threads: 1
+cinder_uwsgi_tls:
+  crt: "{{ cinder_ssl_cert }}"
+  key: "{{ cinder_ssl_key }}"
 
 # Define the following dictionary variable to enable qos settings on volumes.
 # cinder_qos_specs
@@ -407,3 +411,51 @@ cinder_environment_overrides:
 _UUID_regex: "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}"
 
 cinder_memcached_servers: "{{ memcached_servers }}"
+
+###
+### Backend TLS
+###
+
+# Define if communication between haproxy and service backends should be
+# encrypted with TLS.
+cinder_backend_ssl: "{{ openstack_service_backend_ssl | default(False) }}"
+
+# Storage location for SSL certificate authority
+cinder_pki_dir: "{{ openstack_pki_dir | default('/etc/openstack_deploy/pki') }}"
+
+# Delegated host for operating the certificate authority
+cinder_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
+
+# cinder server certificate
+cinder_pki_keys_path: "{{ cinder_pki_dir ~ '/certs/private/' }}"
+cinder_pki_certs_path: "{{ cinder_pki_dir ~ '/certs/certs/' }}"
+cinder_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
+cinder_pki_regen_cert: ''
+cinder_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+cinder_pki_certificates:
+  - name: "cinder_{{ ansible_facts['hostname'] }}"
+    provider: ownca
+    cn: "{{ ansible_facts['hostname'] }}"
+    san: "{{ cinder_pki_san }}"
+    signed_by: "{{ cinder_pki_intermediate_cert_name }}"
+
+# cinder destination files for SSL certificates
+cinder_ssl_cert: /etc/cinder/cinder.pem
+cinder_ssl_key: /etc/cinder/cinder.key
+
+# Installation details for SSL certificates
+cinder_pki_install_certificates:
+  - src: "{{ cinder_user_ssl_cert | default(cinder_pki_certs_path ~ 'cinder_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+    dest: "{{ cinder_ssl_cert }}"
+    owner: "{{ cinder_system_user_name }}"
+    group: "{{ cinder_system_user_name }}"
+    mode: "0644"
+  - src: "{{ cinder_user_ssl_key | default(cinder_pki_keys_path ~ 'cinder_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    dest: "{{ cinder_ssl_key }}"
+    owner: "{{ cinder_system_user_name }}"
+    group: "{{ cinder_system_user_name }}"
+    mode: "0600"
+
+# Define user-provided SSL certificates
+#cinder_user_ssl_cert: <path to cert on ansible deployment host>
+#cinder_user_ssl_key: <path to cert on ansible deployment host>
