@@ -145,6 +145,10 @@ hmac_keys = {{ cinder_profiler_hmac_key }}
 [barbican]
 auth_endpoint = {{ keystone_service_internaluri }}/v3
 barbican_endpoint_type = internal
+send_service_user_token = {{ cinder_service_token_roles_required | bool }}
+
+[barbican_service_user]
+auth_section = keystone_authtoken
 
 [key_manager]
 backend = barbican
@@ -176,6 +180,18 @@ service_type = {{ cinder_service_type }}
 
 [nova]
 interface = internal
+insecure = {{ keystone_service_internaluri_insecure | bool }}
+auth_type = {{ cinder_keystone_auth_type }}
+auth_url = {{ keystone_service_internalurl }}
+password = {{ cinder_service_password }}
+project_domain_id = {{ cinder_service_project_domain_id }}
+project_name = {{ cinder_service_project_name }}
+region_name = {{ keystone_service_region }}
+user_domain_id = {{ cinder_service_user_domain_id }}
+username = {{ cinder_service_user_name }}
+
+[service_user]
+send_service_user_token = {{ cinder_service_token_roles_required | bool }}
 insecure = {{ keystone_service_internaluri_insecure | bool }}
 auth_type = {{ cinder_keystone_auth_type }}
 auth_url = {{ keystone_service_internalurl }}
