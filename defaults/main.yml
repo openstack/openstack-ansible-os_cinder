@@ -351,6 +351,10 @@ cinder_services:
     start_order: 2
     execstarts: "{{ cinder_bin }}/cinder-volume"
     execreloads: "/bin/kill -HUP $MAINPID"
+    environment:
+      MALLOC_ARENA_MAX: 1
+      MALLOC_MMAP_THRESHOLD_: 131072
+      MALLOC_TRIM_THRESHOLD_: 262144
   cinder-backup:
     group: cinder_backup
     service_name: cinder-backup
@@ -359,6 +363,10 @@ cinder_services:
     start_order: 3
     execstarts: "{{ cinder_bin }}/cinder-backup"
     execreloads: "/bin/kill -HUP $MAINPID"
+    environment:
+      MALLOC_ARENA_MAX: 1
+      MALLOC_MMAP_THRESHOLD_: 131072
+      MALLOC_TRIM_THRESHOLD_: 262144
   cinder-api:
     group: cinder_api
     service_name: cinder-api
