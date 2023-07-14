@@ -13,9 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_cinder_is_first_api_play_host: "{{ (cinder_services['cinder-api']['group'] in group_names and inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | first) | bool }}"
-_cinder_is_first_play_host: "{{ (cinder_services['cinder-scheduler']['group'] in group_names and inventory_hostname == (groups[cinder_services['cinder-scheduler']['group']] | intersect(ansible_play_hosts)) | first) | bool }}"
-_cinder_is_last_play_host: "{{ (cinder_services['cinder-api']['group'] in group_names and inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | last) | bool }}"
+_cinder_is_first_api_play_host: >-
+  {{
+    (cinder_services['cinder-api']['group'] in group_names and
+    inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+  }}
+_cinder_is_first_play_host: >-
+  {{
+    (cinder_services['cinder-scheduler']['group'] in group_names and
+    inventory_hostname == (groups[cinder_services['cinder-scheduler']['group']] | intersect(ansible_play_hosts)) | first) | bool
+  }}
+_cinder_is_last_play_host: >-
+  {{
+    (cinder_services['cinder-api']['group'] in group_names and
+    inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | last) | bool
+  }}
 
 _cinder_rootwrap_conf_overrides:
   DEFAULT:
@@ -136,4 +148,6 @@ _cinder_coordination_url: >-
       groups[cinder_coordination_group]
         | map('extract', hostvars, 'ansible_host')
         | list | join(':' ~ cinder_coordination_port ~ ',')
-    }}:{{ cinder_coordination_port }}?namespace={{ cinder_coordination_namespace }}{% if cinder_coordination_client_ssl | bool %}&use_ssl=True&verify_certs={{ cinder_coordination_verify_cert | bool }}{% endif %}
+    }}:{{ cinder_coordination_port -}}
+    ?namespace={{ cinder_coordination_namespace }}{% if cinder_coordination_client_ssl | bool -%}
+    &use_ssl=True&verify_certs={{ cinder_coordination_verify_cert | bool }}{% endif %}

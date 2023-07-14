@@ -18,19 +18,21 @@ galaxy_info:
   description: Installation and setup of cinder
   company: Rackspace
   license: Apache2
-  min_ansible_version: 2.2
+  role_name: os_cinder
+  namespace: openstack
+  min_ansible_version: "2.10"
   platforms:
     - name: Debian
       versions:
-        - buster
+        - bullseye
     - name: Ubuntu
       versions:
-        - bionic
         - focal
+        - jammy
     - name: EL
       versions:
-        - 8
-  categories:
+        - "9"
+  galaxy_tags:
     - cloud
     - python
     - cinder

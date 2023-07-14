@@ -13,17 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: create the system group
+- name: Create the system group
   group:
     name: "{{ cinder_system_group_name }}"
-    gid: "{{ cinder_system_group_gid|default(omit) }}"
+    gid: "{{ cinder_system_group_gid | default(omit) }}"
     state: "present"
     system: "yes"
 
 - name: Create the cinder system user
   user:
     name: "{{ cinder_system_user_name }}"
-    uid: "{{ cinder_system_user_uid|default(omit) }}"
+    uid: "{{ cinder_system_user_uid | default(omit) }}"
     group: "{{ cinder_system_group_name }}"
     comment: "{{ cinder_system_comment }}"
     shell: "{{ cinder_system_shell }}"

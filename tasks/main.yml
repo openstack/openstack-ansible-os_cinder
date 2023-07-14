@@ -43,7 +43,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.db_setup role
+  include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -64,7 +65,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.mq_setup role
+  include_role:
     name: openstack.osa.mq_setup
     apply:
       tags:
@@ -86,18 +88,21 @@
   tags:
     - always
 
-- import_tasks: cinder_lvm_config.yml
+- name: Importing cinder_lvm_config tasks
+  import_tasks: cinder_lvm_config.yml
   when:
     - "cinder_services['cinder-volume']['group'] in group_names"
     - "cinder_backend_lvm_inuse | bool"
   tags:
     - cinder-config
 
-- import_tasks: cinder_pre_install.yml
+- name: Importing cinder_pre_install tasks
+  import_tasks: cinder_pre_install.yml
   tags:
     - cinder-install
 
-- import_tasks: cinder_install.yml
+- name: Importing cinder_install tasks
+  import_tasks: cinder_install.yml
   tags:
     - cinder-install
 
@@ -121,14 +126,15 @@
   tags:
     - always
 
-- name: refresh local facts
+- name: Refresh local facts
   setup:
     filter: ansible_local
     gather_subset: "!all"
   tags:
     - cinder-config
 
-- include_tasks: cinder_cleanup_old_facts.yml
+- name: Including cinder_cleanup_old_facts tasks
+  include_tasks: cinder_cleanup_old_facts.yml
   args:
     apply:
       tags:
@@ -140,7 +146,8 @@
   tags:
     - always
 
-- import_tasks: cinder_post_install.yml
+- name: Importing cinder_post_install tasks
+  import_tasks: cinder_post_install.yml
   tags:
     - cinder-config
 
@@ -155,17 +162,22 @@
     systemd_services:
       - service_name: "cinder-volume-usage-audit"
         execstarts:
-          - '/bin/bash -c "{{ cinder_bin }}/cinder-volume-usage-audit --start_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00\s-d\s-1{{ cinder_volume_usage_audit }})\" --end_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00)\" {{ (cinder_volume_usage_audit_send_actions_enabled | bool) | ternary( "--send_actions", "--nosend_actions" ) }}"'
+          - >-
+            /bin/bash -c "{{ cinder_bin }}/cinder-volume-usage-audit --start_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00\s-d\s-1{{ cinder_volume_usage_audit }})\"
+            --end_time \"$$(date\s+%%Y-%%m-%%d\\\s%%H:00:00)\" {{
+              (cinder_volume_usage_audit_send_actions_enabled | bool) | ternary('--send_actions', '--nosend_actions')
+            }}"
         timer:
           state: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary('started', 'stopped') }}"
           options:
             OnBootSec: 30min
-            OnCalendar: "{{ (cinder_volume_usage_audit == 'day') | ternary('daily', cinder_volume_usage_audit+'ly') }}"
+            OnCalendar: "{{ (cinder_volume_usage_audit == 'day') | ternary('daily', cinder_volume_usage_audit + 'ly') }}"
             Persistent: true
   tags:
     - cinder-config
 
-- import_tasks: cinder_db_sync.yml
+- name: Importing cinder_db_sync tasks
+  import_tasks: cinder_db_sync.yml
   when:
     - _cinder_is_first_api_play_host
   tags:
@@ -181,7 +193,8 @@
     - cinder-config
     - uwsgi
 
-- include_role:
+- name: Including osa.service_setup role
+  include_role:
     name: openstack.osa.service_setup
     apply:
       tags:
@@ -231,18 +244,20 @@
   retries: 5
   delay: 2
   when:
-   - "cinder_services['cinder-volume']['group'] in group_names"
+    - "cinder_services['cinder-volume']['group'] in group_names"
 
 - name: Flush handlers
   meta: flush_handlers
 
-- import_tasks: cinder_db_post_setup.yml
+- name: Importing cinder_db_post_setup tasks
+  import_tasks: cinder_db_post_setup.yml
   when:
     - "_cinder_is_last_play_host"
   tags:
     - cinder-config
 
-- import_tasks: cinder_backends.yml
+- name: Importing cinder_backends tasks
+  import_tasks: cinder_backends.yml
   when:
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
     - "_cinder_is_last_play_host"

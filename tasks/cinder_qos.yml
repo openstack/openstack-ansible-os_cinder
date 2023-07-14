@@ -16,13 +16,15 @@
 - name: Add in cinder qos types
   shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
-    {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos list --format value --column Name | grep -x {{ item.name }} || \
-    {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos create {{ item.name }} \
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
+    {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume qos list --format value --column Name | grep -x {{ item.name }} || \
+    {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume qos create {{ item.name }} \
     --consumer {{ item.options.consumer }}\
-    {% for k,v in item.options.items() %} --property {{ k }}={{ v }}{% endfor %}
+    {% for k, v in item.options.items() %} --property {{ k }}={{ v }}{% endfor %}
   args:
     executable: /bin/bash
+  vars:
+    __cinder_python_interpreter_dirname: "{{ cinder_service_setup_host_python_interpreter | dirname }}"
   with_items: "{{ cinder_qos_specs }}"
   delegate_to: "{{ cinder_service_setup_host }}"
   changed_when: false
@@ -32,15 +34,18 @@
 - name: Associate qos types to volume types
   shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
     {% for vtype in item.cinder_volume_types %}
-    if {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ vtype }}"; then
-      {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume qos associate {{ item.name }} {{ vtype }}
+    if {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ vtype }}"; then
+      {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume qos associate {{ item.name }} {{ vtype }}
     fi
     {% endfor %}
   args:
     executable: /bin/bash
+  vars:
+    __cinder_python_interpreter_dirname: "{{ cinder_service_setup_host_python_interpreter | dirname }}"
   with_items: "{{ cinder_qos_specs }}"
+  changed_when: false
   delegate_to: "{{ cinder_service_setup_host }}"
   when:
     - item.cinder_volume_types is defined
