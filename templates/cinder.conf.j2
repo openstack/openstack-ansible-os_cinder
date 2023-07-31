@@ -120,7 +120,7 @@ backend_url = {{ cinder_coordination_url }}
 target_helper = {{ cinder_target_helper }}
 
 [database]
-connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}/{{ cinder_galera_database }}?charset=utf8{% if cinder_galera_use_ssl | bool %}&ssl_verify_cert=true{% if cinder_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ cinder_galera_ssl_ca_cert }}{% endif %}{% endif +%}
+connection = mysql+pymysql://{{ cinder_galera_user }}:{{ cinder_container_mysql_password }}@{{ cinder_galera_address }}:{{ cinder_galera_port }}/{{ cinder_galera_database }}?charset=utf8{% if cinder_galera_use_ssl | bool %}&ssl_verify_cert=true{% if cinder_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ cinder_galera_ssl_ca_cert }}{% endif %}{% endif +%}
 max_overflow = {{ cinder_db_max_overflow }}
 max_pool_size = {{ cinder_db_max_pool_size }}
 pool_timeout = {{ cinder_db_pool_timeout }}
