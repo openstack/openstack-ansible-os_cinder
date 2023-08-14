@@ -21,7 +21,11 @@ cinder_package_state: "{{ package_state | default('latest') }}"
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 cinder_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-cinder_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((cinder_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+cinder_service_setup_host_python_interpreter: >-
+  {{
+    openstack_service_setup_host_python_interpreter | default(
+      (cinder_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 
 # Set installation method.
 cinder_install_method: "{{ service_install_method | default('source') }}"
@@ -29,7 +33,8 @@ cinder_venv_python_executable: "{{ openstack_venv_python_executable | default('p
 
 cinder_git_repo: https://opendev.org/openstack/cinder
 cinder_git_install_branch: master
-cinder_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
+cinder_upper_constraints_url: >-
+  {{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}
 cinder_git_constraints:
   - "--constraint {{ cinder_upper_constraints_url }}"
 
@@ -64,7 +69,11 @@ cinder_fatal_deprecations: False
 
 ## Database info
 cinder_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-cinder_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((cinder_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+cinder_db_setup_python_interpreter: >-
+  {{
+    openstack_db_setup_python_interpreter | default(
+      (cinder_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 cinder_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 cinder_galera_user: cinder
 cinder_galera_database: cinder
@@ -230,7 +239,8 @@ cinder_swift_catalog_info: "object-store:swift:internalURL"
 
 ## Cap the maximun number of threads / workers when a user value is unspecified.
 cinder_osapi_volume_workers_max: 16
-cinder_osapi_volume_workers: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, cinder_osapi_volume_workers_max] | min }}"
+cinder_osapi_volume_workers: >-
+  {{ [[(ansible_facts['processor_vcpus'] // ansible_facts['processor_threads_per_core']) | default(1), 1] | max * 2, cinder_osapi_volume_workers_max] | min }}
 
 ## Cinder iscsi
 cinder_target_helper_mapping:
@@ -290,9 +300,9 @@ cinder_quota_backup_gigabytes: 1000
 cinder_lvm_devices_filter_override: []
 
 # cinder_backend_lvm_inuse: True if current host has an lvm backend
-cinder_backend_lvm_inuse: '{{ (cinder_backends|default("")|to_json).find("lvm") != -1 }}'
+cinder_backend_lvm_inuse: '{{ (cinder_backends | default("") | to_json).find("lvm") != -1 }}'
 # cinder_backend_rbd_inuse: True if the current host has an rbd backend
-cinder_backend_rbd_inuse: '{{ (cinder_backends|default("")|to_json).find("cinder.volume.drivers.rbd.RBDDriver") != -1 }}'
+cinder_backend_rbd_inuse: '{{ (cinder_backends | default("") | to_json).find("cinder.volume.drivers.rbd.RBDDriver") != -1 }}'
 
 # Set to false if you want to explicitly disable active/active cluster
 cinder_active_active_cluster: "{{ cinder_backend_rbd_inuse }}"
@@ -301,12 +311,19 @@ cinder_active_active_cluster_name: ceph
 ## Policy vars
 # Provide a list of access controls to merge with the default
 # access controls in the service code.
-#cinder_policy_overrides:
-#  "volume:create": ""
-#  "volume:delete": ""
+# cinder_policy_overrides:
+#   "volume:create": ""
+#   "volume:delete": ""
 
 # Comma separated list of Glance API servers
-cinder_glance_api_servers: "{{ (glance_service_internalurl | default('http://localhost')) | urlsplit('scheme') ~ '://' ~ (glance_service_internalurl | default('http://localhost')) | urlsplit('netloc') }}"
+cinder_glance_api_servers: >-
+  {{
+    (
+      glance_service_internalurl | default('http://localhost')
+    ) | urlsplit('scheme') ~ '://' ~ (
+      glance_service_internalurl | default('http://localhost')
+    ) | urlsplit('netloc')
+  }}
 
 cinder_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
@@ -381,7 +398,7 @@ cinder_services:
 
 # Cinder uWSGI settings
 cinder_wsgi_processes_max: 16
-cinder_wsgi_processes: "{{ [[ansible_facts['processor_vcpus']|default(1), 1] | max * 2, cinder_wsgi_processes_max] | min }}"
+cinder_wsgi_processes: "{{ [[ansible_facts['processor_vcpus'] | default(1), 1] | max * 2, cinder_wsgi_processes_max] | min }}"
 cinder_wsgi_threads: 1
 cinder_uwsgi_tls:
   crt: "{{ cinder_ssl_cert }}"
@@ -415,8 +432,6 @@ cinder_resource_filters_overrides: {}
 cinder_environment_overrides:
   Service:
     Environment: "PATH={{ cinder_bin }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-_UUID_regex: "[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}"
 
 cinder_memcached_servers: "{{ memcached_servers }}"
 
@@ -465,8 +480,8 @@ cinder_pki_install_certificates:
     mode: "0600"
 
 # Define user-provided SSL certificates
-#cinder_user_ssl_cert: <path to cert on ansible deployment host>
-#cinder_user_ssl_key: <path to cert on ansible deployment host>
+# cinder_user_ssl_cert: <path to cert on ansible deployment host>
+# cinder_user_ssl_key: <path to cert on ansible deployment host>
 
 # Database cleanup
 # Periodically purge shadow tables, where archived records are stored

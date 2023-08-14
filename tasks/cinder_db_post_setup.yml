@@ -29,6 +29,7 @@
     - name: Check if all cinder services are up
       shell: "{{ cinder_bin }}/cinder-manage service list | /usr/bin/awk '{ if(NR>1) print $5 }' | /bin/egrep -vq ':-)'"
       register: failed_cinder_services
+      changed_when: false
       ignore_errors: True
 
     - name: Fail if any cinder service is down
@@ -53,6 +54,7 @@
     section: cinder
     option: need_online_data_migrations
     value: False
+    mode: "0644"
   with_items: "{{ groups[cinder_services['cinder-api']['group']] }}"
   when:
     - not data_migrations is skipped

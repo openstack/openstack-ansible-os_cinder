@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Discover lvm devices
-  shell: |
+  shell: >-
     /sbin/pvdisplay | awk '/PV\ Name/ {print $3}' | sed 's/\/dev\///g'
   register: lvm_devices
   changed_when: lvm_devices.rc != 0
@@ -24,6 +24,7 @@
   file:
     state: "directory"
     path: "/etc/lvm"
+    mode: "0755"
   when: lvm_devices.rc == 0
 
 - name: Drop lvm Config
@@ -33,4 +34,5 @@
     owner: "root"
     group: "root"
     backup: "yes"
+    mode: "0644"
   when: lvm_devices.rc == 0

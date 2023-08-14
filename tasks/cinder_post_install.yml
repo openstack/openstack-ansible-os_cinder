@@ -21,6 +21,7 @@
     state: "directory"
     owner: "root"
     group: "root"
+    mode: "0750"
 
 - name: Generate cinder config
   openstack.config_template.config_template:
@@ -45,7 +46,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "root"
-    group: "{{ item.group|default(cinder_system_group_name) }}"
+    group: "{{ item.group | default(cinder_system_group_name) }}"
     mode: "0640"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
@@ -160,6 +161,7 @@
   template:
     src: nfs_shares.j2
     dest: "{{ item.value.nfs_shares_config }}"
+    mode: "0644"
   with_dict: "{{ cinder_backends | default({}) }}"
   when:
     - "cinder_services['cinder-volume']['group'] in group_names"

@@ -39,32 +39,42 @@
 - name: Add in cinder devices types
   shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
-    if ! {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ item.key }}"; then
-      {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ item.key }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
+    if ! {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ item.key }}"; then
+      {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume type create \
+        --property volume_backend_name="{{ item.value.volume_backend_name }}" \
+        {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ item.key }}"
     fi
   args:
     executable: /bin/bash
-  with_dict: "{{ _cinder_backends|default({}) }}"
+  vars:
+    __cinder_python_interpreter_dirname: "{{ cinder_service_setup_host_python_interpreter | dirname }}"
+  with_dict: "{{ _cinder_backends | default({}) }}"
   delegate_to: "{{ cinder_service_setup_host }}"
   changed_when: false
 
 - name: Add extra cinder volume types
   shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
-    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure','') }}"
+    CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
     {% for evtype in item.value.extra_volume_types %}
-      if ! {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ evtype }}"; then
-        {{ cinder_service_setup_host_python_interpreter | dirname }}/openstack ${CLI_OPTIONS} volume type create --property volume_backend_name="{{ item.value.volume_backend_name }}" {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ evtype }}"
+      if ! {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ evtype }}"; then
+        {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume type create \
+          --property volume_backend_name="{{ item.value.volume_backend_name }}" \
+          {% if not (item.value.public | default(True)) | bool %} --private {% endif %} "{{ evtype }}"
       fi
     {% endfor %}
   args:
     executable: /bin/bash
-  with_dict: "{{ _cinder_backends|default({}) }}"
+  vars:
+    __cinder_python_interpreter_dirname: "{{ cinder_service_setup_host_python_interpreter | dirname }}"
+  changed_when: false
+  with_dict: "{{ _cinder_backends | default({}) }}"
   delegate_to: "{{ cinder_service_setup_host }}"
   when: item.value.extra_volume_types is defined
 
-- import_tasks: cinder_qos.yml
+- name: Importing cinder_qos tasks
+  import_tasks: cinder_qos.yml
   when: cinder_qos_specs is defined
   tags:
     - cinder-qos

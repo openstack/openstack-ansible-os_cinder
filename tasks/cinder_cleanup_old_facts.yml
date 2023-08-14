@@ -22,8 +22,9 @@
     section: cinder
     option: "need_db_sync"
     state: absent
+    mode: "0644"
 
-- name: refresh local facts
+- name: Refresh local facts
   setup:
     filter: ansible_local
     gather_subset: "!all"
