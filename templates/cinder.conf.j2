@@ -55,7 +55,7 @@ backup_ceph_pool = {{ cinder_service_backup_ceph_pool }}
 executor_thread_pool_size = {{ cinder_rpc_executor_thread_pool_size }}
 rpc_response_timeout = {{ cinder_rpc_response_timeout }}
 
-transport_url = {{ cinder_oslomsg_rpc_transport }}://{% for host in cinder_oslomsg_rpc_servers.split(',') %}{{ cinder_oslomsg_rpc_userid }}:{{ cinder_oslomsg_rpc_password }}@{{ host }}:{{ cinder_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ cinder_oslomsg_rpc_vhost }}{% if cinder_oslomsg_rpc_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_rpc_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_rpc_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ cinder_oslomsg_rpc_transport }}://{% for host in cinder_oslomsg_rpc_servers.split(',') %}{{ cinder_oslomsg_rpc_userid }}:{{ cinder_oslomsg_rpc_password }}@{{ host }}:{{ cinder_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ _cinder_oslomsg_rpc_vhost_conf }}{% if cinder_oslomsg_rpc_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_rpc_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_rpc_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 ## Quota
 quota_volumes = {{ cinder_quota_volumes }}
@@ -128,10 +128,13 @@ connection_recycle_time = {{ cinder_db_connection_recycle_time }}
 
 [oslo_messaging_rabbit]
 heartbeat_in_pthread = {{ cinder_oslomsg_heartbeat_in_pthread }}
+rabbit_quorum_queue = {{ cinder_oslomsg_rabbit_quorum_queues }}
+rabbit_quorum_delivery_limit = {{ cinder_oslomsg_rabbit_quorum_delivery_limit }}
+rabbit_quorum_max_memory_bytes = {{ cinder_oslomsg_rabbit_quorum_max_memory_bytes }}
 
 [oslo_messaging_notifications]
 driver = {{ (cinder_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
-transport_url = {{ cinder_oslomsg_notify_transport }}://{% for host in cinder_oslomsg_notify_servers.split(',') %}{{ cinder_oslomsg_notify_userid }}:{{ cinder_oslomsg_notify_password }}@{{ host }}:{{ cinder_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ cinder_oslomsg_notify_vhost }}{% if cinder_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_notify_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ cinder_oslomsg_notify_transport }}://{% for host in cinder_oslomsg_notify_servers.split(',') %}{{ cinder_oslomsg_notify_userid }}:{{ cinder_oslomsg_notify_password }}@{{ host }}:{{ cinder_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ _cinder_oslomsg_notify_vhost_conf }}{% if cinder_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_notify_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 [oslo_concurrency]
 lock_path = {{ cinder_lock_dir }}/{{ cinder_system_slice_name }}
