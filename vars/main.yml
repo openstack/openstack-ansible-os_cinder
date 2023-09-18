@@ -34,8 +34,16 @@ _cinder_rootwrap_conf_overrides:
     filters_path: "/etc/cinder/rootwrap.d,/usr/share/cinder/rootwrap"
     exec_dirs: "{{ cinder_bin }},/sbin,/usr/sbin,/bin,/usr/bin,/usr/local/bin,/usr/local/sbin"
 
-_cinder_oslomsg_rpc_vhost_conf: "{{ (cinder_oslomsg_rpc_vhost is string) | ternary(cinder_oslomsg_rpc_vhost, cinder_oslomsg_rpc_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first) }}"
-_cinder_oslomsg_notify_vhost_conf: "{{ (cinder_oslomsg_notify_vhost is string) | ternary(cinder_oslomsg_notify_vhost, cinder_oslomsg_notify_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first) }}"
+_cinder_oslomsg_rpc_vhost_conf: >-
+  {{
+    (cinder_oslomsg_rpc_vhost is string) | ternary(cinder_oslomsg_rpc_vhost, cinder_oslomsg_rpc_vhost | selectattr(
+      'state', 'eq', 'present') | map(attribute='name') | first)
+  }}
+_cinder_oslomsg_notify_vhost_conf: >-
+  {{
+    (cinder_oslomsg_notify_vhost is string) | ternary(cinder_oslomsg_notify_vhost, cinder_oslomsg_notify_vhost | selectattr(
+      'state', 'eq', 'present') | map(attribute='name') | first)
+  }}
 
 #
 # Compile a list of the services on a host based on whether
