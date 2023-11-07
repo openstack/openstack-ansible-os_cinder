@@ -259,6 +259,7 @@
     systemd_tempd_prefix: openstack
     systemd_slice_name: "{{ cinder_system_slice_name }}"
     systemd_lock_dir: "{{ cinder_lock_dir }}"
+    systemd_service_restart: on-abnormal
     systemd_services:
       - service_name: "cinder-purge-deleted"
         execstarts:
