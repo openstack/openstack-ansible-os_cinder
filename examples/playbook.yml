@@ -3,7 +3,8 @@
   hosts: cinder_all
   user: root
   roles:
-    - { role: "os_cinder", tags: [ "os-cinder" ] }
+    - role: "os_cinder"
+      tags: "os-cinder"
   vars:
     cinder_glance_api_servers: "http://glance_server:9292"
     cinder_galera_address: "{{ internal_lb_vip_address }}"
