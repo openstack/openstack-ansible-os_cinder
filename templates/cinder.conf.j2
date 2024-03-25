@@ -133,7 +133,7 @@ rabbit_quorum_delivery_limit = {{ cinder_oslomsg_rabbit_quorum_delivery_limit }}
 rabbit_quorum_max_memory_bytes = {{ cinder_oslomsg_rabbit_quorum_max_memory_bytes }}
 
 [oslo_messaging_notifications]
-driver = {{ (cinder_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
+driver = {{ (cinder_oslomsg_notify_configure | bool) | ternary('messagingv2', 'noop') }}
 transport_url = {{ cinder_oslomsg_notify_transport }}://{% for host in cinder_oslomsg_notify_servers.split(',') %}{{ cinder_oslomsg_notify_userid }}:{{ cinder_oslomsg_notify_password }}@{{ host }}:{{ cinder_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ _cinder_oslomsg_notify_vhost_conf }}{% if cinder_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ cinder_oslomsg_notify_ssl_version }}&ssl_ca_file={{ cinder_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 [oslo_concurrency]

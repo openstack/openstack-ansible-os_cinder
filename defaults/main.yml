@@ -110,6 +110,7 @@ cinder_oslomsg_rpc_ssl_version: "{{ oslomsg_rpc_ssl_version | default('TLSv1_2')
 cinder_oslomsg_rpc_ssl_ca_file: "{{ oslomsg_rpc_ssl_ca_file | default('') }}"
 
 # Notify
+cinder_oslomsg_notify_configure: "{{ oslomsg_notify_configure | default(cinder_ceilometer_enabled) }}"
 cinder_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
 cinder_oslomsg_notify_setup_host: "{{ (cinder_oslomsg_notify_host_group in groups) | ternary(groups[cinder_oslomsg_notify_host_group][0], 'localhost') }}"
 cinder_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"

@@ -81,6 +81,7 @@
     _oslomsg_rpc_vhost: "{{ cinder_oslomsg_rpc_vhost }}"
     _oslomsg_rpc_transport: "{{ cinder_oslomsg_rpc_transport }}"
     _oslomsg_rpc_policies: "{{ cinder_oslomsg_rpc_policies }}"
+    _oslomsg_notify_configure: "{{ cinder_oslomsg_notify_configure }}"
     _oslomsg_notify_setup_host: "{{ cinder_oslomsg_notify_setup_host }}"
     _oslomsg_notify_userid: "{{ cinder_oslomsg_notify_userid }}"
     _oslomsg_notify_password: "{{ cinder_oslomsg_notify_password }}"
