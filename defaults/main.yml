@@ -126,6 +126,10 @@ cinder_oslomsg_notify_policies: []
 
 ## RabbitMQ integration
 cinder_oslomsg_rabbit_quorum_queues: "{{ oslomsg_rabbit_quorum_queues | default(True) }}"
+cinder_oslomsg_rabbit_stream_fanout: "{{ oslomsg_rabbit_stream_fanout | default(cinder_oslomsg_rabbit_quorum_queues) }}"
+cinder_oslomsg_rabbit_transient_quorum_queues: "{{ oslomsg_rabbit_transient_quorum_queues | default(cinder_oslomsg_rabbit_stream_fanout) }}"
+cinder_oslomsg_rabbit_qos_prefetch_count: "{{ oslomsg_rabbit_qos_prefetch_count | default(cinder_oslomsg_rabbit_stream_fanout | ternary(10, 0)) }}"
+cinder_oslomsg_rabbit_queue_manager: "{{ oslomsg_rabbit_queue_manager | default(cinder_oslomsg_rabbit_quorum_queues) }}"
 cinder_oslomsg_rabbit_quorum_delivery_limit: "{{ oslomsg_rabbit_quorum_delivery_limit | default(0) }}"
 cinder_oslomsg_rabbit_quorum_max_memory_bytes: "{{ oslomsg_rabbit_quorum_max_memory_bytes | default(0) }}"
 
