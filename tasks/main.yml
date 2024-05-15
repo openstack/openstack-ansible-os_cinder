@@ -153,6 +153,7 @@
   import_tasks: cinder_post_install.yml
   tags:
     - cinder-config
+    - post-install
 
 - name: Run the systemd service role
   import_role:
