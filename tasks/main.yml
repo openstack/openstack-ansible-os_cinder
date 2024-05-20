@@ -242,10 +242,16 @@
   tags:
     - cinder-config
 
-- import_tasks: cinder_backends.yml
+
+- include_tasks: cinder_backends.yml
+  args:
+    apply:
+      tags:
+        - cinder-config
   when:
     - "groups[cinder_services['cinder-volume']['group']] | length > 0"
     - "_cinder_is_last_play_host"
+    - cinder_manage_volume_types | bool
   tags:
     - cinder-config
 
