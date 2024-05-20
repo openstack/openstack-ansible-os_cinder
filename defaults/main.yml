@@ -303,6 +303,8 @@ cinder_quota_backup_gigabytes: 1000
 #       - lvm_high_iops
 #       - lvm_low_iops
 
+cinder_manage_volume_types: True
+
 # Override generated device filter in lvm.conf
 # Example:
 # cinder_lvm_devices_filter_override:
