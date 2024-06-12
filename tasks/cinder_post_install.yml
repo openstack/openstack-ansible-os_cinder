@@ -156,6 +156,17 @@
     - "cinder_target_helper == 'lioadm'"
     - cinder_backend_lvm_inuse | bool
 
+# NOTE(jrosser) it is necessarry to start the iscsid service to
+# generate an initiator uuid if one is not already present
+- name: Ensure iscsid service is started
+  service:
+    name: "iscsid"
+    state: started
+    enabled: true
+  when:
+    - "cinder_services['cinder-volume']['group'] in group_names"
+    - cinder_backend_lvm_inuse | bool
+
 - name: Create nfs shares export file
   template:
     src: nfs_shares.j2
