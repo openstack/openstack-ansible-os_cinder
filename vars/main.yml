@@ -129,8 +129,6 @@ cinder_service_catalog:
     description: "{{ cinder_service_v3_description }}"
     state: present
 
-_cinder_oslomsg_heartbeat_in_pthread: "{{ (cinder_services['cinder-volume']['group'] in group_names) | ternary(False, True) }}"
-
 _cinder_coordination_url: >-
   {{ cinder_coordination_driver }}://{{
       groups[cinder_coordination_group]
