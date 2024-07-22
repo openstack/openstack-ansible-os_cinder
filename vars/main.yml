@@ -16,17 +16,17 @@
 _cinder_is_first_api_play_host: >-
   {{
     (cinder_services['cinder-api']['group'] in group_names and
-    inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+    inventory_hostname == (groups[cinder_services['cinder-api']['group']] | select('in', ansible_play_hosts)) | first) | bool
   }}
 _cinder_is_first_play_host: >-
   {{
     (cinder_services['cinder-scheduler']['group'] in group_names and
-    inventory_hostname == (groups[cinder_services['cinder-scheduler']['group']] | intersect(ansible_play_hosts)) | first) | bool
+    inventory_hostname == (groups[cinder_services['cinder-scheduler']['group']] | select('in', ansible_play_hosts)) | first) | bool
   }}
 _cinder_is_last_play_host: >-
   {{
     (cinder_services['cinder-api']['group'] in group_names and
-    inventory_hostname == (groups[cinder_services['cinder-api']['group']] | intersect(ansible_play_hosts)) | last) | bool
+    inventory_hostname == (groups[cinder_services['cinder-api']['group']] | select('in', ansible_play_hosts)) | last) | bool
   }}
 
 _cinder_rootwrap_conf_overrides:
