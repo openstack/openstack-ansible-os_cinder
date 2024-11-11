@@ -15,7 +15,7 @@
 
 - name: Ensure cinder api is available
   uri:
-    url: "{{ cinder_service_internaluri }}"
+    url: "{{ cinder_service_v3_internaluri }}"
     status_code: 200,300
     validate_certs: "{{ not keystone_service_internaluri_insecure | bool }}"
   register: api_status

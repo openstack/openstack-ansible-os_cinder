@@ -186,40 +186,21 @@ cinder_service_token_roles:
   - service
 cinder_service_token_roles_required: "{{ openstack_service_token_roles_required | default(True) }}"
 cinder_service_region: "{{ service_region | default('RegionOne') }}"
-cinder_service_description: "Cinder Volume Service"
 cinder_service_port: 8776
 cinder_service_proto: http
-cinder_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(cinder_service_proto) }}"
-cinder_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(cinder_service_proto) }}"
-cinder_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(cinder_service_proto) }}"
-cinder_service_type: volume
-cinder_service_publicuri: "{{ cinder_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-
-cinder_service_v2_name: cinderv2
-cinder_service_v2_port: 8776
-cinder_service_v2_proto: http
-cinder_service_v2_type: volumev2
-cinder_service_v2_description: "Cinder Volume Service V2"
-cinder_service_v2_publicuri: "{{ cinder_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_v2_publicurl: "{{ cinder_service_publicuri }}/v2/%(tenant_id)s"
-cinder_service_v2_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_v2_adminurl: "{{ cinder_service_adminuri }}/v2/%(tenant_id)s"
-cinder_service_v2_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_v2_internalurl: "{{ cinder_service_internaluri }}/v2/%(tenant_id)s"
 
 cinder_service_v3_name: cinderv3
-cinder_service_v3_port: 8776
-cinder_service_v3_proto: http
 cinder_service_v3_type: volumev3
 cinder_service_v3_description: "Cinder Volume Service V3"
-cinder_service_v3_publicuri: "{{ cinder_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_v3_publicurl: "{{ cinder_service_publicuri }}/v3/%(tenant_id)s"
-cinder_service_v3_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_v3_adminurl: "{{ cinder_service_adminuri }}/v3/%(tenant_id)s"
-cinder_service_v3_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
-cinder_service_v3_internalurl: "{{ cinder_service_internaluri }}/v3/%(tenant_id)s"
+cinder_service_v3_publicuri_proto: "{{ openstack_service_publicuri_proto | default(cinder_service_proto) }}"
+cinder_service_v3_adminuri_proto: "{{ openstack_service_adminuri_proto | default(cinder_service_proto) }}"
+cinder_service_v3_internaluri_proto: "{{ openstack_service_internaluri_proto | default(cinder_service_proto) }}"
+cinder_service_v3_publicuri: "{{ cinder_service_v3_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_v3_publicurl: "{{ cinder_service_v3_publicuri }}/v3/%(tenant_id)s"
+cinder_service_v3_adminuri: "{{ cinder_service_v3_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_v3_adminurl: "{{ cinder_service_v3_adminuri }}/v3/%(tenant_id)s"
+cinder_service_v3_internaluri: "{{ cinder_service_v3_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_v3_internalurl: "{{ cinder_service_v3_internaluri }}/v3/%(tenant_id)s"
 
 cinder_auth_strategy: keystone
 

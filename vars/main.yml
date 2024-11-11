@@ -113,18 +113,6 @@ cinder_core_files:
     mode: "0640"
 
 cinder_service_endpoints:
-  - service: "{{ cinder_service_v2_name }}"
-    interface: "public"
-    url: "{{ cinder_service_v2_publicurl }}"
-    state: "absent"
-  - service: "{{ cinder_service_v2_name }}"
-    interface: "internal"
-    url: "{{ cinder_service_v2_internalurl }}"
-    state: "absent"
-  - service: "{{ cinder_service_v2_name }}"
-    interface: "admin"
-    url: "{{ cinder_service_v2_adminurl }}"
-    state: "absent"
   - service: "{{ cinder_service_v3_name }}"
     interface: "public"
     url: "{{ cinder_service_v3_publicurl }}"
@@ -139,14 +127,6 @@ cinder_service_endpoints:
     state: present
 
 cinder_service_catalog:
-  - name: "{{ cinder_service_name }}"
-    type: "{{ cinder_service_type }}"
-    description: "{{ cinder_service_description }}"
-    state: absent
-  - name: "{{ cinder_service_v2_name }}"
-    type: "{{ cinder_service_v2_type }}"
-    description: "{{ cinder_service_v2_description }}"
-    state: "absent"
   - name: "{{ cinder_service_v3_name }}"
     type: "{{ cinder_service_v3_type }}"
     description: "{{ cinder_service_v3_description }}"
