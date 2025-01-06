@@ -59,8 +59,3 @@ cinder_backup_distro_packages:
   - iscsi-initiator-utils
   - nfs-utils
   - rpcbind
-
-cinder_oslomsg_amqp1_distro_packages:
-  - cyrus-sasl-lib
-  - cyrus-sasl-plain
-  - cyrus-sasl-md5

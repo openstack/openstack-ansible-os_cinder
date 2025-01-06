@@ -29,9 +29,6 @@ cinder_package_list: |-
   {% if cinder_services['cinder-backup']['group'] in group_names %}
   {%   set _ = packages.extend(cinder_backup_distro_packages) %}
   {% endif %}
-  {% if cinder_oslomsg_amqp1_enabled | bool %}
-  {%   set _ = packages.extend(cinder_oslomsg_amqp1_distro_packages) %}
-  {% endif %}
   {{ packages | unique }}
 
 _cinder_bin: "/openstack/venvs/cinder-{{ cinder_venv_tag }}/bin"

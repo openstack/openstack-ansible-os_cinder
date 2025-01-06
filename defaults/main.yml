@@ -133,10 +133,6 @@ cinder_oslomsg_rabbit_queue_manager: "{{ oslomsg_rabbit_queue_manager | default(
 cinder_oslomsg_rabbit_quorum_delivery_limit: "{{ oslomsg_rabbit_quorum_delivery_limit | default(0) }}"
 cinder_oslomsg_rabbit_quorum_max_memory_bytes: "{{ oslomsg_rabbit_quorum_max_memory_bytes | default(0) }}"
 
-## (Qdrouterd) integration
-# TODO(evrardjp): Change structure when more backends will be supported
-cinder_oslomsg_amqp1_enabled: "{{ cinder_oslomsg_rpc_transport == 'amqp' }}"
-
 ## Coordintation
 cinder_coordination_driver: "{{ coordination_driver | default('zookeeper') }}"
 cinder_coordination_group: "{{ coordination_host_group | default('zookeeper_all') }}"
@@ -344,9 +340,6 @@ cinder_pip_packages:
 
 # Specific pip packages provided by the user
 cinder_user_pip_packages: []
-
-cinder_optional_oslomsg_amqp1_pip_packages:
-  - oslo.messaging[amqp1]
 
 cinder_api_init_overrides: {}
 cinder_scheduler_init_overrides: {}

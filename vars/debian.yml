@@ -64,7 +64,3 @@ cinder_backup_distro_packages:
   - open-iscsi
   - nfs-common
   - rpcbind
-
-cinder_oslomsg_amqp1_distro_packages:
-  - libsasl2-modules
-  - sasl2-bin
