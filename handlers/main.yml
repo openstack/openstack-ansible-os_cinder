@@ -16,7 +16,7 @@
 - name: Stop services
   service:
     name: "{{ item.service_name }}"
-    enabled: yes
+    enabled: true
     state: stopped
     daemon_reload: "{{ (ansible_facts['service_mgr'] == 'systemd') | ternary('yes', omit) }}"
   with_items: "{{ filtered_cinder_services }}"
@@ -33,7 +33,7 @@
 - name: Start services
   service:
     name: "{{ item.service_name }}"
-    enabled: yes
+    enabled: true
     state: "started"
     daemon_reload: "{{ (ansible_facts['service_mgr'] == 'systemd') | ternary('yes', omit) }}"
   with_items: "{{ filtered_cinder_services }}"
@@ -50,6 +50,6 @@
 - name: Ensure tgt service restarted
   service:
     name: "{{ tgt_service_name }}"
-    enabled: yes
+    enabled: true
     state: restarted
     daemon_reload: "{{ (ansible_facts['service_mgr'] == 'systemd') | ternary('yes', omit) }}"

@@ -53,7 +53,7 @@ cinder_ceilometer_enabled: "{{ (groups['ceilometer_all'] is defined) and (groups
 # Time period for which to generate volume usages. The options are hour, day,
 # month, or year. (string value)
 cinder_volume_usage_audit: hour
-cinder_volume_usage_audit_send_actions_enabled: True
+cinder_volume_usage_audit_send_actions_enabled: true
 
 cinder_storage_availability_zone: nova
 cinder_default_availability_zone: "{{ cinder_storage_availability_zone }}"
@@ -65,7 +65,7 @@ cinder_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0
 cinder_nova_catalog_info: compute:nova:internalURL
 cinder_nova_catalog_admin_info: compute:nova:adminURL
 
-cinder_fatal_deprecations: False
+cinder_fatal_deprecations: false
 
 ## Database info
 cinder_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
@@ -287,7 +287,7 @@ cinder_quota_backup_gigabytes: 1000
 #       - lvm_high_iops
 #       - lvm_low_iops
 
-cinder_manage_volume_types: True
+cinder_manage_volume_types: true
 
 # Override generated device filter in lvm.conf
 # Example:
@@ -383,7 +383,7 @@ cinder_services:
     service_name: cinder-api
     init_config_overrides: "{{ cinder_api_init_overrides }}"
     start_order: 4
-    wsgi_app: True
+    wsgi_app: true
     wsgi_name: cinder-wsgi
     uwsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ cinder_service_port }}"
@@ -447,7 +447,7 @@ cinder_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
 cinder_pki_keys_path: "{{ cinder_pki_dir ~ '/certs/private/' }}"
 cinder_pki_certs_path: "{{ cinder_pki_dir ~ '/certs/certs/' }}"
 cinder_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
-cinder_pki_regen_cert: ''
+cinder_pki_regen_cert: ""
 cinder_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
 cinder_pki_certificates:
   - name: "cinder_{{ ansible_facts['hostname'] }}"
@@ -479,7 +479,7 @@ cinder_pki_install_certificates:
 
 # Database cleanup
 # Periodically purge shadow tables, where archived records are stored
-cinder_purge_deleted: False
+cinder_purge_deleted: false
 # When to start purge task.
 cinder_purge_deleted_on_calendar: "*-*-* 01:00:00"
 # Purge events that are older then the number of days below.

@@ -15,7 +15,6 @@
 
 - name: Perform data migrations if necessary and all cinder services are up
   block:
-
     - name: Perform online data migrations
       command: "{{ cinder_bin }}/cinder-manage db online_data_migrations"
       register: data_migrations
@@ -25,12 +24,11 @@
       until: "data_migrations.rc in [0, 2]"
 
   rescue:
-
     - name: Check if all cinder services are up
       shell: "{{ cinder_bin }}/cinder-manage service list | /usr/bin/awk '{ if(NR>1) print $5 }' | /bin/egrep -vq ':-)'"
       register: failed_cinder_services
       changed_when: false
-      ignore_errors: True
+      ignore_errors: true
 
     - name: Fail if any cinder service is down
       fail:
@@ -42,7 +40,7 @@
         msg: An unexpected error occured.
       when: failed_cinder_services.rc == 1
 
-  become: yes
+  become: true
   become_user: "{{ cinder_system_user_name }}"
   when:
     - "ansible_local['openstack_ansible']['cinder']['need_online_data_migrations'] | bool"
@@ -53,7 +51,7 @@
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: cinder
     option: need_online_data_migrations
-    value: False
+    value: false
     mode: "0644"
   with_items: "{{ groups[cinder_services['cinder-api']['group']] }}"
   when:

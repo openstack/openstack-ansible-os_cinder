@@ -26,10 +26,10 @@
     venv_facts_when_changed:
       - section: "cinder"
         option: "need_service_restart"
-        value: True
+        value: true
       - section: "cinder"
         option: "need_online_data_migrations"
-        value: True
+        value: true
       - section: "cinder"
         option: "venv_tag"
         value: "{{ cinder_venv_tag }}"
