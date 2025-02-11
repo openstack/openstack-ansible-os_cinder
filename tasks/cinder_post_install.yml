@@ -16,7 +16,7 @@
 # NOTE(cloudnull): This task is required to copy rootwrap filters that we need
 #                  and cinder does not provide by default.
 - name: Create aux cinder dir
-  file:
+  ansible.builtin.file:
     path: "/etc/cinder/rootwrap.d"
     state: "directory"
     owner: "root"
@@ -77,7 +77,7 @@
     - cinder-policy-override
 
 - name: Remove legacy policy.yaml file
-  file:
+  ansible.builtin.file:
     path: "/etc/cinder/policy.yaml"
     state: absent
   when:
@@ -89,13 +89,13 @@
 #                  because we only want to copy the original files once. and we
 #                  don't want to need multiple tasks.
 - name: Preserve original configuration file(s)
-  command: "cp {{ item.target_f }} {{ item.target_f }}.original"
+  ansible.builtin.command: "cp {{ item.target_f }} {{ item.target_f }}.original"
   args:
     creates: "{{ item.target_f }}.original"
   with_items: "{{ cinder_core_files }}"
 
 - name: Fetch override files
-  fetch:
+  ansible.builtin.fetch:
     src: "{{ item.target_f }}.original"
     dest: "{{ item.tmp_f }}"
     flat: true
@@ -119,7 +119,7 @@
     - Restart uwsgi services
 
 - name: Cleanup fetched temp files
-  file:
+  ansible.builtin.file:
     path: "{{ item.tmp_f }}"
     state: absent
   changed_when: false
@@ -129,7 +129,7 @@
 # NOTE(cloudnull): This will ensure strong permissions on all rootwrap files.
 # NOTE(noonedeadpunk): X keeps execute permissions for rootwrap.d itself.
 - name: Set rootwrap.d permissions
-  file:
+  ansible.builtin.file:
     path: "/etc/cinder/rootwrap.d"
     owner: "root"
     group: "root"
@@ -137,7 +137,7 @@
     recurse: true
 
 - name: Ensure cinder tgt include
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/tgt/targets.conf
     line: "include /var/lib/cinder/volumes/*"
     state: present
@@ -148,7 +148,7 @@
     - cinder_backend_lvm_inuse | bool
 
 - name: Ensure iscsi service is started
-  service:
+  ansible.builtin.service:
     name: "{{ tgt_service_name }}"
     state: started
     enabled: true
@@ -160,7 +160,7 @@
 # NOTE(jrosser) it is necessarry to start the iscsid service to
 # generate an initiator uuid if one is not already present
 - name: Ensure iscsid service is started
-  service:
+  ansible.builtin.service:
     name: "iscsid"
     state: started
     enabled: true
@@ -169,7 +169,7 @@
     - cinder_backend_lvm_inuse | bool
 
 - name: Create nfs shares export file
-  template:
+  ansible.builtin.template:
     src: nfs_shares.j2
     dest: "{{ item.value.nfs_shares_config }}"
     mode: "0644"
@@ -181,7 +181,7 @@
     - cinder-nfs
 
 - name: Drop sudoers file
-  template:
+  ansible.builtin.template:
     src: "sudoers.j2"
     dest: "/etc/sudoers.d/{{ cinder_system_user_name }}_sudoers"
     mode: "0440"

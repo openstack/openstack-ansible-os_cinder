@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Ensure cinder api is available
-  uri:
+  ansible.builtin.uri:
     url: "{{ cinder_service_v3_internaluri }}"
     status_code: 200,300
     validate_certs: "{{ not keystone_service_internaluri_insecure | bool }}"
@@ -28,16 +28,16 @@
 # we should do that and use the delegation to the service setup host
 # so that we can remove the openrc file from the target host.
 - name: Implement openrc/clouds.yaml
-  import_role:
+  ansible.builtin.import_role:
     name: "openstack_openrc"
 
 - name: Create singular cinder_backends variable for all hosts
-  set_fact:
+  ansible.builtin.set_fact:
     _cinder_backends: "{{ (_cinder_backends | default(cinder_backends | default({}))) | combine(hostvars[item]['cinder_backends'] | default({})) }}"
   with_items: "{{ groups[cinder_services['cinder-volume']['group']] }}"
 
 - name: Add in cinder devices types
-  shell: |
+  ansible.builtin.shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
     if ! {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume type show "{{ item.key }}"; then
@@ -54,7 +54,7 @@
   changed_when: false
 
 - name: Add extra cinder volume types
-  shell: |
+  ansible.builtin.shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
     {% for evtype in item.value.extra_volume_types %}
@@ -74,7 +74,7 @@
   when: item.value.extra_volume_types is defined
 
 - name: Importing cinder_qos tasks
-  import_tasks: cinder_qos.yml
+  ansible.builtin.import_tasks: cinder_qos.yml
   when: cinder_qos_specs is defined
   tags:
     - cinder-qos

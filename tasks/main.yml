@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Gather variables for each operating system
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files:
@@ -29,7 +29,7 @@
     - always
 
 - name: Fail if service was deployed using a different installation method
-  fail:
+  ansible.builtin.fail:
     msg: "Switching installation methods for OpenStack services is not supported"
   when:
     - ansible_local is defined
@@ -39,12 +39,12 @@
     - ansible_local.openstack_ansible.cinder.install_method != cinder_install_method
 
 - name: Gather variables for installation method
-  include_vars: "{{ cinder_install_method }}_install.yml"
+  ansible.builtin.include_vars: "{{ cinder_install_method }}_install.yml"
   tags:
     - always
 
 - name: Including osa.db_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -66,7 +66,7 @@
     - always
 
 - name: Including osa.mq_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.mq_setup
     apply:
       tags:
@@ -92,7 +92,7 @@
     - always
 
 - name: Importing cinder_lvm_config tasks
-  import_tasks: cinder_lvm_config.yml
+  ansible.builtin.import_tasks: cinder_lvm_config.yml
   when:
     - "cinder_services['cinder-volume']['group'] in group_names"
     - "cinder_backend_lvm_inuse | bool"
@@ -100,17 +100,17 @@
     - cinder-config
 
 - name: Importing cinder_pre_install tasks
-  import_tasks: cinder_pre_install.yml
+  ansible.builtin.import_tasks: cinder_pre_install.yml
   tags:
     - cinder-install
 
 - name: Importing cinder_install tasks
-  import_tasks: cinder_install.yml
+  ansible.builtin.import_tasks: cinder_install.yml
   tags:
     - cinder-install
 
 - name: Create and install SSL certificates
-  include_role:
+  ansible.builtin.include_role:
     name: pki
     tasks_from: main_certs.yml
     apply:
@@ -130,14 +130,14 @@
     - always
 
 - name: Refresh local facts
-  setup:
+  ansible.builtin.setup:
     filter: ansible_local
     gather_subset: "!all"
   tags:
     - cinder-config
 
 - name: Including cinder_cleanup_old_facts tasks
-  include_tasks: cinder_cleanup_old_facts.yml
+  ansible.builtin.include_tasks: cinder_cleanup_old_facts.yml
   args:
     apply:
       tags:
@@ -150,13 +150,13 @@
     - always
 
 - name: Importing cinder_post_install tasks
-  import_tasks: cinder_post_install.yml
+  ansible.builtin.import_tasks: cinder_post_install.yml
   tags:
     - cinder-config
     - post-install
 
 - name: Run the systemd service role
-  import_role:
+  ansible.builtin.import_role:
     name: systemd_service
   vars:
     systemd_service_enabled: "{{ ((cinder_services['cinder-volume']['group'] in group_names) and (cinder_ceilometer_enabled | bool)) | ternary(true, false) }}"
@@ -181,14 +181,14 @@
     - cinder-config
 
 - name: Importing cinder_db_sync tasks
-  import_tasks: cinder_db_sync.yml
+  ansible.builtin.import_tasks: cinder_db_sync.yml
   when:
     - _cinder_is_first_api_play_host
   tags:
     - cinder-config
 
 - name: Import uwsgi role
-  import_role:
+  ansible.builtin.import_role:
     name: uwsgi
   vars:
     uwsgi_services: "{{ uwsgi_cinder_services }}"
@@ -198,7 +198,7 @@
     - uwsgi
 
 - name: Including osa.service_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.service_setup
     apply:
       tags:
@@ -223,7 +223,7 @@
     - always
 
 - name: Import ceph_client role
-  import_role:
+  ansible.builtin.import_role:
     name: ceph_client
   vars:
     openstack_service_system_user: "{{ cinder_system_user_name }}"
@@ -238,7 +238,7 @@
 # so are installed after the ceph_client role is run to ensure that the ceph repos setup
 # is in place.
 - name: Install cinder volumes distro tool packages
-  package:
+  ansible.builtin.package:
     name: "{{ cinder_volume_distro_packages_tools }}"
     state: "{{ cinder_package_state }}"
     update_cache: "{{ (ansible_facts['pkg_mgr'] == 'apt') | ternary('yes', omit) }}"
@@ -251,17 +251,16 @@
     - "cinder_services['cinder-volume']['group'] in group_names"
 
 - name: Flush handlers
-  meta: flush_handlers
-
+  ansible.builtin.meta: flush_handlers
 - name: Importing cinder_db_post_setup tasks
-  import_tasks: cinder_db_post_setup.yml
+  ansible.builtin.import_tasks: cinder_db_post_setup.yml
   when:
     - "_cinder_is_last_play_host"
   tags:
     - cinder-config
 
 - name: Importing cinder_backends tasks
-  include_tasks: cinder_backends.yml
+  ansible.builtin.include_tasks: cinder_backends.yml
   args:
     apply:
       tags:
@@ -274,7 +273,7 @@
     - cinder-config
 
 - name: Create service and timer for archiving deleted records
-  include_role:
+  ansible.builtin.include_role:
     name: systemd_service
   vars:
     systemd_service_restart_changed: false

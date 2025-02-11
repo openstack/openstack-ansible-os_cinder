@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Record the installation method
-  ini_file:
+  community.general.ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: "cinder"
     option: "install_method"
@@ -22,12 +22,12 @@
     mode: "0644"
 
 - name: Refresh local facts to ensure the cinder section is present
-  setup:
+  ansible.builtin.setup:
     filter: ansible_local
     gather_subset: "!all"
 
 - name: Install distro packages
-  package:
+  ansible.builtin.package:
     name: "{{ cinder_package_list }}"
     state: "{{ cinder_package_state }}"
     update_cache: "{{ (ansible_facts['pkg_mgr'] == 'apt') | ternary('yes', omit) }}"
@@ -40,11 +40,11 @@
     - "Restart cinder services"
 
 - name: Install cinder packages from PIP
-  import_tasks: cinder_install_source.yml
+  ansible.builtin.import_tasks: cinder_install_source.yml
   when: cinder_install_method == 'source'
 
 - name: Run the systemd service role
-  import_role:
+  ansible.builtin.import_role:
     name: systemd_service
   vars:
     systemd_user_name: "{{ cinder_system_user_name }}"
@@ -65,7 +65,7 @@
   when: cinder_install_method == 'distro'
   block:
     - name: Record the osa version deployed
-      ini_file:
+      community.general.ini_file:
         dest: "/etc/ansible/facts.d/openstack_ansible.fact"
         section: cinder
         option: venv_tag
@@ -73,7 +73,7 @@
         mode: "0644"
 
     - name: Set the upgrade facts
-      ini_file:
+      community.general.ini_file:
         dest: "/etc/ansible/facts.d/openstack_ansible.fact"
         section: cinder
         option: "{{ item }}"

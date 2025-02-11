@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Install the python venv
-  import_role:
+  ansible.builtin.import_role:
     name: "python_venv_build"
   vars:
     venv_python_executable: "{{ cinder_venv_python_executable }}"
@@ -35,7 +35,7 @@
         value: "{{ cinder_venv_tag }}"
 
 - name: Link in the os-brick rootwrap filters
-  file:
+  ansible.builtin.file:
     src: "{{ cinder_bin | dirname }}/etc/os-brick/rootwrap.d/os-brick.filters"
     dest: /etc/cinder/rootwrap.d/os-brick.filters
     state: link

@@ -16,7 +16,7 @@
 - name: Perform data migrations if necessary and all cinder services are up
   block:
     - name: Perform online data migrations
-      command: "{{ cinder_bin }}/cinder-manage db online_data_migrations"
+      ansible.builtin.command: "{{ cinder_bin }}/cinder-manage db online_data_migrations"
       register: data_migrations
       changed_when: false
       retries: 5
@@ -25,18 +25,18 @@
 
   rescue:
     - name: Check if all cinder services are up
-      shell: "{{ cinder_bin }}/cinder-manage service list | /usr/bin/awk '{ if(NR>1) print $5 }' | /bin/egrep -vq ':-)'"
+      ansible.builtin.shell: "{{ cinder_bin }}/cinder-manage service list | /usr/bin/awk '{ if(NR>1) print $5 }' | /bin/egrep -vq ':-)'"
       register: failed_cinder_services
       changed_when: false
       ignore_errors: true
 
     - name: Fail if any cinder service is down
-      fail:
+      ansible.builtin.fail:
         msg: At least one cinder service is down. You need to fix this before re-running the playbook.
       when: failed_cinder_services.rc != 1
 
     - name: All cinder services are up, but migration failed nontheless.
-      fail:
+      ansible.builtin.fail:
         msg: An unexpected error occured.
       when: failed_cinder_services.rc == 1
 
@@ -47,7 +47,7 @@
 
 - name: Disable the online migrations requirement
   delegate_to: "{{ item }}"
-  ini_file:
+  community.general.ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: cinder
     option: need_online_data_migrations

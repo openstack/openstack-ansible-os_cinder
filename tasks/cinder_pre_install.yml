@@ -14,14 +14,14 @@
 # limitations under the License.
 
 - name: Create the system group
-  group:
+  ansible.builtin.group:
     name: "{{ cinder_system_group_name }}"
     gid: "{{ cinder_system_group_gid | default(omit) }}"
     state: "present"
     system: "yes"
 
 - name: Create the cinder system user
-  user:
+  ansible.builtin.user:
     name: "{{ cinder_system_user_name }}"
     uid: "{{ cinder_system_user_uid | default(omit) }}"
     group: "{{ cinder_system_group_name }}"
@@ -38,12 +38,12 @@
 - name: Source config block
   block:
     - name: Stat config directory
-      stat:
+      ansible.builtin.stat:
         path: "/etc/cinder"
       register: cinder_conf_dir_stat
 
     - name: Remove the config directory
-      file:
+      ansible.builtin.file:
         path: "/etc/cinder"
         state: absent
       when:
@@ -53,7 +53,7 @@
     - cinder_install_method == 'source'
 
 - name: Create cinder dir
-  file:
+  ansible.builtin.file:
     path: "{{ item.path | default(omit) }}"
     src: "{{ item.src | default(omit) }}"
     dest: "{{ item.dest | default(omit) }}"

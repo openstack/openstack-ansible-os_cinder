@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Add in cinder qos types
-  shell: |
+  ansible.builtin.shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
     {{ __cinder_python_interpreter_dirname }}/openstack ${CLI_OPTIONS} volume qos list --format value --column Name | grep -x {{ item.name }} || \
@@ -32,7 +32,7 @@
     - cinder-qos
 
 - name: Associate qos types to volume types
-  shell: |
+  ansible.builtin.shell: |
     . {{ ansible_facts['env']['HOME'] }}/openrc
     CLI_OPTIONS="{{ ((keystone_service_adminuri_insecure | bool) or (keystone_service_internaluri_insecure | bool)) | ternary('--insecure', '') }}"
     {% for vtype in item.cinder_volume_types %}
