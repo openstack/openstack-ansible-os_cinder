@@ -170,7 +170,6 @@ cinder_service_admin_tenant_name: "service"
 cinder_service_admin_username: "cinder"
 
 ## Cinder api service type and data
-cinder_service_name: cinder
 cinder_service_project_domain_id: default
 cinder_service_user_domain_id: default
 cinder_service_user_name: cinder
@@ -185,12 +184,26 @@ cinder_service_region: "{{ service_region | default('RegionOne') }}"
 cinder_service_port: 8776
 cinder_service_proto: http
 
+cinder_service_name: cinder
+cinder_service_type: block-storage
+cinder_service_description: "Cinder Volume Service"
+cinder_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(cinder_service_proto) }}"
+cinder_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(cinder_service_proto) }}"
+cinder_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(cinder_service_proto) }}"
+cinder_service_publicuri: "{{ cinder_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_publicurl: "{{ cinder_service_publicuri }}/v3/%(project_id)s"
+cinder_service_adminuri: "{{ cinder_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_adminurl: "{{ cinder_service_adminuri }}/v3/%(project_id)s"
+cinder_service_internaluri: "{{ cinder_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"
+cinder_service_internalurl: "{{ cinder_service_internaluri }}/v3/%(project_id)s"
+
+cinder_service_v3_enabled: true
 cinder_service_v3_name: cinderv3
 cinder_service_v3_type: volumev3
 cinder_service_v3_description: "Cinder Volume Service V3"
-cinder_service_v3_publicuri_proto: "{{ openstack_service_publicuri_proto | default(cinder_service_proto) }}"
-cinder_service_v3_adminuri_proto: "{{ openstack_service_adminuri_proto | default(cinder_service_proto) }}"
-cinder_service_v3_internaluri_proto: "{{ openstack_service_internaluri_proto | default(cinder_service_proto) }}"
+cinder_service_v3_publicuri_proto: "{{ openstack_service_publicuri_proto | default(cinder_service_publicuri_proto) }}"
+cinder_service_v3_adminuri_proto: "{{ openstack_service_adminuri_proto | default(cinder_service_adminuri_proto) }}"
+cinder_service_v3_internaluri_proto: "{{ openstack_service_internaluri_proto | default(cinder_service_internaluri_proto) }}"
 cinder_service_v3_publicuri: "{{ cinder_service_v3_publicuri_proto }}://{{ external_lb_vip_address }}:{{ cinder_service_port }}"
 cinder_service_v3_publicurl: "{{ cinder_service_v3_publicuri }}/v3/%(tenant_id)s"
 cinder_service_v3_adminuri: "{{ cinder_service_v3_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ cinder_service_port }}"

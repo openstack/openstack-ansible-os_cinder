@@ -113,24 +113,40 @@ cinder_core_files:
     mode: "0640"
 
 cinder_service_endpoints:
+  - service: "{{ cinder_service_name }}"
+    interface: "public"
+    url: "{{ cinder_service_publicurl }}"
+    state: present
+  - service: "{{ cinder_service_name }}"
+    interface: "internal"
+    url: "{{ cinder_service_internalurl }}"
+    state: present
+  - service: "{{ cinder_service_name }}"
+    interface: "admin"
+    url: "{{ cinder_service_adminurl }}"
+    state: present
   - service: "{{ cinder_service_v3_name }}"
     interface: "public"
     url: "{{ cinder_service_v3_publicurl }}"
-    state: present
+    state: "{{ cinder_service_v3_enabled | ternary('present', 'absent') }}"
   - service: "{{ cinder_service_v3_name }}"
     interface: "internal"
     url: "{{ cinder_service_v3_internalurl }}"
-    state: present
+    state: "{{ cinder_service_v3_enabled | ternary('present', 'absent') }}"
   - service: "{{ cinder_service_v3_name }}"
     interface: "admin"
     url: "{{ cinder_service_v3_adminurl }}"
-    state: present
+    state: "{{ cinder_service_v3_enabled | ternary('present', 'absent') }}"
 
 cinder_service_catalog:
+  - name: "{{ cinder_service_name }}"
+    type: "{{ cinder_service_type }}"
+    description: "{{ cinder_service_description }}"
+    state: present
   - name: "{{ cinder_service_v3_name }}"
     type: "{{ cinder_service_v3_type }}"
     description: "{{ cinder_service_v3_description }}"
-    state: present
+    state: "{{ cinder_service_v3_enabled | ternary('present', 'absent') }}"
 
 _cinder_coordination_url: >-
   {{ cinder_coordination_driver }}://{{
