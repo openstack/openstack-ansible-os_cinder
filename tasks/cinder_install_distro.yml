@@ -1,0 +1,109 @@
+---
+# Copyright 2025, Cleura AB.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Add repository for EL
+  when:
+    - ansible_facts['os_family'] | lower == 'redhat'
+  block:
+    - name: Download EPEL gpg keys
+      ansible.builtin.get_url:
+        url: "{{ item.url }}"
+        dest: "{{ item.key }}"
+        mode: "0640"
+      with_items: "{{ cinder_extra_gpg_keys | selectattr('url', 'defined') }}"
+      register: _get_yum_keys
+      until: _get_yum_keys is success
+      retries: 5
+      delay: 2
+
+    - name: Copy EPEL gpg keyfile to the key location
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.key }}"
+        mode: "0640"
+      with_items: "{{ cinder_extra_gpg_keys | selectattr('src', 'defined') }}"
+
+    - name: Install EPEL gpg keys
+      ansible.builtin.rpm_key:
+        key: "{{ key['key'] }}"
+        fingerprint: "{{ key['fingerprint'] | default(omit) }}"
+        state: "{{ key['state'] | default('present') }}"
+      with_items: "{{ cinder_extra_gpg_keys }}"
+      loop_control:
+        loop_var: key
+      register: _add_ceph_keys
+      until: _add_ceph_keys is success
+      retries: 5
+      delay: 2
+
+    - name: Install required repositories
+      ansible.builtin.yum_repository:
+        baseurl: "{{ item.baseurl }}"
+        description: "{{ item.description | default(omit) }}"
+        enabled: "{{ item.enabled | default(True) }}"
+        file: "{{ item.file | default(omit) }}"
+        includepkgs: "{{ item.includepkgs | default(omit) }}"
+        gpgcheck: "{{ item.gpgcheck | default(omit) }}"
+        gpgkey: "{{ item.gpgkey | default(omit) }}"
+        name: "{{ item.name }}"
+        priority: "{{ item.priority | default(omit) }}"
+        state: "{{ item.state | default('present') }}"
+      with_items: "{{ cinder_extra_repos }}"
+      register: install_repo
+      until: install_repo  is success
+      retries: 5
+      delay: 2
+
+- name: Add repository for Debian/Ubuntu
+  when:
+    - ansible_facts['os_family'] | lower == 'debian'
+  block:
+    - name: Manage apt repositories
+      ansible.builtin.deb822_repository:
+        allow_downgrade_to_insecure: "{{ item.allow_downgrade_to_insecure | default(omit) }}"
+        allow_insecure: "{{ item.allow_insecure | default(omit) }}"
+        allow_weak: "{{ item.allow_weak | default(omit) }}"
+        architectures: "{{ item.architectures | default(omit) }}"
+        by_hash: "{{ item.by_hash | default(omit) }}"
+        check_date: "{{ item.check_date | default(omit) }}"
+        check_valid_until: "{{ item.check_valid_until | default(omit) }}"
+        components: "{{ item.components | default(omit) }}"
+        date_max_future: "{{ item.date_max_future | default(omit) }}"
+        enabled: "{{ item.enabled | default(omit) }}"
+        inrelease_path: "{{ item.inrelease_path | default(omit) }}"
+        languages: "{{ item.languages | default(omit) }}"
+        mode: "{{ item.mode | default(omit) }}"
+        name: "{{ item.name }}"
+        pdiffs: "{{ item.pdiffs | default(omit) }}"
+        signed_by: "{{ item.signed_by | default(omit) }}"
+        state: "{{ item.state | default(omit) }}"
+        suites: "{{ item.suites | default(omit) }}"
+        targets: "{{ item.targets | default(omit) }}"
+        trusted: "{{ item.trusted | default(omit) }}"
+        types: "{{ item.types | default(omit) }}"
+        uris: "{{ item.uris | default(omit) }}"
+      with_items: "{{ cinder_extra_repos }}"
+      register: _manage_apt_repositories
+
+    - name: Update Apt cache # noqa: no-handler
+      ansible.builtin.apt:
+        update_cache: true
+      when:
+        - _manage_apt_repositories is changed
+      register: _update_apt_cache
+      until: _update_apt_cache  is success
+      changed_when: false
+      retries: 5
+      delay: 2

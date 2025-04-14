@@ -26,6 +26,11 @@
     filter: ansible_local
     gather_subset: "!all"
 
+- name: Include cinder_install_distro tasks
+  ansible.builtin.include_tasks: cinder_install_distro.yml
+  when:
+    - cinder_extra_repos or cinder_extra_gpg_keys
+
 - name: Install distro packages
   ansible.builtin.package:
     name: "{{ cinder_package_list }}"

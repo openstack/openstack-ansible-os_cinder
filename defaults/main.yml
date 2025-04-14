@@ -486,6 +486,14 @@ cinder_pki_install_certificates:
     group: "{{ cinder_system_user_name }}"
     mode: "0600"
 
+# EPEL repo for EL distro path
+cinder_centos_epel_key: >-
+  {{ centos_epel_key | default('http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-' ~ ansible_facts['distribution_major_version']) }}
+cinder_centos_epel_mirror: "{{ centos_epel_mirror | default('http://download.fedoraproject.org/pub/epel') }}"
+
+cinder_extra_gpg_keys: "{{ _cinder_extra_gpg_keys }}"
+cinder_extra_repos: "{{ _cinder_extra_repos }}"
+
 # Define user-provided SSL certificates
 # cinder_user_ssl_cert: <path to cert on ansible deployment host>
 # cinder_user_ssl_key: <path to cert on ansible deployment host>

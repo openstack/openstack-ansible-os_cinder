@@ -64,3 +64,6 @@ cinder_backup_distro_packages:
   - open-iscsi
   - nfs-common
   - rpcbind
+
+_cinder_extra_gpg_keys: []
+_cinder_extra_repos: []

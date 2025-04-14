@@ -59,3 +59,20 @@ cinder_backup_distro_packages:
   - iscsi-initiator-utils
   - nfs-utils
   - rpcbind
+
+_cinder_epel_gpg:
+  - key: "/etc/pki/rpm-gpg/{{ cinder_centos_epel_key | basename }}"
+    url: "{{ cinder_centos_epel_key }}"
+
+_cinder_epel_repo:
+  - name: cinder-epel
+    baseurl: "{{ cinder_centos_epel_mirror ~ '/' ~ ansible_facts['distribution_major_version'] ~ '/Everything/' ~ ansible_facts['architecture'] }}"
+    description: "Extra Packages for Enterprise Linux {{ ansible_facts['distribution_major_version'] }} - $basearch"
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/{{ cinder_centos_epel_key.split('/')[-1] }}"
+    enabled: true
+    includepkgs:
+      - python3-zstd
+
+_cinder_extra_gpg_keys: "{{ (cinder_install_method == 'distro') | ternary(_cinder_epel_gpg, []) }}"
+_cinder_extra_repos: "{{ (cinder_install_method == 'distro') | ternary(_cinder_epel_repo, []) }}"
