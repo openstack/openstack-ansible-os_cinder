@@ -1,17 +1,8 @@
 ========================
-Team and repository tags
+OpenStack-Ansible Cinder
 ========================
 
-.. image:: https://governance.openstack.org/tc/badges/openstack-ansible-os_cinder.svg
-    :target: https://governance.openstack.org/tc/reference/tags/index.html
-
-.. Change things from this point on
-
-========================
-OpenStack-Ansible cinder
-========================
-
-This Ansible role installs and configures OpenStack cinder.
+This Ansible role installs and configures OpenStack Cinder.
 
 Documentation for the project can be found at:
   https://docs.openstack.org/openstack-ansible-os_cinder/latest/
