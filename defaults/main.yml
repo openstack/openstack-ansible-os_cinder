@@ -461,12 +461,14 @@ cinder_pki_keys_path: "{{ cinder_pki_dir ~ '/certs/private/' }}"
 cinder_pki_certs_path: "{{ cinder_pki_dir ~ '/certs/certs/' }}"
 cinder_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
 cinder_pki_regen_cert: ""
-cinder_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+cinder_pki_san: "{{ openstack_pki_san | default({'dns': [ansible_facts['hostname']], 'ip': [management_address]}) }}"
+cinder_pki_backend: "{{ openstack_pki_backend | default('standalone') }}"
 cinder_pki_certificates:
   - name: "cinder_{{ ansible_facts['hostname'] }}"
-    provider: ownca
     cn: "{{ ansible_facts['hostname'] }}"
     san: "{{ cinder_pki_san }}"
+    # standalone backend only
+    provider: ownca
     signed_by: "{{ cinder_pki_intermediate_cert_name }}"
 
 # cinder destination files for SSL certificates
@@ -475,16 +477,20 @@ cinder_ssl_key: /etc/cinder/cinder.key
 
 # Installation details for SSL certificates
 cinder_pki_install_certificates:
-  - src: "{{ cinder_user_ssl_cert | default(cinder_pki_certs_path ~ 'cinder_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+  - name: "cinder_{{ ansible_facts['hostname'] }}"
+    type: "certificate_chain"
     dest: "{{ cinder_ssl_cert }}"
     owner: "{{ cinder_system_user_name }}"
     group: "{{ cinder_system_user_name }}"
-    mode: "0644"
-  - src: "{{ cinder_user_ssl_key | default(cinder_pki_keys_path ~ 'cinder_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    # standalone backend only
+    src: "{{ cinder_user_ssl_cert }}"
+  - name: "cinder_{{ ansible_facts['hostname'] }}"
+    type: "private_key"
     dest: "{{ cinder_ssl_key }}"
     owner: "{{ cinder_system_user_name }}"
     group: "{{ cinder_system_user_name }}"
-    mode: "0600"
+    # standalone backend only
+    src: "{{ cinder_user_ssl_key }}"
 
 # EPEL repo for EL distro path
 cinder_centos_epel_key: >-
@@ -495,8 +501,8 @@ cinder_extra_gpg_keys: "{{ _cinder_extra_gpg_keys }}"
 cinder_extra_repos: "{{ _cinder_extra_repos }}"
 
 # Define user-provided SSL certificates
-# cinder_user_ssl_cert: <path to cert on ansible deployment host>
-# cinder_user_ssl_key: <path to cert on ansible deployment host>
+cinder_user_ssl_cert: ""
+cinder_user_ssl_key: ""
 
 # Database cleanup
 # Periodically purge shadow tables, where archived records are stored
