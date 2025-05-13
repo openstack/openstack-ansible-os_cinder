@@ -143,8 +143,8 @@
     state: present
   notify: Ensure tgt service restarted
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
-    - "cinder_target_helper == 'tgtadm'"
+    - cinder_services['cinder-volume']['group'] in group_names
+    - cinder_target_helper == 'tgtadm'
     - cinder_backend_lvm_inuse | bool
 
 - name: Ensure iscsi service is started
@@ -153,8 +153,8 @@
     state: started
     enabled: true
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
-    - "cinder_target_helper == 'lioadm'"
+    - cinder_services['cinder-volume']['group'] in group_names
+    - cinder_target_helper == 'lioadm'
     - cinder_backend_lvm_inuse | bool
 
 # NOTE(jrosser) it is necessarry to start the iscsid service to
@@ -165,7 +165,7 @@
     state: started
     enabled: true
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
+    - cinder_services['cinder-volume']['group'] in group_names
     - cinder_backend_lvm_inuse | bool
 
 - name: Create nfs shares export file
@@ -175,7 +175,7 @@
     mode: "0644"
   with_dict: "{{ cinder_backends | default({}) }}"
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
+    - cinder_services['cinder-volume']['group'] in group_names
     - item.value.nfs_shares_config is defined
   tags:
     - cinder-nfs
