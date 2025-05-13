@@ -222,9 +222,12 @@
   tags:
     - always
 
-- name: Import ceph_client role
-  ansible.builtin.import_role:
+- name: Include ceph_client role
+  ansible.builtin.include_role:
     name: ceph_client
+    apply:
+      tags:
+        - ceph
   vars:
     openstack_service_system_user: "{{ cinder_system_user_name }}"
     openstack_service_venv_bin: "{{ (cinder_install_method == 'source') | ternary(cinder_bin, '') }}"
