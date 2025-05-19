@@ -43,7 +43,7 @@
   become: true
   become_user: "{{ cinder_system_user_name }}"
   when:
-    - "ansible_local['openstack_ansible']['cinder']['need_online_data_migrations'] | bool"
+    - ansible_local['openstack_ansible']['cinder']['need_online_data_migrations'] | bool
 
 - name: Disable the online migrations requirement
   delegate_to: "{{ item }}"

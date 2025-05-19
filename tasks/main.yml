@@ -98,8 +98,8 @@
       tags:
         - cinder-config
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
-    - "cinder_backend_lvm_inuse | bool"
+    - cinder_services['cinder-volume']['group'] in group_names
+    - cinder_backend_lvm_inuse | bool
   tags:
     - cinder-config
 
@@ -226,7 +226,7 @@
         password: "{{ cinder_service_password }}"
         role: "{{ cinder_service_role_names }}"
   when:
-    - "_cinder_is_first_play_host"
+    - _cinder_is_first_play_host
   tags:
     - always
 
@@ -240,8 +240,8 @@
     openstack_service_system_user: "{{ cinder_system_user_name }}"
     openstack_service_venv_bin: "{{ (cinder_install_method == 'source') | ternary(cinder_bin, '') }}"
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
-    - "cinder_backend_rbd_inuse | bool"
+    - cinder_services['cinder-volume']['group'] in group_names
+    - cinder_backend_rbd_inuse | bool
   tags:
     - ceph
 
@@ -259,7 +259,7 @@
   retries: 5
   delay: 2
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
+    - cinder_services['cinder-volume']['group'] in group_names
 
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
@@ -271,7 +271,7 @@
       tags:
         - cinder-config
   when:
-    - "_cinder_is_last_play_host"
+    - _cinder_is_last_play_host
   tags:
     - cinder-config
 
@@ -282,8 +282,8 @@
       tags:
         - cinder-config
   when:
-    - "groups[cinder_services['cinder-volume']['group']] | length > 0"
-    - "_cinder_is_last_play_host"
+    - groups[cinder_services['cinder-volume']['group']] | length > 0
+    - _cinder_is_last_play_host | bool
     - cinder_manage_volume_types | bool
   tags:
     - cinder-config
