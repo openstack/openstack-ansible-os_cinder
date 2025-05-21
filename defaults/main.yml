@@ -397,7 +397,7 @@ cinder_services:
     init_config_overrides: "{{ cinder_api_init_overrides }}"
     start_order: 4
     wsgi_app: true
-    wsgi_name: cinder-wsgi
+    wsgi: "cinder.wsgi.api:application"
     uwsgi_overrides: "{{ cinder_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ cinder_service_port }}"
     uwsgi_tls: "{{ cinder_backend_ssl | ternary(cinder_uwsgi_tls, {}) }}"
