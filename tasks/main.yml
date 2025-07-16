@@ -140,19 +140,6 @@
   tags:
     - cinder-config
 
-- name: Including cinder_cleanup_old_facts tasks
-  ansible.builtin.include_tasks: cinder_cleanup_old_facts.yml
-  args:
-    apply:
-      tags:
-        - cinder-config
-  when:
-    - "'openstack_ansible' in ansible_local"
-    - "'cinder' in ansible_local['openstack_ansible']"
-    - "'need_db_sync' in ansible_local['openstack_ansible']['cinder']"
-  tags:
-    - always
-
 - name: Importing cinder_post_install tasks
   ansible.builtin.import_tasks: cinder_post_install.yml
   tags:
