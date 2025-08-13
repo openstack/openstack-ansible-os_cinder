@@ -240,7 +240,7 @@
     openstack_service_system_user: "{{ cinder_system_user_name }}"
     openstack_service_venv_bin: "{{ (cinder_install_method == 'source') | ternary(cinder_bin, '') }}"
   when:
-    - "cinder_services['cinder-volume']['group'] in group_names"
+    - "cinder_services['cinder-volume']['group'] in group_names or cinder_services['cinder-backup']['group'] in group_names"
     - "cinder_backend_rbd_inuse | bool"
   tags:
     - ceph

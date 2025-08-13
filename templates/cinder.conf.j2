@@ -23,7 +23,7 @@ cluster = {{ cinder_active_active_cluster_name }}
 scheduler_default_filters={{ cinder_scheduler_default_filters | join(',') }}
 {% endif %}
 
-{% if cinder_services['cinder-volume']['group'] in group_names %}
+{% if cinder_services['cinder-backup']['group'] in group_names %}
 {% if cinder_service_backup_program_enabled == true %}
 
 ## Cinder Backup
