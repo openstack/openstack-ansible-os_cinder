@@ -130,6 +130,7 @@
     pki_install_certificates: "{{ cinder_pki_install_certificates }}"
   when:
     - cinder_backend_ssl
+    - cinder_services['cinder-api']['group'] in group_names
   tags:
     - always
 
