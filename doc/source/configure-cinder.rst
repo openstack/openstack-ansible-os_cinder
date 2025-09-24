@@ -148,7 +148,11 @@ back up to an external swift installation.
        cinder_service_backup_compression_algorithm: zlib
        cinder_service_backup_metadata_version: 2
 
-During installation of cinder, the backup service is configured.
+   During installation of cinder, the backup service is configured.
+
+#. If Horizon is used, you might also need to define
+   ``horizon_enable_cinder_backup: true`` explicitly and run horizon playbook
+   to enable the Backup panel in Horizon.
 
 
 Using Ceph for cinder backups
@@ -223,6 +227,23 @@ By default, no horizon configuration is set.
    that a volume creation request without an explicit volume type
    succeeds.
 
+#. You may also configure parameters for the Instance launch menu,
+   like hide "Create Volume" question and always create Cinder volumes
+   for instances. For that you may define following variable:
+
+   .. code-block:: yaml
+
+      horizon_launch_instance_defaults:
+         create_volume: True
+         hide_create_volume: True
+         disable_image: False
+         disable_instance_snapshot: False
+         disable_volume: False
+         disable_volume_snapshot: False
+         default_availability_zone: any
+
+   Please check available options for this parameter in
+   `Horizon docs <https://docs.openstack.org/horizon/latest/configuration/settings.html#launch-instance-defaults>`_
 
 Configuring cinder to use LVM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
