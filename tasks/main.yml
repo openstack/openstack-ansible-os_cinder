@@ -141,6 +141,31 @@
   tags:
     - cinder-config
 
+- name: Including osa.service_setup role
+  ansible.builtin.include_role:
+    name: openstack.osa.service_setup
+    apply:
+      tags:
+        - common-service
+        - cinder-config
+  vars:
+    _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
+    _service_in_ldap: "{{ cinder_service_in_ldap }}"
+    _service_setup_host: "{{ cinder_service_setup_host }}"
+    _service_setup_host_python_interpreter: "{{ cinder_service_setup_host_python_interpreter }}"
+    _service_project_name: "{{ cinder_service_project_name }}"
+    _service_endpoints: "{{ cinder_service_endpoints }}"
+    _service_catalog: "{{ cinder_service_catalog }}"
+    _service_region: "{{ cinder_service_region }}"
+    _service_users:
+      - name: "{{ cinder_service_user_name }}"
+        password: "{{ cinder_service_password }}"
+        role: "{{ cinder_service_role_names }}"
+  when:
+    - _cinder_is_first_play_host
+  tags:
+    - always
+
 - name: Importing cinder_post_install tasks
   ansible.builtin.import_tasks: cinder_post_install.yml
   tags:
@@ -192,31 +217,6 @@
   tags:
     - cinder-config
     - uwsgi
-
-- name: Including osa.service_setup role
-  ansible.builtin.include_role:
-    name: openstack.osa.service_setup
-    apply:
-      tags:
-        - common-service
-        - cinder-config
-  vars:
-    _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
-    _service_in_ldap: "{{ cinder_service_in_ldap }}"
-    _service_setup_host: "{{ cinder_service_setup_host }}"
-    _service_setup_host_python_interpreter: "{{ cinder_service_setup_host_python_interpreter }}"
-    _service_project_name: "{{ cinder_service_project_name }}"
-    _service_endpoints: "{{ cinder_service_endpoints }}"
-    _service_catalog: "{{ cinder_service_catalog }}"
-    _service_region: "{{ cinder_service_region }}"
-    _service_users:
-      - name: "{{ cinder_service_user_name }}"
-        password: "{{ cinder_service_password }}"
-        role: "{{ cinder_service_role_names }}"
-  when:
-    - _cinder_is_first_play_host
-  tags:
-    - always
 
 - name: Include ceph_client role
   ansible.builtin.include_role:
