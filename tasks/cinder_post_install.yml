@@ -62,7 +62,7 @@
     - cinder-config
     - cinder-post-install
 
-- name: Implement policy.yaml if there are overrides configured
+- name: Place policy.yaml file
   openstack.config_template.config_template:
     content: "{{ cinder_policy_overrides }}"
     dest: "/etc/cinder/policy.yaml"
@@ -71,18 +71,9 @@
     mode: "0640"
     config_type: yaml
   when:
-    - cinder_policy_overrides | length > 0
+    - cinder_services['cinder-api']['group'] in group_names
   tags:
     - cinder-config
-    - cinder-policy-override
-
-- name: Remove legacy policy.yaml file
-  ansible.builtin.file:
-    path: "/etc/cinder/policy.yaml"
-    state: absent
-  when:
-    - cinder_policy_overrides | length == 0
-  tags:
     - cinder-policy-override
 
 # NOTE(cloudnull): This is using "cp" instead of copy with a remote_source
