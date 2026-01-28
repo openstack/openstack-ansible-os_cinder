@@ -29,7 +29,7 @@
 - name: Include cinder_install_distro tasks
   ansible.builtin.include_tasks: cinder_install_distro.yml
   when:
-    - cinder_extra_repos or cinder_extra_gpg_keys
+    - cinder_extra_repos | length > 0 or cinder_extra_gpg_keys | length > 0
 
 - name: Install distro packages
   ansible.builtin.package:
