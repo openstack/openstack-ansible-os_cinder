@@ -39,29 +39,6 @@
     - cinder-config
     - cinder-post-install
 
-# TODO(cloudnull): Once "master" OSA is using a recent pull for
-#                  cinder this task and templte can be removed.
-- name: Copy cinder configs
-  openstack.config_template.config_template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "root"
-    group: "{{ item.group | default(cinder_system_group_name) }}"
-    mode: "0640"
-    config_overrides: "{{ item.config_overrides }}"
-    config_type: "{{ item.config_type }}"
-  with_items:
-    - src: "resource_filters.json.j2"
-      dest: "/etc/cinder/resource_filters.json"
-      config_overrides: "{{ cinder_resource_filters_overrides }}"
-      config_type: "json"
-  notify:
-    - Restart cinder services
-    - Restart uwsgi services
-  tags:
-    - cinder-config
-    - cinder-post-install
-
 - name: Place policy.yaml file
   openstack.config_template.config_template:
     content: "{{ cinder_policy_overrides }}"
