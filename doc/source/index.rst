@@ -7,9 +7,10 @@ This Ansible role installs and configures OpenStack cinder.
 The following cinder services are managed by the role:
     * cinder-api
     * cinder-volume
+    * cinder-backup
     * cinder-scheduler
 
-By default, cinder API v1 and v2 are both enabled.
+Only Cinder API v3 is enabled at the moment by default
 
 .. toctree::
    :maxdepth: 2
@@ -54,7 +55,9 @@ Example playbook
 Tags
 ~~~~
 
-This role supports two tags: ``cinder-install`` and ``cinder-config``
+This role supports series of common tags, like ``ceph``, ``common-db``,
+``common-db``, ``common-mq``, ``post-install`` as well as role-specific
+tags like: ``cinder-install`` and ``cinder-config``.
 
 The ``cinder-install`` tag can be used to install and upgrade.
 
