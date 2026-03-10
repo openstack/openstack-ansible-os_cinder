@@ -122,9 +122,10 @@
         - cinder-config
         - pki
   vars:
+    pki_backend: "{{ cinder_pki_backend }}"
     pki_setup_host: "{{ cinder_pki_setup_host }}"
     pki_dir: "{{ cinder_pki_dir }}"
-    pki_create_certificates: "{{ cinder_user_ssl_cert is not defined and cinder_user_ssl_key is not defined }}"
+    pki_create_certificates: "{{ cinder_user_ssl_cert | length == 0 and cinder_user_ssl_key | length == 0 }}"
     pki_regen_cert: "{{ cinder_pki_regen_cert }}"
     pki_certificates: "{{ cinder_pki_certificates }}"
     pki_install_certificates: "{{ cinder_pki_install_certificates }}"
