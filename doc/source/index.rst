@@ -16,6 +16,7 @@ Only Cinder API v3 is enabled at the moment by default
    :maxdepth: 2
 
    configure-cinder.rst
+   deployment-options.rst
 
 To clone or view the source code for this repository, visit the role repository
 for `os_cinder <https://github.com/openstack/openstack-ansible-os_cinder>`_.
