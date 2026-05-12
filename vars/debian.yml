@@ -21,9 +21,17 @@ cache_timeout: 600
 tgt_service_name: tgt
 
 # Common apt packages
+_cinder_package_names_condition: >-
+  {{
+    (
+      (ansible_facts['distribution'] | lower == 'debian' and ansible_facts['distribution_major_version'] is version('14', '>=')) or
+        (ansible_facts['distribution'] | lower == 'ubuntu' and ansible_facts['distribution_version'] is version('26.04', '>='))
+    )
+  }}
+
 cinder_distro_packages:
   - libkmod2
-  - libxml2
+  - "{{ _cinder_package_names_condition | ternary('libxml2-16', 'libxml2') }}"
   - zlib1g
 
 cinder_service_distro_packages:
