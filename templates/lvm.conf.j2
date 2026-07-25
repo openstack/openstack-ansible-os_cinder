@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+# {{ openstack_ansible_managed | default('OpenStack-Ansible Managed') }}
 
 {% set used_lvm_devices = [] %}
 {% if cinder_lvm_devices_filter_override|length > 0 %}
