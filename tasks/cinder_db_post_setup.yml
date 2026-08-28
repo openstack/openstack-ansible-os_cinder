@@ -25,7 +25,7 @@
 
   rescue:
     - name: Check if all cinder services are up
-      ansible.builtin.shell: "{{ cinder_bin }}/cinder-manage service list | /usr/bin/awk '{ if(NR>1) print $5 }' | /bin/egrep -vq ':-)'"
+      ansible.builtin.shell: "{{ cinder_bin }}/cinder-manage service list | /usr/bin/awk '{ if(NR>1) print $5 }' | /bin/grep -Evq ':-)'"
       register: failed_cinder_services
       changed_when: false
       ignore_errors: true
