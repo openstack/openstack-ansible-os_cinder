@@ -337,7 +337,7 @@ cinder_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 # Common pip packages
 cinder_pip_packages:
-  - "git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}#egg=cinder"
+  - "cinder@git+{{ cinder_git_repo }}@{{ cinder_git_install_branch }}"
   - cryptography
   - ecdsa
   - httplib2
