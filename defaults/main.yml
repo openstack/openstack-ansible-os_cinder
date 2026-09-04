@@ -294,6 +294,7 @@ cinder_quota_snapshots: 10
 cinder_quota_gigabytes: 1000
 cinder_quota_backups: 10
 cinder_quota_backup_gigabytes: 1000
+cinder_quota_groups: 10
 
 ## General configuration
 # cinder_backends:
