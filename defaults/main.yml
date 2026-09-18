@@ -243,7 +243,7 @@ cinder_service_backup_metadata_version: 2
 
 cinder_swift_catalog_info: "object-store:swift:internalURL"
 
-## Cap the maximun number of threads / workers when a user value is unspecified.
+## Cap the maximum number of threads / workers when a user value is unspecified.
 cinder_osapi_volume_workers_max: 16
 cinder_osapi_volume_workers: >-
   {{ [[(ansible_facts['processor_vcpus'] // ansible_facts['processor_threads_per_core']) | default(1), 1] | max * 2, cinder_osapi_volume_workers_max] | min }}

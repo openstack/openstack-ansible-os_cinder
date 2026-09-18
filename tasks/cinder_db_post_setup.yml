@@ -37,7 +37,7 @@
 
     - name: All cinder services are up, but migration failed nontheless.
       ansible.builtin.fail:
-        msg: An unexpected error occured.
+        msg: An unexpected error occurred.
       when: failed_cinder_services.rc == 1
 
   become: true
