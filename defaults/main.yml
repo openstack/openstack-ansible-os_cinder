@@ -55,7 +55,7 @@ cinder_ceilometer_enabled: "{{ (groups['ceilometer_all'] is defined) and (groups
 cinder_volume_usage_audit: hour
 cinder_volume_usage_audit_send_actions_enabled: true
 
-cinder_storage_availability_zone: nova
+cinder_storage_availability_zone: "{{ openstack_default_availability_zone | default('nova', true) }}"
 cinder_default_availability_zone: "{{ cinder_storage_availability_zone }}"
 
 cinder_storage_address: 127.0.0.1

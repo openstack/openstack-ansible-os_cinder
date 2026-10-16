@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``cinder_storage_availability_zone`` variable now defaults to
+    ``openstack_default_availability_zone``, which is ``nova``.
+    ``cinder_default_availability_zone`` still follows
+    ``cinder_storage_availability_zone``.
