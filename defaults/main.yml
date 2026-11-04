@@ -496,8 +496,8 @@ cinder_pki_install_certificates:
 
 # EPEL repo for EL distro path
 cinder_centos_epel_key: >-
-  {{ centos_epel_key | default('http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-' ~ ansible_facts['distribution_major_version']) }}
-cinder_centos_epel_mirror: "{{ centos_epel_mirror | default('http://download.fedoraproject.org/pub/epel') }}"
+  {{ centos_epel_key | default('https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-' ~ ansible_facts['distribution_major_version']) }}
+cinder_centos_epel_mirror: "{{ centos_epel_mirror | default('https://dl.fedoraproject.org/pub/epel') }}"
 
 cinder_extra_gpg_keys: "{{ _cinder_extra_gpg_keys }}"
 cinder_extra_repos: "{{ _cinder_extra_repos }}"
